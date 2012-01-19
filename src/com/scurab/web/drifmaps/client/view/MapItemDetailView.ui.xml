@@ -1,0 +1,21 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:with type="com.scurab.web.drifmaps.language.Words" field="res"></ui:with>
+	<g:HTMLPanel width="450" height="300">
+		<g:HorizontalPanel width="213px" horizontalAlignment="ALIGN_CENTER">
+			<g:Button text="{res.Save}" ui:field="btnSave"/>
+		</g:HorizontalPanel>
+		<g:TabPanel width="450px" height="450px" animationEnabled="true" >
+			<g:Tab text="Main">
+				<g:HTMLPanel ui:field="contentHolder" width="100%" height="100%"/>
+			</g:Tab>
+			<g:Tab text="Details">
+				<g:HTMLPanel width="100%" height="100%"/>
+			</g:Tab>
+			<g:Tab text="StreetView">
+				<g:HTMLPanel width="100%" height="100%"/>
+			</g:Tab>
+		</g:TabPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 
