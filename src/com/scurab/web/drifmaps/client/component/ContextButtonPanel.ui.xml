@@ -1,0 +1,11 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<g:HTMLPanel>
+		<g:HorizontalPanel>
+			<g:Image ui:field="btnPlus" styleName="item-header-icobutton" url="pics/icons_bigger/ico_plus.png"/>
+			<g:Image ui:field="btnMinus" styleName="item-header-icobutton" url="pics/icons_bigger/ico_minus.png"/>
+			<g:Image ui:field="btnCustom" styleName="item-header-icobutton" url="pics/icons_bigger/ico_pencil.png"/>
+		</g:HorizontalPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

@@ -3,29 +3,35 @@ package com.scurab.web.drifmaps.shared.datamodel;
 import java.io.Serializable;
 import java.util.List;
 
-import com.google.gwt.dev.javac.asm.CollectClassData.ClassType;
+import com.scurab.web.drifmaps.client.AppConstants;
+import com.scurab.web.drifmaps.shared.interfaces.HasCoordinates;
+import com.scurab.web.drifmaps.shared.interfaces.HasIcon;
+import com.scurab.web.drifmaps.shared.interfaces.HasId;
+import com.scurab.web.drifmaps.shared.interfaces.HasTitle;
 
-public class MapItem implements Serializable
+public class MapItem implements Serializable, HasCoordinates, HasId, HasIcon, HasTitle
 {
 	
-	public long id;
-	public String type;
+	private long id;
+	private String type;
 	
-	public String name;
+	private String name;
 	private String country;
-	public String city;
-	public String street;
-	public String webLink;
-	public String streetViewLink;
-	public String author;
+	private String city;
+	private String street;
+	private String web;
+	private String streetViewLink;
+	private String author;
+	private String contact;
 	
-	public double x;
-	public double y;
+	private double x;
+	private double y;
 	
-	public List<String> pros;
-	public List<String> cons;
-	public List<Detail> details;
+	private List<String> pros;
+	private List<String> cons;
+	private List<Detail> details;
 	
+	@Override
 	public long getId()
 	{
 		return id;
@@ -66,13 +72,13 @@ public class MapItem implements Serializable
 	{
 		this.street = street;
 	}
-	public String getWebLink()
+	public String getWeb()
 	{
-		return webLink;
+		return web;
 	}
-	public void setWebLink(String webLink)
+	public void setWeb(String link)
 	{
-		this.webLink = webLink;
+		web = link;
 	}
 	public String getStreetViewLink()
 	{
@@ -90,6 +96,7 @@ public class MapItem implements Serializable
 	{
 		this.author = author;
 	}
+	@Override
 	public double getX()
 	{
 		return x;
@@ -98,6 +105,7 @@ public class MapItem implements Serializable
 	{
 		this.x = x;
 	}
+	@Override
 	public double getY()
 	{
 		return y;
@@ -137,5 +145,23 @@ public class MapItem implements Serializable
 	public void setCountry(String country)
 	{
 		this.country = country;
+	}
+	@Override
+	public String getIconUrl()
+	{
+		return AppConstants.MediumIcons.ICO_BEER;
+	}
+	@Override
+	public String getTitle()
+	{
+		return name;
+	}
+	public String getContact()
+	{
+		return contact;
+	}
+	public void setContact(String contact)
+	{
+		this.contact = contact;
 	}
 }

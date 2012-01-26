@@ -67,6 +67,11 @@ public class NotificationDialog extends Composite
 		});
 	}
 	
+	public static void show(String message)
+	{
+		new NotificationDialog(null, message, NotificationType.Information);
+	}
+	
 	public static void show(String message, NotificationType type)
 	{
 		new NotificationDialog(null, message, type);
@@ -75,6 +80,14 @@ public class NotificationDialog extends Composite
 	public static void show(String title, String message, NotificationType type)
 	{
 		new NotificationDialog(title, message, type);
+	}
+	
+	public static void show(Throwable e)
+	{
+		if(e.getCause() != null)
+			new NotificationDialog(e.getClass().toString(), e.getMessage() + "<br />" + e.getCause().getMessage(), NotificationType.Error);
+		else
+			new NotificationDialog(e.getClass().toString(), e.getMessage(), NotificationType.Error);
 	}
 	
 	private static final String getImageUrl(NotificationType type)

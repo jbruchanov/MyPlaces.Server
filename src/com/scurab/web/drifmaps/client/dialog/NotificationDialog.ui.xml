@@ -5,15 +5,19 @@
 	<ui:style>
 	.title
 	{
+		white-space:pre-line;
 		font-weight: bolder;
+		line-height:0.8em;
 		padding:5px;
 		font-size:16px;
 		text-align: center;
 	}
 	.message
 	{	
+		white-space:pre-line;
 		width: 90%;
-			font-size:14px;
+		font-size:14px;
+		line-height:0.8em;
 		position:absolute;
 		top:30px;
 		bottom:5px;

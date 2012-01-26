@@ -52,7 +52,10 @@
         background: #fafafa;
 }    
 
-
+.button[disabled] 
+{ /* Text and background colour, medium red on light yellow */
+    color:#a0a0a0;
+}
 
 .button:before
 {

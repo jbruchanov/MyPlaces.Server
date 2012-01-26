@@ -46,7 +46,7 @@
 				</g:HTMLPanel>
 			</g:south>
 			<g:west size="7.7">
-				<g:Image url="pics/icons_big/ico_info.png" styleName="{style.ico}"/>
+				<g:Image ui:field="icon" url="pics/icons_big/ico_info.png" styleName="{style.ico}"/>
 			</g:west>
 			<g:center>
 				<g:SimplePanel>

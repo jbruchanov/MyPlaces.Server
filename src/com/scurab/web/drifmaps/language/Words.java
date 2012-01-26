@@ -43,6 +43,15 @@ public interface Words extends com.google.gwt.i18n.client.Constants {
   String AddDetail();
 
   /**
+   * Translated "AddNewItem".
+   * 
+   * @return translated "AddNewItem"
+   */
+  @DefaultStringValue("AddNewItem")
+  @Key("AddNewItem")
+  String AddNewItem();
+
+  /**
    * Translated "AddPro".
    * 
    * @return translated "AddPro"
@@ -95,6 +104,15 @@ public interface Words extends com.google.gwt.i18n.client.Constants {
   @DefaultStringValue("Cons")
   @Key("Cons")
   String Cons();
+
+  /**
+   * Translated "Contact".
+   * 
+   * @return translated "Contact"
+   */
+  @DefaultStringValue("Contact")
+  @Key("Contact")
+  String Contact();
 
   /**
    * Translated "Coordinates".
@@ -194,6 +212,15 @@ public interface Words extends com.google.gwt.i18n.client.Constants {
   @DefaultStringValue("Pros")
   @Key("Pros")
   String Pros();
+
+  /**
+   * Translated "Really ?".
+   * 
+   * @return translated "Really ?"
+   */
+  @DefaultStringValue("Really ?")
+  @Key("ReallyQstn")
+  String ReallyQstn();
 
   /**
    * Translated "Save".

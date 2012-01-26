@@ -1,0 +1,11 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<g:HTMLPanel styleName="item-detail">
+		<g:Image styleName="item-detail-icon" url="pics/icons_bigger/ico_pencil.png"/>
+		<g:Image ui:field="imgClose" styleName="item-closebutton" url="pics/icons_small/ico_error.png"/>
+		<g:Label text="What" styleName="item-detail-what" ui:field="lblWhat"/>
+		<g:Label text="Detail" ui:field="lblDetail" styleName="item-detail-label"/>
+		<g:Label text="5.11.2010" ui:field="lblTime" styleName="item-detail-time"/>
+	</g:HTMLPanel>
+</ui:UiBinder> 

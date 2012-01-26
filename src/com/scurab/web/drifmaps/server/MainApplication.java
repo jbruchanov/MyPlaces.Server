@@ -17,7 +17,13 @@ public class MainApplication implements ServletContextListener
 	@Override
 	public void contextInitialized(ServletContextEvent arg0)
 	{	
-//		Database.createSchema();
+		try
+		{
+//			Database d = new Database(DataServiceImpl.FILE);
+//			d.createTables();
+		}
+		catch(Exception e){}
+		
 	}
 
 }

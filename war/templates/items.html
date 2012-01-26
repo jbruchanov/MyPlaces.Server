@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+.item {
+	position: relative;
+	background-color: #f1f1f1;
+	font: bold 1em/2em Arial, Helvetica;
+	color: #333;
+	border: solid 1px #D1D8DF;
+	width: 348px;
+	height: 40px;
+	white-space: nowrap;
+	text-decoration: none;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, .8);
+}
+
+.item:HOVER {
+	background: #eaeaea;
+}
+
+.item:ACTIVE,
+.item-detail:ACTIVE
+ {
+	-moz-box-shadow: 0 0 4px 2px rgba(0, 0, 0, .3) inset;
+	-webkit-box-shadow: 0 0 4px 2px rgba(0, 0, 0, .3) inset;
+	box-shadow: 0 0 1px 1px rgba(0, 0, 0, .3) inset;
+	position: relative;
+	top: 1px;
+}
+
+.item-closebutton {
+	position: absolute;
+	padding: 5px;
+	top: 0px;
+	right: 0px;
+	width: 15px;
+	height: 15px;
+}
+
+
+
+
+.item-closebutton:ACTIVE {
+	border: solid 1px #aeaeae;
+}
+
+.item-icon /*32px*/ {
+	position: absolute;
+	padding: 5px;
+	top: 0px; /*depends on .item.height */
+	left: 0px;
+}
+
+.item-what-label {
+	white-space: pre-wrap;
+	position: absolute;
+	padding: 5px;
+	top: 0px;
+	left: 45px;
+}
+
+.item-detail {
+	position: relative;
+	background-color: #f1f1f1;
+	width: 348px;
+	font: bold 16pt Arial, Helvetica;	
+	color: #333;
+	border: solid 1px #D1D8DF;
+	
+	text-decoration: none;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, .8);
+	/*font: bold 1em/0.5em Arial, Helvetica;
+	*/
+}
+
+
+.item-detail-icon /*32px*/ {
+	position: absolute;	
+	padding: 5px;
+	top: 8px; /*depends on .item.height */
+	left: 0px;
+}
+
+.item-detail-what {
+	display:block;
+	width: 80%;
+	white-space: pre-wrap;
+	position: relative;
+	top: 10px;
+	left: 50px;
+	margin-bottom: 5px;
+}
+
+.item-detail-label {
+	display:block;
+	font-size: 10pt;
+	position:relative;
+	margin-top:20px;
+	margin-bottom:10px;
+	left: 50px;
+	width: 80%;
+}
+
+.item-detail-time {
+	position: absolute;
+	top: 5px;
+	right: 30px;
+	font-size: 10px;
+}
+
+body {
+	background: #cfcfcf;
+}
+</style>
+</head>
+<body>
+	<div onmousedown="return false;" onselectstart="return false;"
+		style="width: 350px; height: 800px; background: #FFF; overflow: auto; padding: 1px;">
+		<div class="item">
+			<img alt="ico" src="../pics/icons_bigger/ico_plus.png"
+				class="item-icon" /> <img alt="delete"
+				src="../pics/icons_small/ico_error.png" class="item-closebutton" />
+			<label class="item-what-label">Dobrý pivko a tak...</label>
+		</div>
+		<div class="item">
+			<img alt="ico" src="../pics/icons_bigger/ico_minus.png"
+				class="item-icon" /> <img alt="delete"
+				src="../pics/icons_small/ico_error.png" class="item-closebutton" />
+			<label class="item-what-label">Líná obsluha</label>
+		</div>
+		<div class="item-detail">
+			<img alt="ico" src="../pics/icons_bigger/ico_pencil.png" class="item-detail-icon" /> 
+			<img alt="delete" src="../pics/icons_small/ico_error.png" class="item-closebutton" />
+			<label class="item-detail-what">ABCDEF</label> 
+			<span class="item-detail-label">
+			Kundy z bundy nasrat bazar píča\nKundy z bundy nasrat bazar píčaKundy z bundy nasrat bazar asbbcd píčaKundy z bundy nasrat bazar píčaKundy z bundy nasrat bazar píčaKundy z bundy nasrat bazar píčaKundy z bundy nasrat bazar píčas
+			</span> 
+			<label class="item-detail-time">23.1.2012</label>
+		</div>
+	</div>
+</body>
+</html>

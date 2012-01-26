@@ -23,7 +23,10 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.pietschy.gwt.pectin.client.form.FieldModelBase;
 import com.pietschy.gwt.pectin.client.form.metadata.HasVisible;
+import com.pietschy.gwt.pectin.client.form.validation.binding.ValidationBinder;
+import com.pietschy.gwt.pectin.client.form.validation.component.ValidationDisplayLabel;
 
 /**
  * Created by IntelliJ IDEA. User: andrew Date: Jul 18, 2009 Time: 12:14:12 PM
@@ -39,6 +42,14 @@ public abstract class VerySimpleForm extends Composite {
 		setStylePrimaryName("VerySimpleForm");
 	}
 
+	public Row addRow(Widget widget) {
+		int rowIndex = table.getRowCount();
+		table.getFlexCellFormatter().setColSpan(rowIndex, 1, 2);
+		table.setWidget(rowIndex, 1, widget);
+		styleWidgets(rowIndex);
+		return new Row(rowIndex);
+	}
+	
 	public Row addRow(String label, Widget widget) {
 		int rowIndex = table.getRowCount();
 		table.setText(rowIndex, 0, label);
@@ -163,6 +174,12 @@ public abstract class VerySimpleForm extends Composite {
 			return table.getRowFormatter().isVisible(rowIndex);
 		}
 
+	}
+	
+	protected ValidationDisplayLabel createValidationLabel(ValidationBinder validation, FieldModelBase<?> field) {
+		ValidationDisplayLabel label = new ValidationDisplayLabel();
+		validation.bindValidationOf(field).to(label);
+		return label;
 	}
 
 }

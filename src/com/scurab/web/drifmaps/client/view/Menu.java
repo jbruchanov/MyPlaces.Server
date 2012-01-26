@@ -3,6 +3,7 @@ package com.scurab.web.drifmaps.client.view;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
@@ -23,6 +24,9 @@ public class Menu extends Composite
 	public Menu()
 	{
 		initWidget(uiBinder.createAndBindUi(this));
+		//to hide triangle button to open/close disclosure panel
+		menuContentHolder.setHeader(new Label());
+		menuContentHolder.remove(menuContentHolder.getHeader());
 	}
 	
 	public Button getAddButton()

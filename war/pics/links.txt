@@ -1,0 +1,5 @@
+ico_star - http://www.iconarchive.com/show/shop-icons-by-newidols.ru/star-icon.html
+ico_beer -  http://www.iconfinder.com/icondetails/44609/128/alcohol_beer_glass_icon
+ico_plus - http://www.iconfinder.com/icondetails/22608/64/add_health_new_plus_icon	
+ico_minus - http://www.iconfinder.com/icondetails/2461/128/minus_red_remove_icon
+ico_pencil - http://www.iconfinder.com/icondetails/10616/48/draw_edit_pencil_write_icons

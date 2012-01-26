@@ -3,12 +3,14 @@ package com.scurab.web.drifmaps.client.dialog;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Label;
 
@@ -24,6 +26,7 @@ public class InputDialog extends Composite
 	@UiField Button btnCancel;
 	@UiField TextBox txtInput;
 	@UiField Label lblMessage;
+	@UiField Image icon;
 
 	interface InputDialogUiBinder extends UiBinder<Widget, InputDialog>
 	{
@@ -31,7 +34,7 @@ public class InputDialog extends Composite
 	
 	DialogBox db = new DialogBox();
 
-	private InputDialog(String message, OnInputDialogButtonClick listener)
+	private InputDialog(String message, SafeUri iconUri, OnInputDialogButtonClick listener)
 	{
 		initWidget(uiBinder.createAndBindUi(this));
 		bind(listener);
@@ -40,6 +43,8 @@ public class InputDialog extends Composite
 		db.setAnimationEnabled(false);
 		db.setAutoHideEnabled(false);
 		db.setGlassEnabled(true);
+		if(iconUri != null)
+			icon.setUrl(iconUri);
 		db.add(this);		
 		db.show();
 	}
@@ -52,7 +57,7 @@ public class InputDialog extends Composite
 			public void onClick(ClickEvent event)
 			{			
 				db.hide();
-				listener.onOkClick(txtInput.getValue());
+				listener.onOkClick(txtInput.getText());
 			}
 		});
 		
@@ -69,7 +74,16 @@ public class InputDialog extends Composite
 	
 	public static void show(String message, OnInputDialogButtonClick listener)
 	{
-		new InputDialog(message,listener);
+		new InputDialog(message, null, listener);
+	}
+	
+	public static void show(SafeUri iconUrl, OnInputDialogButtonClick listener)
+	{
+		show(iconUrl, null, listener);
+	}
+	public static void show(SafeUri iconUrl, String message, OnInputDialogButtonClick listener)
+	{
+		new InputDialog(message, iconUrl, listener);
 	}
 
 }
