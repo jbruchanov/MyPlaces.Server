@@ -9,6 +9,7 @@ import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.maps.client.MapUIOptions;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.event.MapClickHandler;
+import com.google.gwt.maps.client.event.MapClickHandler.MapClickEvent;
 import com.google.gwt.maps.client.event.MapDragEndHandler;
 import com.google.gwt.maps.client.event.MapZoomEndHandler;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
@@ -37,7 +38,7 @@ public class MapController
 	private MapWidget map = null;
 	protected Marker mCurrentMarker = null;
 	protected LatLng mStartEditLatLng = null;
-	private static final String DEFAULT_CURSOR = "url(http://maps.gstatic.com/intl/en_ALL/mapfiles/openhand_8_8.cur), default";
+	protected static final String DEFAULT_CURSOR = "url(http://maps.gstatic.com/intl/en_ALL/mapfiles/openhand_8_8.cur), default";
 	private DataServiceAsync mDataService = null;
 	protected HashMap<Long, MapItemOverlay<MapItem>> mCurrentVisibleMapItems = new HashMap<Long,MapItemOverlay<MapItem>>();
 	protected State mState = State.Default;
@@ -82,8 +83,8 @@ public class MapController
 	
 	public void startAdding()
 	{
-		mState = State.Adding;
-		changeCursor(Cursor.CROSSHAIR.toString());
+		mState = State.Adding;		
+		onChangeCursor(Cursor.CROSSHAIR.toString());
 	}
 	
 	public void startEditing(MapItemOverlay<MapItem> mio)
@@ -92,7 +93,7 @@ public class MapController
 		mCurrentMarker = mio;
 		LatLng ll = mio.getLatLng();
 		mStartEditLatLng = LatLng.newInstance(ll.getLatitude(), ll.getLongitude());
-		changeCursor(Cursor.CROSSHAIR.toString());
+		onChangeCursor(Cursor.CROSSHAIR.toString());
 	}
 	
 	public void finishWorking(boolean canceled)
@@ -104,15 +105,13 @@ public class MapController
 				break;
 			case Editing:
 				if(canceled)
-				{
 					mCurrentMarker.setLatLng(mStartEditLatLng);
-					mCurrentMarker = null;
-					mStartEditLatLng = null;
-				}
+				mCurrentMarker = null;
+				mStartEditLatLng = null;
 				break;
 		}
 		mState = State.Default;
-		changeCursor(null);
+		onChangeCursor(null);
 	}
 
 	private void bind()
@@ -167,7 +166,7 @@ public class MapController
 	{
 		if(result.size() == 0)
 			return;
-		List<MapItem> val = (List<MapItem>) result;
+		List<MapItem> val = result;
 		for(MapItem item : val)
 		{
 			MapItemOverlay<MapItem> mio = mCurrentVisibleMapItems.get(item.getId()); 
@@ -231,7 +230,7 @@ public class MapController
 	 * Overrides style! 
 	 * @param cursor
 	 */
-	private void changeCursor(String cursor)
+	protected void onChangeCursor(String cursor)
 	{
 		if(cursor == null)
 			cursor = DEFAULT_CURSOR;
@@ -244,19 +243,38 @@ public class MapController
 		}
 	}
 	
+	public void onMapClick(MapClickEvent event)
+	{
+		LatLng e = event.getLatLng();
+		if(e == null)
+			e = event.getOverlayLatLng();
+
+		switch(mState)
+		{
+			case Adding:
+				if(mCurrentMarker == null)
+				{
+					mCurrentMarker = new Marker(e);
+					map.addOverlay(mCurrentMarker);
+				}	
+				else
+					moveCurrentMapMarker(e);
+				break;
+			case Editing:
+				moveCurrentMapMarker(e);
+				break;
+		}
+	}
+	
 	private MapClickHandler mClickHandler = new MapClickHandler()
 	{
 		@Override
 		public void onClick(MapClickEvent event)
 		{
-			if(mState == State.Adding || mState==State.Editing)
-			{
-				LatLng e = event.getLatLng();
-				if(e == null)
-					e = event.getOverlayLatLng();
-				moveCurrentMapMarker(e);
-			}
+			onMapClick(event);
 		}
+		
+		
 	};
 	
 	

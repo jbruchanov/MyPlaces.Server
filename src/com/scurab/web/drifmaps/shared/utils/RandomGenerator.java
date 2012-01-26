@@ -37,12 +37,12 @@ public class RandomGenerator
 		return s;
 	}
 	
-	private static float genRandomX()
+	public static float genRandomX()
 	{
 		return czMinX + r.nextFloat() * diffX;
 	}
 	
-	private static float genRandomY()
+	public static float genRandomY()
 	{
 		return czMinY + r.nextFloat() * diffY;
 	}

@@ -132,11 +132,13 @@ public class MainView extends Composite implements MainViewPresenter.Display
 		mContextItemsContainer.setHeight(height + "px");
 	}
 	
+	@Override
 	public MapItemDetailForm getForm()
 	{
 		return mForm;
 	}
 	
+	@Override
 	public StreetViewWidget getStreetView()
 	{
 		return mStreetView;
@@ -190,16 +192,19 @@ public class MainView extends Composite implements MainViewPresenter.Display
 		return mFormModel;
 	}
 	
+	@Override
 	public Button getAddButton()
 	{
 		return mMenu.getAddButton();
 	}
 	
+	@Override
 	public Button getSaveButton()
 	{
 		return  mMenu.getSaveButton();
 	}
 	
+	@Override
 	public DisclosurePanel getMenuContent()
 	{
 		return mMenu.getMenuContent();

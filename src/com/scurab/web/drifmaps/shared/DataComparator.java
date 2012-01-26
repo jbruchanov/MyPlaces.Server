@@ -1,13 +1,14 @@
-package com.scurab.web.drifmaps.server;
+package com.scurab.web.drifmaps.shared;
 
 import java.util.HashMap;
 import junit.framework.Assert;
 
 import com.google.gwt.dev.util.collect.Lists;
+import com.google.gwt.junit.client.GWTTestCase;
 import com.scurab.web.drifmaps.shared.datamodel.Detail;
 import com.scurab.web.drifmaps.shared.datamodel.MapItem;
 import com.scurab.web.drifmaps.shared.datamodel.Star;
-public final class DataComparator
+public final class DataComparator extends GWTTestCase
 {	
 	public static void assertEquals(Detail o1, Detail o2, boolean assertIds)
 	{		
@@ -91,5 +92,14 @@ public final class DataComparator
 			for(int i = 0;i<o1.getCons().size();i++)
 				Assert.assertEquals(o1.getCons().get(i), o2.getCons().get(i));
 		}
+	}
+
+	/**
+	 * Never called like a test => not neccessary
+	 */
+	@Override
+	public String getModuleName()
+	{
+		return null;
 	}
 }
