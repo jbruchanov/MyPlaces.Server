@@ -334,7 +334,7 @@ public class Database
 			d.setId(rs.getLong(Structure.Details.ID));
 			d.setWhat(rs.getString(Structure.Details.WHAT));
 			d.setDetail(rs.getString(Structure.Details.VALUE));
-			d.setTime(new Date(rs.getLong(Structure.Details.WHEN)));
+			d.setWhen(new Date(rs.getLong(Structure.Details.WHEN)));
 			result.add(d);
 		}
 		rs.close();
@@ -661,7 +661,9 @@ public class Database
 		values.insert(0," VALUES (");
 		sb.append(") ");		
 		
-		return sb.toString() + values.toString();
+		String result = sb.toString() + values.toString(); 
+		System.out.println(result);
+		return result;
 	}
 	
 	
@@ -677,31 +679,32 @@ public class Database
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("UPDATE %s SET ",Structure.Tables.MAP_ITEMS));
 		sb.append(String.format("%s = ",Structure.MapItems.AUTHOR));
-		sb.append(String.format("%s,",convertEmptyStringToNull(mi.getAuthor(),true)));
+		sb.append(String.format("%s, ",convertEmptyStringToNull(mi.getAuthor(),true)));
 		sb.append(String.format("%s = ",Structure.MapItems.CITY));
-		sb.append(String.format("%s,",convertEmptyStringToNull(mi.getCity(),true)));
+		sb.append(String.format("%s, ",convertEmptyStringToNull(mi.getCity(),true)));
 		sb.append(String.format("%s = ",Structure.MapItems.CONTACT));
-		sb.append(String.format("%s,",convertEmptyStringToNull(mi.getContact(),true)));
+		sb.append(String.format("%s, ",convertEmptyStringToNull(mi.getContact(),true)));
 		sb.append(String.format("%s = ",Structure.MapItems.COUNTRY));
-		sb.append(String.format("%s,",convertEmptyStringToNull(mi.getCountry(),true)));
+		sb.append(String.format("%s, ",convertEmptyStringToNull(mi.getCountry(),true)));
 		sb.append(String.format("%s = ",Structure.MapItems.NAME));
-		sb.append(String.format("%s,",convertEmptyStringToNull(mi.getName(),true)));
+		sb.append(String.format("%s, ",convertEmptyStringToNull(mi.getName(),true)));
 		sb.append(String.format("%s = ",Structure.MapItems.STREET));
-		sb.append(String.format("%s,",convertEmptyStringToNull(mi.getStreet(),true)));
+		sb.append(String.format("%s, ",convertEmptyStringToNull(mi.getStreet(),true)));
 		sb.append(String.format("%s = ",Structure.MapItems.STREETVIEWLINK));
-		sb.append(String.format("%s",convertEmptyStringToNull(mi.getStreetViewLink()),true));
+		sb.append(String.format("%s, ",convertEmptyStringToNull(mi.getStreetViewLink()),true));
 		sb.append(String.format("%s = ",Structure.MapItems.TYPE));
-		sb.append(String.format("%s,",convertEmptyStringToNull(mi.getType(),true)));
+		sb.append(String.format("%s, ",convertEmptyStringToNull(mi.getType(),true)));
 		sb.append(String.format("%s = ",Structure.MapItems.WEBLINK));
-		sb.append(String.format("%s,",convertEmptyStringToNull(mi.getWeb(),true)));
-		sb.append(String.format("%s = ",Structure.MapItems.X));
-		sb.append(String.format("%s,",mi.getX()));
+		sb.append(String.format("%s, ",convertEmptyStringToNull(mi.getWeb(),true)));
+		sb.append(String.format("%s = ",Structure.MapItems.X));	
+		sb.append(String.format("%s, ",mi.getX()));
 		sb.append(String.format("%s = ",Structure.MapItems.Y));
 		sb.append(String.format("%s",mi.getY()));
 		
 		sb.append(String.format(" WHERE %s = %s",Structure.MapItems.ID,mi.getId()));
-		
-		return sb.toString();
+		String result = sb.toString(); 
+		System.out.println(result);
+		return result;
 	}
 	
 	/**
