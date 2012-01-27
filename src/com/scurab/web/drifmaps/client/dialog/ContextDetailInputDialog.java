@@ -63,7 +63,7 @@ public class ContextDetailInputDialog extends Composite
 				Detail d = new Detail();
 				d.setWhat(txtHeader.getText());
 				d.setDetail(txtDetail.getText());
-				d.setTime(txtDate.getValue());
+				d.setWhen(txtDate.getValue());
 				if(!(d.getWhat().trim().length() == 0
 					|| d.getDetail().trim().length() == 0
 					|| d.getTime() ==  null))

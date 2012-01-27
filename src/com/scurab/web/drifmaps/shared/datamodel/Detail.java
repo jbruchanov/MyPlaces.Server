@@ -38,7 +38,7 @@ public class Detail implements Serializable, IsDetailItem
 	{
 		return time;
 	}
-	public void setTime(Date time)
+	public void setWhen(Date time)
 	{
 		this.time = time;
 	}
@@ -49,5 +49,5 @@ public class Detail implements Serializable, IsDetailItem
 	public void setDetail(String detail)
 	{
 		this.detail = detail;
-	}	
+	}
 }

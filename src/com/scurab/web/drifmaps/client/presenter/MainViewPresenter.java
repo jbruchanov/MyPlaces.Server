@@ -12,6 +12,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.event.MapClickHandler;
+import com.google.gwt.maps.client.event.MapClickHandler.MapClickEvent;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.safehtml.shared.UriUtils;
@@ -111,7 +112,7 @@ public class MainViewPresenter
 	private void bindMap(DataServiceAsync ds)
 	{
 		mDisplay.getTopContainer().insert(getTestButton(), 0);
-		mMapController = new MapController(mapWidget, ds);
+		mMapController = createMapController(ds);
 		mapWidget.addMapClickHandler(mClickHandler);	
 		mMapController.setOnMapMarkerClick(new MapController.OnMapMarkerClick()
 		{
@@ -127,6 +128,11 @@ public class MainViewPresenter
 				handleStartEditing(item.getMapItem());
 			}
 		});
+	}
+	
+	protected MapController createMapController(DataServiceAsync ds)
+	{
+		return new MapController(mapWidget,ds);
 	}
 	
 	/**
@@ -168,7 +174,7 @@ public class MainViewPresenter
 			@Override
 			public void onClick(ClickEvent event)
 			{
-				onSavingItem(mDataModel.getValue());
+				onSavingItem();
 			}
 		});
 		mDisplay.getSaveButton().setEnabled(false);
@@ -291,7 +297,6 @@ public class MainViewPresenter
 					mDataModel.getValue().setCons(new ArrayList<String>());
 				mDataModel.getValue().getCons().add(value);
 			}
-			
 		}
 	}
 	
@@ -457,10 +462,11 @@ public class MainViewPresenter
 		mDisplay.setCurrentMenuTab(0);
 	}
 	
-	public void onSavingItem(MapItem item)
+	public void onSavingItem()
 	{
 		if (mDisplay.validate())
 		{
+			MapItem item = mDisplay.getDataModel().getValue();
 			mDisplay.getSaveButton().setEnabled(false);
 			mDisplay.getSaveButton().setText(DrifMaps.Words.Saving());
 			int operation = (item.getId() == 0) ? DataService.ADD : DataService.UPDATE;
@@ -502,19 +508,27 @@ public class MainViewPresenter
 		@Override
 		public void onClick(MapClickEvent event)
 		{
-			if(mState == State.Adding || mState==State.Editing)
-			{
-				LatLng e = event.getLatLng();
-				if(e == null)
-					e = event.getOverlayLatLng();
-				mDataModel.getX().setValue(e.getLongitude());
-				mDataModel.getY().setValue(e.getLatitude());
-				mDisplay.getStreetView().setLocation(e);
-				handleChangePosition(e);
-			}
+			onMapClick(event);
 		}
 	};
 	
+	/**
+	 * 
+	 * @param event
+	 */
+	public void onMapClick(MapClickEvent event)
+	{
+		if(mState == State.Adding || mState==State.Editing)
+		{
+			LatLng e = event.getLatLng();
+			if(e == null)
+				e = event.getOverlayLatLng();
+			mDataModel.getX().setValue(e.getLongitude());
+			mDataModel.getY().setValue(e.getLatitude());
+			mDisplay.getStreetView().setLocation(e);
+			handleChangePosition(e);
+		}
+	}
 	/**
 	 * sets text boxed base on current marker position
 	 * @param latlng

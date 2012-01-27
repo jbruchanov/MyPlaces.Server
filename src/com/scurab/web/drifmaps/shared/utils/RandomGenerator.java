@@ -52,7 +52,7 @@ public class RandomGenerator
 		Detail d = new Detail();
 		d.setDetail(AppUtils.generateRandomString());
 		d.setWhat(AppUtils.generateRandomString());
-		d.setTime(new Date(System.currentTimeMillis() - r.nextInt(86400 * 1000 *14)));//now - 14days at top
+		d.setWhen(new Date(System.currentTimeMillis() - r.nextInt(86400 * 1000 *14)));//now - 14days at top
 		return d;
 	}
 	
@@ -97,7 +97,7 @@ public class RandomGenerator
 		MapItem mi = genMapItem();
 		if(deep)
 		{
-			int howMany = r.nextInt(10);
+			int howMany = 1 + r.nextInt(10);
 			mi.setDetails(new ArrayList<Detail>());
 			for(int i = 0;i<howMany;i++)
 				mi.getDetails().add(genRandomDetail());

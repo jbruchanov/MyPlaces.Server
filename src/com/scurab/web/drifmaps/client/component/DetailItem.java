@@ -1,6 +1,10 @@
 package com.scurab.web.drifmaps.client.component;
 
+import java.util.Date;
+
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.shared.DateTimeFormat;
+import com.google.gwt.i18n.shared.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
@@ -20,6 +24,7 @@ public class DetailItem<T extends IsDetailItem> extends Composite
 	@UiField Label lblDetail;
 	@UiField Label lblTime;
 	T item;
+	private static DateTimeFormat format = DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM);
 	
 	interface DetailItemUiBinder extends UiBinder<Widget, DetailItem>
 	{
@@ -34,6 +39,8 @@ public class DetailItem<T extends IsDetailItem> extends Composite
 	public DetailItem(T d)
 	{
 		this();
+		if(d == null)
+			throw new NullPointerException();
 		setValue(d);
 	}
 	
@@ -45,23 +52,29 @@ public class DetailItem<T extends IsDetailItem> extends Composite
 	public void setWhat(String text)
 	{
 		lblWhat.setText(text);
+		item.setWhat(text);
 	}
 	
-	public void setTime(String time)
+	public void setTime(Date time)
 	{
-		lblTime.setText(time);
+		lblTime.setText(format.format(time));
+		item.setWhen(time);
 	}
 	
 	public void setDetail(String detail)
 	{
 		lblDetail.setText(detail);
+		item.setDetail(detail);
 	}
 	
 	public void setValue(T d)
 	{
+		if(d == null)
+			throw new NullPointerException();
+		item = d;
 		setWhat(d.getWhat());
 		setDetail(d.getDetail());
-		setTime(DrifMaps.DateFormat.format(d.getWhen()));
+		setTime(d.getWhen());
 	}
 		
 	public T getValue()
