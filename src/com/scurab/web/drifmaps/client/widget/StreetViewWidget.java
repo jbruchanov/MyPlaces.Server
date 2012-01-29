@@ -1,5 +1,7 @@
 package com.scurab.web.drifmaps.client.widget;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -15,21 +17,25 @@ import com.google.gwt.maps.client.streetview.Pov;
 import com.google.gwt.maps.client.streetview.StreetviewClient;
 import com.google.gwt.maps.client.streetview.StreetviewPanoramaOptions;
 import com.google.gwt.maps.client.streetview.StreetviewPanoramaWidget;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasValue;
 
 public class StreetViewWidget extends Composite implements HasValue<String>
 {
-	public interface OnChange
-	{
-		void onChange(LatLng latlng);
-	}
 	private final StreetviewPanoramaWidget panorama;
 	private final StreetviewClient svClient;
 
-	private Pov currentPov = Pov.newInstance();
+//	private Pov currentPov = Pov.newInstance();
 	private Polygon viewPolygon;
-	private OnChange mChangeListener = null;
+	
+	private double lastPitch = 0;
+	private double lastYaw = 0;
+	private double lastZoom = 0;
+	private boolean moved = false;
+	private Pov currentPov = null;
+	private LatLng currentLatLng = null;
+	
 
 	public StreetViewWidget(LatLng position)
 	{
@@ -58,14 +64,19 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 //				if(!visible)
 //					panorama.hide();
 			}
-		});
+		});		
 
 		panorama.addPitchChangedHandler(new StreetviewPitchChangedHandler()
 		{
 			@Override
 			public void onPitchChanged(StreetviewPitchChangedEvent event)
-			{				
-				currentPov.setPitch(event.getPitch());
+			{			
+				double pitch = event.getPitch();
+				if(lastPitch == pitch || panorama.isHidden()) //check for some change
+					return;
+				currentPov.setPitch(pitch);
+				lastPitch = pitch;
+//				panorama.getPov().setPitch(pitch);
 				updatePolyline();
 				ValueChangeEvent.fire(StreetViewWidget.this, getValue());
 			}
@@ -75,19 +86,31 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 		{
 			@Override
 			public void onYawChanged(StreetviewYawChangedEvent event)
-			{				
-				currentPov.setYaw(event.getYaw());
+			{	
+				double yaw = event.getYaw();
+				if(lastYaw == yaw ||panorama.isHidden())
+					return;
+				lastYaw = yaw;
+				currentPov.setYaw(yaw);
+//				panorama.getPov().setYaw(yaw);
 				updatePolyline();
 				ValueChangeEvent.fire(StreetViewWidget.this, getValue());
 			}
 		});
-
+		
 		panorama.addZoomChangedHandler(new StreetviewZoomChangedHandler()
 		{
 			@Override
 			public void onZoomChanged(StreetviewZoomChangedEvent event)
 			{				
-				currentPov.setZoom(event.getZoom());
+				double zoom = event.getZoom();
+				//don't check zoom, because if there is only move all handlers are called, 
+				//so let it be handled by this way
+				if(panorama.isHidden()) 
+					return;
+				currentPov.setZoom(zoom);
+				lastZoom = zoom;
+//				panorama.getPov().setZoom(zoom);
 				updatePolyline();
 				ValueChangeEvent.fire(StreetViewWidget.this, getValue());
 			}
@@ -105,12 +128,21 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 	
 	public void hide()
 	{
-		panorama.hide();
+		panorama.hide();		
+		resetLastValues();
 		if (viewPolygon != null)
 		{
 			mapViewport.removeOverlay(viewPolygon);
 			viewPolygon = null;
 		}
+	}
+	
+	private void resetLastValues()
+	{
+		lastPitch = 0;
+		lastYaw = 0;
+		lastZoom = 0;
+//		currentPov = Pov.newInstance();
 	}
 	
 	/**
@@ -119,6 +151,7 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 	 */
 	public void setLocation(final LatLng point)
 	{
+		resetLastValues();
 //		panorama.setLocationAndPov(latLng, currentPov);	
 //		Window.alert("set");
 //		LatLng point = event.getLatLng() == null ? event.getOverlayLatLng() : event.getLatLng();
@@ -143,9 +176,21 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 					double distance = distance(point, result)*1000;
 					if(distance < 10)//max length from point
 					{
-						panorama.setLocationAndPov(result, Pov.newInstance());
-						if(panorama.isHidden())
-							panorama.show();
+						currentLatLng = LatLng.newInstance(result.getLatitude(), result.getLongitude());
+						currentPov = Pov.newInstance();
+						panorama.setLocationAndPov(currentLatLng, currentPov);
+						updatePolyline();
+//						panorama.setLocationAndPov(result, currentPov);
+//						if(panorama.isHidden())
+//						{
+//							show();
+//							updatePolyline();
+//						}
+//						else
+//						{
+////							panorama.setPov(currentPov);
+//							updatePolyline();
+//						}
 					}
 					else
 						onFailure();
@@ -193,11 +238,9 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 		mapViewport = map;
 	}
 
-	private void updatePolyline()
+	protected void updatePolyline()
 	{
-		LatLng currentLatLng = panorama.getLatLng();
-		if(mChangeListener != null)
-			mChangeListener.onChange(currentLatLng);
+		//LatLng currentLatLng = panorama.getLatLng();
 		if(mapViewport == null)
 			return;
 		
@@ -205,7 +248,7 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 			mapViewport.removeOverlay(viewPolygon);
 		
 		// Some simple math to calculate viewPolygon
-
+		//Pov currentPov = panorama.getPov();
 		double yaw = currentPov.getYaw();
 		double distanceFactor = Math.cos(Math.toRadians(currentPov.getPitch())) * 0.0015 + 0.0005;
 		double zoomFactor = currentPov.getZoom() * 0.7 + 1;
@@ -221,11 +264,6 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 
 		viewPolygon = new Polygon(points, "blue", 1, 0.5, "blue", 0.15);
 		mapViewport.addOverlay(viewPolygon);
-	}
-
-	public void setChangeListener(OnChange listener)
-	{
-		mChangeListener = listener; 
 	}
 
 	@Override
@@ -284,7 +322,7 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 		double y = 0;
 		double yaw = 0;
 		double pitch = 0;
-		int zoom = 7;
+		double zoom = 0;
 		
 		for(String item : data)
 		{
@@ -302,7 +340,7 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 				else if(key.equals(PITCH))
 					pitch = value;
 				else if(key.equals(ZOOM))
-					zoom = (int)value;
+					zoom = value;
 			}
 			catch(Exception e)
 			{
@@ -310,12 +348,22 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 			}
 		}
 		
-		LatLng latLng = LatLng.newInstance(y, x);
-		Pov pov = Pov.newInstance();
-		pov.setPitch(pitch);
-		pov.setYaw(yaw);
-		pov.setZoom(zoom);
-		
-		panorama.setLocationAndPov(latLng, pov);
+		//final LatLng latLng = LatLng.newInstance(y, x);
+		currentLatLng = LatLng.newInstance(y, x);
+		currentPov = Pov.newInstance();
+		currentPov.setPitch(pitch);
+		currentPov.setYaw(yaw);
+		currentPov.setZoom(zoom);
+		show();
+		panorama.setLocationAndPov(currentLatLng, currentPov);
+		Timer t = new Timer()
+		{
+			@Override
+			public void run()
+			{
+//				panorama.setLocationAndPov(latLng, currentPov);
+			}
+		};
+		t.schedule(2500);
 	}
 }

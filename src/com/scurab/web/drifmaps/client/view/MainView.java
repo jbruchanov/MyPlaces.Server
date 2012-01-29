@@ -1,19 +1,26 @@
 package com.scurab.web.drifmaps.client.view;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.maps.client.MapWidget;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.scurab.web.drifmaps.client.DataServiceAsync;
+import com.scurab.web.drifmaps.client.DrifMaps;
 import com.scurab.web.drifmaps.client.component.ContextButtonPanel;
 import com.scurab.web.drifmaps.client.form.MapItemDetailForm;
 import com.scurab.web.drifmaps.client.formmodel.MapItemDetailFormModel;
@@ -35,6 +42,8 @@ public class MainView extends Composite implements MainViewPresenter.Display
 	private FlowPanel mContextItemsContainer = null;
 	private MapItemDetailFormModel mFormModel = null;
 	private TabPanel mTabPanel = null;
+	private Button mSearchButton = null;
+	private TextBox mSearchBox = null;
 	
 	@SuppressWarnings("unused")
 	public static void initForTest()
@@ -47,8 +56,8 @@ public class MainView extends Composite implements MainViewPresenter.Display
 		top = RootPanel.get("top");		
 		menu = RootPanel.get("menu");
 		workSpace = RootPanel.get("workspace");
-		bottom = RootPanel.get("bottom");
-
+		bottom = RootPanel.get("bottom");				
+		initSearchPanel();
 		//add menu to menu container
 		mMenu = new Menu();
 		getMenuContainer().add(mMenu);
@@ -64,6 +73,20 @@ public class MainView extends Composite implements MainViewPresenter.Display
 			}
 		});
 		handleResizeContextContainer();
+	}
+	
+	private void initSearchPanel()
+	{
+		SimplePanel p = new SimplePanel();
+		p.setStyleName("searchBox");
+		mSearchBox = new TextBox();
+		mSearchBox.setStyleName("searchTextBox");
+		mSearchButton = new Button();
+		mSearchButton.setStyleName("searchButton");
+		p.add(mSearchBox);
+		top.add(mSearchButton);
+		mSearchButton.setText(DrifMaps.Words.Search());
+		top.add(p);
 	}
 	
 	@Override
@@ -213,5 +236,15 @@ public class MainView extends Composite implements MainViewPresenter.Display
 	public void setCurrentMenuTab(int i)
 	{
 		mTabPanel.selectTab(i);		
+	}
+	
+	public Button getSearchButton()
+	{
+		return mSearchButton;
+	}
+	@Override
+	public HasText getSearchBox()
+	{
+		return mSearchBox;
 	}
 }

@@ -7,18 +7,26 @@ import java.util.List;
 import com.capsula.gwt.reversegeocoder.client.ExtendedPlacemark;
 import com.capsula.gwt.reversegeocoder.client.ReverseGeocoder;
 import com.capsula.gwt.reversegeocoder.client.ReverseGeocoderCallback;
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.event.MapClickHandler;
+import com.google.gwt.maps.client.event.MarkerClickHandler;
 import com.google.gwt.maps.client.event.MapClickHandler.MapClickEvent;
+import com.google.gwt.maps.client.geocode.Geocoder;
+import com.google.gwt.maps.client.geocode.LocationCallback;
+import com.google.gwt.maps.client.geocode.Placemark;
 import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.safehtml.shared.UriUtils;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.scurab.web.drifmaps.client.AppConstants;
@@ -36,10 +44,10 @@ import com.scurab.web.drifmaps.client.form.MapItemDetailForm;
 import com.scurab.web.drifmaps.client.formmodel.MapItemDetailFormModel;
 import com.scurab.web.drifmaps.client.map.MapItemOverlay;
 import com.scurab.web.drifmaps.client.widget.StreetViewWidget;
-import com.scurab.web.drifmaps.client.widget.StreetViewWidget.OnChange;
 import com.scurab.web.drifmaps.shared.datamodel.Detail;
 import com.scurab.web.drifmaps.shared.datamodel.MapItem;
 import com.scurab.web.drifmaps.shared.datamodel.Star;
+import com.scurab.web.drifmaps.shared.exception.ValidationException;
 
 public class MainViewPresenter
 {
@@ -77,6 +85,8 @@ public class MainViewPresenter
 		Button getSaveButton();
 		DisclosurePanel getMenuContent();
 		void setCurrentMenuTab(int i);
+		Button getSearchButton();
+		HasText getSearchBox();
 	}
 	
 	private Display mDisplay = null;
@@ -85,6 +95,7 @@ public class MainViewPresenter
 	private DataServiceAsync mDataService = null;
 	private MapWidget mapWidget = null;
 	private MapItemDetailFormModel mDataModel = null;
+	private Button mSearchButton = null;
 	
 	public enum State
 	{
@@ -98,7 +109,7 @@ public class MainViewPresenter
 		mDisplay = display;
 		mapWidget = display.getMapWidget();
 		mDataService = ds;
-		mDataModel = mDisplay.getDataModel();
+		mDataModel = mDisplay.getDataModel();		
 		bind();
 		bindMap(ds);
 		bindMenu(ds);
@@ -111,7 +122,7 @@ public class MainViewPresenter
 	 */
 	private void bindMap(DataServiceAsync ds)
 	{
-		mDisplay.getTopContainer().insert(getTestButton(), 0);
+		//mDisplay.getTopContainer().insert(getTestButton(), 0);
 		mMapController = createMapController(ds);
 		mapWidget.addMapClickHandler(mClickHandler);	
 		mMapController.setOnMapMarkerClick(new MapController.OnMapMarkerClick()
@@ -141,14 +152,72 @@ public class MainViewPresenter
 	private void bind()
 	{
 	    mDisplay.getStreetView().setViewportMap(mapWidget);
-	    mDisplay.getStreetView().setChangeListener(new OnChange()
+	    mDisplay.getSearchButton().addClickHandler(new ClickHandler()
 		{
 			@Override
-			public void onChange(LatLng latlng)
+			public void onClick(ClickEvent event)
 			{
-				mMapController.moveCurrentMapMarker(latlng);				
+				String text = mDisplay.getSearchBox().getText().trim();
+				if(text.length() > 0)
+				{
+					onSearch(text);
+				}
 			}
 		});
+	}
+	    
+	/**
+	 * Called when search button is clicked and search query is not empty
+	 * @param text
+	 */
+	public void onSearch(String text)
+	{
+		Geocoder g = new Geocoder();
+		g.getLocations(text, new LocationCallback()
+		{
+			
+			@Override
+			public void onSuccess(JsArray<Placemark> locations)
+			{
+				if(locations.length() > 0)
+				{
+					Placemark marks = locations.get(0);
+					onSearchAddressResult(marks);
+				}
+			}
+			
+			@Override public void onFailure(int statusCode){}
+		});
+	}
+	
+	/**
+	 * Called like geocoder callback
+	 * @param mark
+	 */
+	public void onSearchAddressResult(Placemark mark)
+	{
+		handleSearchAddressResult(mark);
+	}
+	
+	private void handleSearchAddressResult(Placemark mark)
+	{
+		mDisplay.getMapWidget().setCenter(mark.getPoint());
+		mDisplay.getMapWidget().setZoomLevel(15);
+		final Marker m = new Marker(mark.getPoint());
+		m.addMarkerClickHandler(new MarkerClickHandler()
+		{
+			@Override
+			public void onClick(MarkerClickEvent event)
+			{
+				mDisplay.getMapWidget().removeOverlay(m);
+			}
+		});
+		mDisplay.getMapWidget().addOverlay(m);
+	}
+	
+	public void onStreetViewLocationChange(LatLng latlng)
+	{
+		mMapController.moveCurrentMapMarker(latlng);
 	}
 	/**
 	 * Bind menu
@@ -174,7 +243,15 @@ public class MainViewPresenter
 			@Override
 			public void onClick(ClickEvent event)
 			{
-				onSavingItem();
+				try
+				{
+					if (mDisplay.validate())
+						onSavingItem();
+				}
+				catch(ValidationException ve)
+				{
+					//it's not neccassary to catch, its exception for testing, validate will show it
+				}
 			}
 		});
 		mDisplay.getSaveButton().setEnabled(false);
@@ -430,18 +507,29 @@ public class MainViewPresenter
 	public void onStartEditing(MapItem mi)
 	{		
 		//map handler call this method => witch handler to edit state made before this call
-		mState = State.Editing;
+		mState = State.Editing;		
 		mDisplay.getMenuContent().setOpen(true);
 		mDisplay.getAddButton().setStyleName("button cancel");
 		mDisplay.getAddButton().setText(DrifMaps.Words.Cancel());	
 		mDisplay.setMapItem(mi);
 		mDisplay.getSaveButton().setEnabled(true);
-		for(String s : mi.getPros())
-			onAddPro(s, false);
-		for(String s : mi.getCons())
-			onAddCon(s, false);
-		for(Detail d : mi.getDetails())
-			onAddDetail(d, false);
+		if(mi.getPros() != null)
+		{
+			for(String s : mi.getPros())
+				onAddPro(s, false);	
+		}
+		
+		if(mi.getCons() != null)
+		{
+			for(String s : mi.getCons())
+				onAddCon(s, false);
+		}
+		
+		if(mi.getDetails() != null)
+		{
+			for(Detail d : mi.getDetails())
+				onAddDetail(d, false);
+		}
 		
 	}
 	
@@ -460,32 +548,33 @@ public class MainViewPresenter
 		mDisplay.getStreetView().hide();
 		mDisplay.getSaveButton().setEnabled(false);
 		mDisplay.setCurrentMenuTab(0);
+		mDisplay.getForm().getMapItemType().setSelectedIndex(0);
 	}
 	
-	public void onSavingItem()
+	public void onSavingItem() throws ValidationException
 	{
-		if (mDisplay.validate())
+		if (!mDisplay.validate())
+			throw new ValidationException("Map Item validation");
+		
+		MapItem item = mDisplay.getDataModel().getValue();
+		mDisplay.getSaveButton().setEnabled(false);
+		mDisplay.getSaveButton().setText(DrifMaps.Words.Saving());
+		int operation = (item.getId() == 0) ? DataService.ADD : DataService.UPDATE;
+		
+		mDataService.processMapItem(item, operation, new AsyncCallback<MapItem>()
 		{
-			MapItem item = mDisplay.getDataModel().getValue();
-			mDisplay.getSaveButton().setEnabled(false);
-			mDisplay.getSaveButton().setText(DrifMaps.Words.Saving());
-			int operation = (item.getId() == 0) ? DataService.ADD : DataService.UPDATE;
-			
-			mDataService.processMapItem(item, operation, new AsyncCallback<MapItem>()
+			@Override
+			public void onSuccess(MapItem result)
 			{
-				@Override
-				public void onSuccess(MapItem result)
-				{
-					onSavedItem(result);
-				}
+				onSavedItem(result);
+			}
 
-				@Override
-				public void onFailure(Throwable caught)
-				{
-					NotificationDialog.show(caught);
-				}
-			});
-		}
+			@Override
+			public void onFailure(Throwable caught)
+			{
+				NotificationDialog.show(caught);
+			}
+		});
 	}
 	
 	/**
@@ -494,9 +583,11 @@ public class MainViewPresenter
 	 */
 	public void onSavedItem(MapItem item)
 	{
+		if(mState == State.Adding)
+			mMapController.addMapItem(item);
 		onFinishAdding(false);
 		mDisplay.getSaveButton().setText(DrifMaps.Words.Save());
-		mMapController.addMapItem(item);
+		
 	}
 	
 	/**
@@ -540,19 +631,24 @@ public class MainViewPresenter
 			@Override
 			public void onSuccess(ExtendedPlacemark placemark)
 			{
-				try
-				{
-					mDataModel.getCity().setValue(placemark.getCity());
-					mDataModel.getStreet().setValue(placemark.getStreet());
-					mDataModel.getCountry().setValue(placemark.getCountry());
-				}
-				catch(Exception e)
-				{/*just ignor error and let user write it */}
+				onSuccessReverseGeocode(placemark);
 			}
 			
 			@Override
 			public void onFailure(LatLng point){}
 		});
+	}
+	
+	public void onSuccessReverseGeocode(ExtendedPlacemark placemark)
+	{
+		try
+		{
+			mDataModel.getCity().setValue(placemark.getCity());
+			mDataModel.getStreet().setValue(placemark.getStreet());
+			mDataModel.getCountry().setValue(placemark.getCountry());
+		}
+		catch(Exception e)
+		{/*just ignor error and let user write it */}
 	}
 	
 	public void onClearContextItems()

@@ -241,6 +241,15 @@ public interface Words extends com.google.gwt.i18n.client.Constants {
   String Saving();
 
   /**
+   * Translated "Search".
+   * 
+   * @return translated "Search"
+   */
+  @DefaultStringValue("Search")
+  @Key("Search")
+  String Search();
+
+  /**
    * Translated "Street".
    * 
    * @return translated "Street"

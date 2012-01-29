@@ -691,7 +691,7 @@ public class Database
 		sb.append(String.format("%s = ",Structure.MapItems.STREET));
 		sb.append(String.format("%s, ",convertEmptyStringToNull(mi.getStreet(),true)));
 		sb.append(String.format("%s = ",Structure.MapItems.STREETVIEWLINK));
-		sb.append(String.format("%s, ",convertEmptyStringToNull(mi.getStreetViewLink()),true));
+		sb.append(String.format("%s, ",convertEmptyStringToNull(mi.getStreetViewLink(),true)));
 		sb.append(String.format("%s = ",Structure.MapItems.TYPE));
 		sb.append(String.format("%s, ",convertEmptyStringToNull(mi.getType(),true)));
 		sb.append(String.format("%s = ",Structure.MapItems.WEBLINK));

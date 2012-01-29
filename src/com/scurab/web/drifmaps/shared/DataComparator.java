@@ -5,6 +5,7 @@ import junit.framework.Assert;
 
 import com.google.gwt.dev.util.collect.Lists;
 import com.google.gwt.junit.client.GWTTestCase;
+import com.google.gwt.maps.client.geom.LatLng;
 import com.scurab.web.drifmaps.shared.datamodel.Detail;
 import com.scurab.web.drifmaps.shared.datamodel.MapItem;
 import com.scurab.web.drifmaps.shared.datamodel.Star;
@@ -92,6 +93,12 @@ public final class DataComparator extends GWTTestCase
 			for(int i = 0;i<o1.getCons().size();i++)
 				Assert.assertEquals(o1.getCons().get(i), o2.getCons().get(i));
 		}
+	}
+	
+	public static void assertEquals(LatLng ll1, LatLng ll2)
+	{
+		assertEquals(ll1.getLatitude(),ll2.getLatitude());
+		assertEquals(ll1.getLongitude(),ll2.getLongitude());
 	}
 
 	/**

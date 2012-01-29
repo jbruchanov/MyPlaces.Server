@@ -230,3 +230,58 @@ body {
 {
 	font-weight: bold;
 }
+
+
+/*
+Search text box */
+.searchBox
+{
+	position: absolute;
+	left:250px;
+	top:20px;
+	background-color: #FFF;	
+	border-radius: 5px;
+	padding:5px;
+	/*border: solid 1px #DCDCDC;*/
+	-moz-box-shadow: inset 0 0 2px #000000;
+	-webkit-box-shadow: inset 0 0 2px #000000;
+}
+
+.searchTextBox
+{
+	min-width:250px;
+	width:450px;
+	border: none;
+	font-family: verdana;
+	font-size: 12pt;
+}
+
+.searchTextBox:focus 
+{outline: none;}
+
+.searchButton
+{
+	position:absolute;
+	font-family: Calibri;
+	font-size: 12pt;
+	left:720px;
+	top:18px;
+	padding:6px;
+	border:1px solid #000;
+	background-color:#DCDCDC;
+}
+
+.searchButton:HOVER
+{
+	background-color:#e0e0e0;
+}
+.searchButton:ACTIVE
+{
+	background-color:#e0e0e0;
+	-moz-box-shadow: 0 0 4px 2px rgba(0, 0, 0, .3) inset;
+	-webkit-box-shadow: 0 0 4px 2px rgba(0, 0, 0, .3) inset;
+	box-shadow: 0 0 1px 1px rgba(0, 0, 0, .3) inset;
+	position: absolute;
+	top:18px;
+}
+
