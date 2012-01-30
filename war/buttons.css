@@ -93,6 +93,11 @@
         content: "O";
 }
 
+.search:before
+{
+        content: "S";
+}
+
 .delete:before
 {
         content: "\2718";
@@ -132,3 +137,28 @@
 {
         content: "\25B6";
 }
+
+.star:before
+{
+        content: "\2605";
+}
+
+
+.button-star
+{
+	width:68px;
+	height:68px;
+	padding:15px;
+}
+
+.button-star {background-image: url("pics/icons_big/ico_star.png");}
+.button-smilehappy {background-image: url("pics/icons_big/ico_smile_happy.png");}
+.button-smilelick {background-image: url("pics/icons_big/ico_smile_lick.png");}
+.button-smileneutral {background-image: url("pics/icons_big/ico_smile_neutral.png");}
+.button-smileunhappy {background-image: url("pics/icons_big/ico_smile_unhappy.png");}
+.button-smileveryhappy {background-image: url("pics/icons_big/ico_smile_veryhappy.png");}
+.button-cafe {background-image: url("pics/icons_big/ico_cafe.png");}
+.button-drink {background-image: url("pics/icons_big/ico_drink.png");}
+.button-wine {background-image: url("pics/icons_big/ico_wine.png");}
+.button-search {background-image: url("pics/icons_big/ico_search.png");}
+

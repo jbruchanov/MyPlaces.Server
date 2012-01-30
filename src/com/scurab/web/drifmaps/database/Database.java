@@ -117,7 +117,7 @@ public class Database
 		s.setId(System.nanoTime());		
 		String qry = String.format(Structure.Queries.INSERT_INTO_STAR_TEMPLATE, Structure.Tables.STARS,
 								   Structure.Stars.ID,Structure.Stars.NOTE, Structure.Stars.X,Structure.Stars.Y, Structure.Stars.TYPE,
-								   s.getId(), convertEmptyStringToNull(s.getNote(), true), s.getX(),s.getY(), s.getType());
+								   s.getId(), convertEmptyStringToNull(s.getNote(), true), s.getX(),s.getY(), convertEmptyStringToNull(s.getType(), true));
 		mStatement.executeUpdate(qry);
 	}
 	
@@ -133,7 +133,7 @@ public class Database
 				
 		String qry = String.format(Structure.Queries.UPDATE_STARNOTE_TEMPLATE, Structure.Tables.STARS, 
 				Structure.Stars.NOTE, convertEmptyStringToNull(s.getNote(), true), 
-				Structure.Stars.TYPE, s.getType(),
+				Structure.Stars.TYPE, convertEmptyStringToNull(s.getType(), true),
 			    Structure.Stars.ID,s.getId());
 		mStatement.executeUpdate(qry);
 	}
@@ -185,7 +185,7 @@ public class Database
 			Star s = new Star();
 			s.setId(rs.getLong(Structure.Stars.ID));
 			s.setNote(rs.getString(Structure.Stars.NOTE));
-			s.setType(rs.getInt(Structure.Stars.TYPE));
+			s.setType(rs.getString(Structure.Stars.TYPE));
 			s.setX(rs.getDouble(Structure.Stars.X));
 			s.setY(rs.getDouble(Structure.Stars.Y));
 			result.add(s);
@@ -797,7 +797,7 @@ public class Database
 			public static final String CREATE_TABLE_PROS = "CREATE VIRTUAL TABLE Pros USING fts3(MapItem_FK NUMERIC NOT NULL, Value TEXT NOT NULL)";
 			public static final String CREATE_TABLE_CONS = "CREATE VIRTUAL TABLE Cons USING fts3(MapItem_FK NUMERIC NOT NULL, Value TEXT NOT NULL)";			
 			public static final String CREATE_TABLE_DETAILS = "CREATE VIRTUAL TABLE Details USING fts3(ID NUMERIC PRIMARY KEY NOT NULL, MapItem_FK NUMERIC NOT NULL, What TEXT, Value TEXT NOT NULL, [When] DATETIME NOT NULL)";
-			public static final String CREATE_TABLE_STARS = "CREATE VIRTUAL TABLE Stars USING fts3(ID NUMERIC PRIMARY KEY NOT NULL, Note TEXT, StarType INTEGER NOT NULL, When NUMERIC NOT NULL, X FLOAT NOT NULL, Y FLOAT NOT NULL)";
+			public static final String CREATE_TABLE_STARS = "CREATE VIRTUAL TABLE Stars USING fts3(ID NUMERIC PRIMARY KEY NOT NULL, Note TEXT, StarType TEXT NOT NULL, When NUMERIC NOT NULL, X FLOAT NOT NULL, Y FLOAT NOT NULL)";
 			public static final String CREATE_TABLE_MAPITEMTYPE = "CREATE VIRTUAL TABLE MapItemTypes USING fts3(ID NUMERIC PRIMARY KEY NOT NULL, MapItemType UNIQUE TEXT NOT NULL)";
 			public static final String[] ALL_CREATE_TABLE_QUERIES = new String[] {CREATE_TABLE_MAP_ITEM,CREATE_TABLE_PROS,CREATE_TABLE_CONS,CREATE_TABLE_DETAILS,CREATE_TABLE_STARS,CREATE_TABLE_MAPITEMTYPE};
 			public static final String DELETE_DATA_FROM_TABLE_TEMPLATE = "DELETE FROM %s";

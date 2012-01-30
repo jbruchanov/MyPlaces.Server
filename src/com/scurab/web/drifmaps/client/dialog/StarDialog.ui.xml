@@ -1,0 +1,43 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:my="urn:import:com.scurab.web.drifmaps.client.controls">
+	<g:HTMLPanel>
+		<g:Grid ui:field="grid">
+			<g:row>
+				<g:customCell>
+					<my:CommandButton styleName="button-star button-star item-header-icobutton" command="10" />
+				</g:customCell>
+				<g:customCell>
+					<my:CommandButton styleName="button-cafe button-star item-header-icobutton" command="11"/>
+				</g:customCell>
+				<g:customCell>
+					<my:CommandButton styleName="button-drink button-star item-header-icobutton" command="12"/>
+				</g:customCell>
+				<g:customCell>
+					<my:CommandButton styleName="button-wine button-star item-header-icobutton" command="13"/>
+				</g:customCell>
+				<g:customCell>
+					<my:CommandButton styleName="button-search button-star item-header-icobutton" command="14"/>
+				</g:customCell>
+			</g:row>
+			<g:row>
+				<g:customCell>
+					<my:CommandButton styleName="button-smilehappy button-star item-header-icobutton" command="20"/>
+				</g:customCell>
+				<g:customCell>
+					<my:CommandButton styleName="button-smilelick button-star item-header-icobutton" command="21"/>
+				</g:customCell>
+				<g:customCell>
+					<my:CommandButton styleName="button-smileneutral button-star item-header-icobutton" command="22"/>
+				</g:customCell>
+				<g:customCell>
+					<my:CommandButton styleName="button-smileunhappy button-star item-header-icobutton" command="23"/>
+				</g:customCell>
+				<g:customCell>
+					<my:CommandButton styleName="button-smileveryhappy button-star item-header-icobutton" command="24"/>
+				</g:customCell>
+			</g:row>
+		</g:Grid>
+	</g:HTMLPanel>
+</ui:UiBinder> 

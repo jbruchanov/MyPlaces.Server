@@ -82,7 +82,7 @@ public class MainView extends Composite implements MainViewPresenter.Display
 		mSearchBox = new TextBox();
 		mSearchBox.setStyleName("searchTextBox");
 		mSearchButton = new Button();
-		mSearchButton.setStyleName("searchButton");
+		mSearchButton.setStyleName("button searchButton");
 		p.add(mSearchBox);
 		top.add(mSearchButton);
 		mSearchButton.setText(DrifMaps.Words.Search());
@@ -246,5 +246,10 @@ public class MainView extends Composite implements MainViewPresenter.Display
 	public HasText getSearchBox()
 	{
 		return mSearchBox;
+	}
+	
+	public Button getStarButton()
+	{
+		return mMenu.getStarButton();
 	}
 }

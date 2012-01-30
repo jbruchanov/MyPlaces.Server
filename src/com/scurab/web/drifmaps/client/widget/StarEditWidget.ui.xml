@@ -1,0 +1,10 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:with type="com.scurab.web.drifmaps.language.Words" field="res" />
+	<g:HTMLPanel>
+		<g:Label text="{res.Note}"/>
+		<g:RichTextArea width="98%" height="80px" ui:field="txtNote"/>
+		<g:Button text="{res.Save}" ui:field="btnSave"/>
+	</g:HTMLPanel>
+</ui:UiBinder> 

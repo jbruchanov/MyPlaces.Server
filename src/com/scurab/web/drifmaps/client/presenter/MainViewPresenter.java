@@ -8,6 +8,7 @@ import com.capsula.gwt.reversegeocoder.client.ExtendedPlacemark;
 import com.capsula.gwt.reversegeocoder.client.ReverseGeocoder;
 import com.capsula.gwt.reversegeocoder.client.ReverseGeocoderCallback;
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -40,6 +41,7 @@ import com.scurab.web.drifmaps.client.dialog.ContextDetailInputDialog;
 import com.scurab.web.drifmaps.client.dialog.InputDialog;
 import com.scurab.web.drifmaps.client.dialog.NotificationDialog;
 import com.scurab.web.drifmaps.client.dialog.QuestionDialog;
+import com.scurab.web.drifmaps.client.dialog.StarDialog;
 import com.scurab.web.drifmaps.client.form.MapItemDetailForm;
 import com.scurab.web.drifmaps.client.formmodel.MapItemDetailFormModel;
 import com.scurab.web.drifmaps.client.map.MapItemOverlay;
@@ -87,6 +89,7 @@ public class MainViewPresenter
 		void setCurrentMenuTab(int i);
 		Button getSearchButton();
 		HasText getSearchBox();
+		Button getStarButton();
 	}
 	
 	private Display mDisplay = null;
@@ -96,12 +99,14 @@ public class MainViewPresenter
 	private MapWidget mapWidget = null;
 	private MapItemDetailFormModel mDataModel = null;
 	private Button mSearchButton = null;
+	private String mStarType = null;
 	
 	public enum State
 	{
 		Adding,
 		Editing,
-		Default
+		Default,
+		AddingStar
 	}
 	
 	public MainViewPresenter(Display display, DataServiceAsync ds)
@@ -279,6 +284,27 @@ public class MainViewPresenter
 			public void onClick(ClickEvent event)
 			{
 				handleClickCustomDetail();
+			}
+		});
+		
+		mDisplay.getStarButton().addClickHandler(new ClickHandler()
+		{
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				if(mState == State.AddingStar)
+					onFinishAdding(true);
+				else
+				{
+					StarDialog.show(new StarDialog.OnStarClick()
+					{
+						@Override
+						public void onStarClick(String value)
+						{
+								onAddingStar(value);
+						}
+					});
+				}
 			}
 		});
 	}
@@ -464,12 +490,26 @@ public class MainViewPresenter
 	public void onAddingItem()
 	{
 		mState = State.Adding;
+		
 		mDisplay.getMenuContent().setOpen(true);
 		mDisplay.getAddButton().setStyleName("button cancel");
 		mDisplay.getAddButton().setText(DrifMaps.Words.Cancel());	
 		mDisplay.setMapItem(new MapItem());
 		mDisplay.getSaveButton().setEnabled(true);
+		mDisplay.getStarButton().setEnabled(false);
 		mMapController.startAdding();
+	}
+	
+	public void onAddingStar(String type)
+	{
+		mStarType = type;
+		mState = State.AddingStar;
+		mMapController.onChangeCursor(Cursor.CROSSHAIR.toString());
+		mDisplay.getMenuContent().setOpen(false);
+		mDisplay.getStarButton().setStyleName("button cancel");
+		mDisplay.getStarButton().setText(DrifMaps.Words.Cancel());			
+		mDisplay.getAddButton().setEnabled(false);
+		mDisplay.getSaveButton().setEnabled(false);
 	}
 	
 	private void handleStartEditing(final MapItem mi)
@@ -482,7 +522,7 @@ public class MainViewPresenter
 			{
 				if(result.size() == 1)
 				{
-					onStartEditing((MapItem) result.get(0));
+					onStarEditing((MapItem) result.get(0));
 				}
 				else
 				{
@@ -504,7 +544,7 @@ public class MainViewPresenter
 	 * Event called on start editing
 	 * @param mi
 	 */
-	public void onStartEditing(MapItem mi)
+	public void onStarEditing(MapItem mi)
 	{		
 		//map handler call this method => witch handler to edit state made before this call
 		mState = State.Editing;		
@@ -543,12 +583,47 @@ public class MainViewPresenter
 		mDisplay.getMenuContent().setOpen(false);
 		onClearContextItems();
 		mDisplay.setMapItem(null);
+		mDisplay.getAddButton().setEnabled(true);
 		mDisplay.getAddButton().setStyleName("button add");
 		mDisplay.getAddButton().setText(DrifMaps.Words.Add());
 		mDisplay.getStreetView().hide();
 		mDisplay.getSaveButton().setEnabled(false);
+		mDisplay.getStarButton().setEnabled(true);
+		mDisplay.getStarButton().setStyleName("button star");
+		mDisplay.getStarButton().setText(DrifMaps.Words.Star());
 		mDisplay.setCurrentMenuTab(0);
 		mDisplay.getForm().getMapItemType().setSelectedIndex(0);
+	}
+	
+	public void onFinishAddingStar(final Star s)
+	{
+		mDisplay.getStarButton().setEnabled(false);
+		mDataService.processStar(s, DataService.ADD, new AsyncCallback<Star>()
+		{
+			@Override
+			public void onSuccess(Star result)
+			{
+				onAddedStar(result);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught)
+			{			
+				NotificationDialog.show(caught);
+			}
+		});
+	}
+	
+	public void onAddedStar(Star s)
+	{
+		mState = State.Default;
+		mDisplay.getStarButton().setStyleName("button star");
+		mDisplay.getStarButton().setText(DrifMaps.Words.Star());
+		mDisplay.getStarButton().setEnabled(true);
+		mDisplay.getAddButton().setEnabled(true);
+		mDisplay.getSaveButton().setEnabled(false);
+		mMapController.addStar(s);
+		mMapController.onChangeCursor(null);
 	}
 	
 	public void onSavingItem() throws ValidationException
@@ -609,16 +684,25 @@ public class MainViewPresenter
 	 */
 	public void onMapClick(MapClickEvent event)
 	{
+		LatLng e = event.getLatLng();
+		if(e == null)
+			e = event.getOverlayLatLng();
 		if(mState == State.Adding || mState==State.Editing)
 		{
-			LatLng e = event.getLatLng();
-			if(e == null)
-				e = event.getOverlayLatLng();
 			mDataModel.getX().setValue(e.getLongitude());
 			mDataModel.getY().setValue(e.getLatitude());
 			mDisplay.getStreetView().setLocation(e);
 			handleChangePosition(e);
 		}
+		else if(mState == State.AddingStar)
+		{
+			Star s = new Star();
+			s.setType(mStarType);
+			s.setX(e.getLongitude());
+			s.setY(e.getLatitude());			
+			onFinishAddingStar(s);
+		}
+			
 	}
 	/**
 	 * sets text boxed base on current marker position

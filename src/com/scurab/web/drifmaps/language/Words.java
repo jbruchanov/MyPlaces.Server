@@ -187,6 +187,15 @@ public interface Words extends com.google.gwt.i18n.client.Constants {
   String No();
 
   /**
+   * Translated "Note".
+   * 
+   * @return translated "Note"
+   */
+  @DefaultStringValue("Note")
+  @Key("Note")
+  String Note();
+
+  /**
    * Translated "OK".
    * 
    * @return translated "OK"
@@ -248,6 +257,15 @@ public interface Words extends com.google.gwt.i18n.client.Constants {
   @DefaultStringValue("Search")
   @Key("Search")
   String Search();
+
+  /**
+   * Translated "Star".
+   * 
+   * @return translated "Star"
+   */
+  @DefaultStringValue("Star")
+  @Key("Star")
+  String Star();
 
   /**
    * Translated "Street".

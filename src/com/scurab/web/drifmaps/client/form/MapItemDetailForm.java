@@ -31,6 +31,7 @@ public class MapItemDetailForm extends VerySimpleForm
 	
 	public MapItemDetailForm(MapItemDetailFormModel model, MapItemTypeService dataService)
 	{
+		setWidth("100%");
 		mModel = model;
 		type.setDataService(dataService);
 		try

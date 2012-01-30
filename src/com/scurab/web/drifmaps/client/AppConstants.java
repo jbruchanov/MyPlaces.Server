@@ -24,6 +24,15 @@ public final class AppConstants {
 		public final static String ICO_QUESTION = PREFIX + "ico_question.png";
 		public final static String ICO_BEER = PREFIX + "ico_beer.png";
 		public final static String ICO_STAR = PREFIX + "ico_star.png";
+		
+		public final static String ICO_SMILE_LICK = PREFIX + "ico_smile_lick.png";
+		public final static String ICO_SMILE_HAPPY = PREFIX + "ico_smile_happy.png";
+		public final static String ICO_SMILE_VERYHAPPY = PREFIX + "ico_smile_veryhappy.png";
+		public final static String ICO_SMILE_UNHAPPY = PREFIX + "ico_smile_unhappy.png";
+		public final static String ICO_SMILE_NEUTRAL = PREFIX + "ico_smile_neutral.png";
+		public final static String ICO_CAFE = PREFIX + "ico_cafe.png";
+		public final static String ICO_WINE = PREFIX + "ico_wine.png";
+		public final static String ICO_DRINK = PREFIX + "ico_drink.png";
 
 	}
 
@@ -40,6 +49,17 @@ public final class AppConstants {
 		private final static String PREFIX = "pics/icons_medium/";
 		public final static String ICO_BEER = PREFIX + "ico_beer.png";
 		public final static String ICO_STAR = PREFIX + "ico_star.png";
+		
+		public final static String ICO_SMILE_LICK = PREFIX + "ico_smile_lick.png";
+		public final static String ICO_SMILE_HAPPY = PREFIX + "ico_smile_happy.png";
+		public final static String ICO_SMILE_VERYHAPPY = PREFIX + "ico_smile_veryhappy.png";
+		public final static String ICO_SMILE_UNHAPPY = PREFIX + "ico_smile_unhappy.png";
+		public final static String ICO_SMILE_NEUTRAL = PREFIX + "ico_smile_neutral.png";
+		public final static String ICO_CAFE = PREFIX + "ico_cafe.png";
+		public final static String ICO_WINE = PREFIX + "ico_wine.png";
+		public final static String ICO_DRINK = PREFIX + "ico_drink.png";
+		public final static String ICO_SEARCH = PREFIX + "ico_search.png";
+		
 	}
 	
 	public final class SmallIcons
@@ -53,13 +73,13 @@ public final class AppConstants {
 	public static class Settings
 	{
 		//LatLng.newInstance(50, 14.5)
-		/*
+		
 		public static float DEFAULT_MAP_LOCATION_X = 14.5f;
 		public static float DEFAULT_MAP_LOCATION_Y = 50f;
 		public static int DEFAULT_MAP_ZOOM = 7;
-		*/
-		public static float DEFAULT_MAP_LOCATION_X = 14.4469678401f;
+		
+		/*public static float DEFAULT_MAP_LOCATION_X = 14.4469678401f;
 		public static float DEFAULT_MAP_LOCATION_Y = 50.091615414f;
-		public static int DEFAULT_MAP_ZOOM = 15;
+		public static int DEFAULT_MAP_ZOOM = 15;*/
 	}
 }

@@ -6,10 +6,13 @@ import java.util.List;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.maps.client.InfoWindow;
+import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapUIOptions;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.event.MapClickHandler;
 import com.google.gwt.maps.client.event.MapClickHandler.MapClickEvent;
+import com.google.gwt.maps.client.event.InfoWindowCloseClickHandler;
 import com.google.gwt.maps.client.event.MapDragEndHandler;
 import com.google.gwt.maps.client.event.MapZoomEndHandler;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
@@ -18,12 +21,15 @@ import com.google.gwt.maps.client.geom.LatLngBounds;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.scurab.web.drifmaps.client.AppConstants;
 import com.scurab.web.drifmaps.client.DataServiceAsync;
 import com.scurab.web.drifmaps.client.Settings;
+import com.scurab.web.drifmaps.client.dialog.CloseableDialog;
 import com.scurab.web.drifmaps.client.dialog.NotificationDialog;
 import com.scurab.web.drifmaps.client.map.MapItemOverlay;
 import com.scurab.web.drifmaps.client.presenter.MainViewPresenter.State;
+import com.scurab.web.drifmaps.client.widget.StarEditWidget;
 import com.scurab.web.drifmaps.shared.datamodel.MapItem;
 import com.scurab.web.drifmaps.shared.datamodel.Star;
 
@@ -41,6 +47,7 @@ public class MapController
 	protected static final String DEFAULT_CURSOR = "url(http://maps.gstatic.com/intl/en_ALL/mapfiles/openhand_8_8.cur), default";
 	private DataServiceAsync mDataService = null;
 	protected HashMap<Long, MapItemOverlay<MapItem>> mCurrentVisibleMapItems = new HashMap<Long,MapItemOverlay<MapItem>>();
+	protected HashMap<Long, MapItemOverlay<Star>> mCurrentVisibleStars = new HashMap<Long,MapItemOverlay<Star>>();
 	protected State mState = State.Default;
 	private OnMapMarkerClick listener = null;
 	
@@ -60,6 +67,8 @@ public class MapController
 		this.map = map;
 		mDataService = ds;
 		bind();
+		
+		loadStars();
 	}
 	
 	public void addMapItem(MapItem item)
@@ -81,9 +90,36 @@ public class MapController
 		});		
 	}
 	
+	public void addStar(final Star s)
+	{
+		onChangeCursor(null);
+		MapItemOverlay<Star> mio = new MapItemOverlay<Star>(s);
+		mCurrentVisibleStars.put(s.getId(), mio);
+		mio.addMarkerClickHandler(new MarkerClickHandler()
+		{
+			@Override
+			public void onClick(MarkerClickEvent event)
+			{
+				final CloseableDialog cd = new CloseableDialog();
+				StarEditWidget sew = new StarEditWidget(s, mDataService, new StarEditWidget.OnSavedListener()
+				{
+					@Override
+					public void onSave()
+					{
+						cd.hide();
+					}
+				});				
+				cd.add(sew);
+				cd.show();
+			}
+			
+		});
+		map.addOverlay(mio);
+	}
+	
 	public void startAdding()
 	{
-		mState = State.Adding;		
+		mState = State.Adding;
 		onChangeCursor(Cursor.CROSSHAIR.toString());
 	}
 	
@@ -137,6 +173,21 @@ public class MapController
 		
 	}
 	
+	public void loadStars()
+	{
+		mDataService.get(Star.class.getName(),  new AsyncCallback<List<?>>()
+		{
+			@Override
+			public void onFailure(Throwable caught){}
+
+			@Override
+			public void onSuccess(List<?> result)
+			{
+				List<Star> t = (List<Star>) result;
+				onLoadStars(t);
+			}
+		});
+	}
 	public void loadIcons(int zoom, LatLngBounds bounds)
 	{
 		if(zoom < Settings.MIN_ZOOM_TO_LOAD_ICONS)
@@ -175,6 +226,15 @@ public class MapController
 			else
 				mio.setMapItem(item);
 		}
+	}
+	
+	protected void onLoadStars(List<Star> result)
+	{
+		if(result.size() == 0)
+			return;
+		List<Star> val = result;
+		for(Star item : val)
+			addStar(item);
 	}
 	
 	private MapDragEndHandler mDragEndHandler = new MapDragEndHandler()
@@ -230,7 +290,7 @@ public class MapController
 	 * Overrides style! 
 	 * @param cursor
 	 */
-	protected void onChangeCursor(String cursor)
+	public void onChangeCursor(String cursor)
 	{
 		if(cursor == null)
 			cursor = DEFAULT_CURSOR;

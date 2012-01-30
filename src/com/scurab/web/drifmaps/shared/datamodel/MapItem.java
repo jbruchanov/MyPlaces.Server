@@ -8,6 +8,7 @@ import com.scurab.web.drifmaps.shared.interfaces.HasCoordinates;
 import com.scurab.web.drifmaps.shared.interfaces.HasIcon;
 import com.scurab.web.drifmaps.shared.interfaces.HasId;
 import com.scurab.web.drifmaps.shared.interfaces.HasTitle;
+import com.scurab.web.drifmaps.shared.utils.AppUtils;
 
 public class MapItem implements Serializable, HasCoordinates, HasId, HasIcon, HasTitle
 {
@@ -103,7 +104,7 @@ public class MapItem implements Serializable, HasCoordinates, HasId, HasIcon, Ha
 	}
 	public void setX(double x)
 	{
-		this.x = x;
+		this.x = AppUtils.round(x,6);
 	}
 	@Override
 	public double getY()
@@ -112,7 +113,7 @@ public class MapItem implements Serializable, HasCoordinates, HasId, HasIcon, Ha
 	}
 	public void setY(double y)
 	{
-		this.y = y;
+		this.y = AppUtils.round(y,6);
 	}
 	public List<String> getPros()
 	{

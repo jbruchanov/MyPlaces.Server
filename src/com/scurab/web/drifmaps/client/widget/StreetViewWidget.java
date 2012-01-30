@@ -1,7 +1,5 @@
 package com.scurab.web.drifmaps.client.widget;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -20,6 +18,7 @@ import com.google.gwt.maps.client.streetview.StreetviewPanoramaWidget;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasValue;
+import com.scurab.web.drifmaps.shared.utils.AppUtils;
 
 public class StreetViewWidget extends Composite implements HasValue<String>
 {
@@ -305,11 +304,11 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 	private String transformLocationToString()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append(X + VALUE_SEPARATOR + panorama.getLatLng().getLongitude() + ITEM_SEPARATOR);
-		sb.append(Y + VALUE_SEPARATOR + panorama.getLatLng().getLatitude() + ITEM_SEPARATOR);
-		sb.append(YAW + VALUE_SEPARATOR + panorama.getPov().getYaw() + ITEM_SEPARATOR);
-		sb.append(PITCH + VALUE_SEPARATOR + panorama.getPov().getPitch() + ITEM_SEPARATOR);
-		sb.append(ZOOM + VALUE_SEPARATOR + panorama.getPov().getZoom());
+		sb.append(X + VALUE_SEPARATOR + AppUtils.round(panorama.getLatLng().getLongitude(),6) + ITEM_SEPARATOR);
+		sb.append(Y + VALUE_SEPARATOR + AppUtils.round(panorama.getLatLng().getLatitude(),6) + ITEM_SEPARATOR);
+		sb.append(YAW + VALUE_SEPARATOR + AppUtils.round(panorama.getPov().getYaw(),6) + ITEM_SEPARATOR);
+		sb.append(PITCH + VALUE_SEPARATOR + AppUtils.round(panorama.getPov().getPitch(),6) + ITEM_SEPARATOR);
+		sb.append(ZOOM + VALUE_SEPARATOR + AppUtils.round(panorama.getPov().getZoom(),6));
 		return sb.toString();
 	}
 	

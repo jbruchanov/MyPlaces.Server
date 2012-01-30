@@ -33,7 +33,7 @@ public class RandomGenerator
 			s.setNote(AppUtils.generateRandomString());
 		s.setX(genRandomX());
 		s.setY(genRandomY());
-		s.setType(r.nextInt(20));
+		s.setType(AppUtils.generateRandomString());
 		return s;
 	}
 	

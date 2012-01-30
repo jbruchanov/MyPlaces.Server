@@ -15,6 +15,7 @@ public class Menu extends Composite
 	private static MenuUiBinder uiBinder = GWT.create(MenuUiBinder.class);
 	@UiField Button btnAdd;
 	@UiField Button btnSave;
+	@UiField Button btnStar;
 	@UiField DisclosurePanel menuContentHolder;
 
 	interface MenuUiBinder extends UiBinder<Widget, Menu>
@@ -37,6 +38,11 @@ public class Menu extends Composite
 	public Button getSaveButton()
 	{
 		return btnSave;
+	}
+	
+	public Button getStarButton()
+	{
+		return btnStar;
 	}
 	
 	public DisclosurePanel getMenuContent()

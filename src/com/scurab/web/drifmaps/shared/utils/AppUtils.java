@@ -69,4 +69,13 @@ public class AppUtils
 		int ix = (int)(Math.round(dbl * 100.0));
 		return ix/100.0f;
 	}
+	
+	public static double round(double dbl, int decimals)
+	{
+		if(decimals > 8)
+			decimals = 8;
+		double base = Math.pow(10, decimals);
+		int ix = (int)(Math.round(dbl * base));
+		return ix/base;
+	}
 }
