@@ -220,13 +220,13 @@ public class MainView extends Composite implements MainViewPresenter.Display
 	}
 	
 	@Override
-	public Button getAddButton()
+	public Button getLeftButton()
 	{
 		return mMenu.getAddButton();
 	}
 	
 	@Override
-	public Button getSaveButton()
+	public Button getRightButton()
 	{
 		return  mMenu.getSaveButton();
 	}

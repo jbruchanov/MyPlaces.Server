@@ -138,6 +138,10 @@ public class MapController
 		onChangeCursor(Cursor.CROSSHAIR.toString());
 	}
 	
+	public void startEditing(MapItem mio)
+	{
+		startEditing(mCurrentVisibleMapItems.get(mio.getId()));
+	}
 	public void startEditing(MapItemOverlay<MapItem> mio)
 	{
 		mState = State.Editing;
@@ -288,7 +292,9 @@ public class MapController
 //		InfoWindow iw = map.getInfoWindow();
 //		InfoWindowContent iwc = new InfoWindowContent(mapItemOverlay.getMapItem().getName());
 //		iw.open(mapItemOverlay.getLatLng(), iwc);
-		startEditing(mapItemOverlay);
+		//called after user click on edit button
+//		startEditing(mapItemOverlay);
+		
 	}
 	
 	private void hideMapMarker()

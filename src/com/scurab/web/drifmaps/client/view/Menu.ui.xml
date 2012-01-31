@@ -3,8 +3,8 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:with type="com.scurab.web.drifmaps.language.Words" field="res" />
 	<g:HTMLPanel>
-		<g:Button text="{res.Add}" styleName="button add" ui:field="btnAdd"/>
-		<g:Button text="{res.Save}" styleName="button save" ui:field="btnSave"/>
+		<g:Button text="{res.Add}" styleName="button add" ui:field="btnLeft"/>
+		<g:Button text="{res.Cancel}" styleName="button cancel" ui:field="btnRight"/>
 		<g:Button text="{res.Star}" styleName="button star" ui:field="btnStar"/>
 		<g:DisclosurePanel width="100%" height="100%" animationEnabled="true" ui:field="menuContentHolder">
 			<g:header></g:header>

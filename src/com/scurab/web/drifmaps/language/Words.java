@@ -160,6 +160,24 @@ public interface Words extends com.google.gwt.i18n.client.Constants {
   String Detail();
 
   /**
+   * Translated "Edit".
+   * 
+   * @return translated "Edit"
+   */
+  @DefaultStringValue("Edit")
+  @Key("Edit")
+  String Edit();
+
+  /**
+   * Translated "Hide".
+   * 
+   * @return translated "Hide"
+   */
+  @DefaultStringValue("Hide")
+  @Key("Hide")
+  String Hide();
+
+  /**
    * Translated "ID".
    * 
    * @return translated "ID"
