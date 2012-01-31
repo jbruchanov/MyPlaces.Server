@@ -56,12 +56,11 @@ public class StarEditWidget extends Composite
 		@Override
 		public void onClick(ClickEvent event)
 		{		
-			setButtonsEnabled(false);
-			btnSave.setText(DrifMaps.Words.Saving());
 			String t = txtNote.getText();
 			if(t == null || t.length() == 0)
 				return;
-			
+			setButtonsEnabled(false);
+			btnSave.setText(DrifMaps.Words.Saving());
 			mStar.setNote(t);
 			mDataService.processStar(mStar, DataService.UPDATE, new AsyncCallback<Star>()
 			{
