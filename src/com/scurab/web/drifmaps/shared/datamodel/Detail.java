@@ -1,11 +1,11 @@
 package com.scurab.web.drifmaps.shared.datamodel;
 
-import java.io.Serializable;
 import java.util.Date;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 import com.scurab.web.drifmaps.shared.interfaces.IsDetailItem;
 
-public class Detail implements Serializable, IsDetailItem
+public class Detail implements IsSerializable, IsDetailItem
 {
 	private long id;
 	private String what;
@@ -38,14 +38,17 @@ public class Detail implements Serializable, IsDetailItem
 	{
 		return time;
 	}
+	@Override
 	public void setWhen(Date time)
 	{
 		this.time = time;
 	}
+	@Override
 	public void setWhat(String what)
 	{
 		this.what = what;
 	}
+	@Override
 	public void setDetail(String detail)
 	{
 		this.detail = detail;

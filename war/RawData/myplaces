@@ -1,0 +1,41 @@
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        ServerName myplaces.scurab.com
+
+#ProxyRequests On
+#ProxyPreserveHost On
+
+        ErrorLog /var/log/apache2/myplaces.error.log
+        CustomLog /var/log/apache2/myplaces.log combined
+
+        #ProxyPass /drifmaps/dataService http://127.0.0.1:8081/myplaces/dataService
+        #ProxyPassReverse /drifmaps/dataService http://127.0.0.1:8081/myplaces/dataService
+
+#       ProxyPass / ajp://127.0.0.1:8081/drifmaps/
+#       ProxyPassReverse / ajp://127.0.0.1:8081/drifmaps/
+
+        ProxyRequests Off
+        ProxyVia Off
+        ProxyPreserveHost On
+
+        <Proxy *>
+          AddDefaultCharset off
+          Order deny,allow
+          Allow from all
+        </Proxy>
+
+        <Location />
+               Order allow,deny
+               Allow from all
+               ProxyPass http://127.0.0.1:8080/drifmaps/
+               ProxyPassReverse http://127.0.0.1:8080/drifmaps/
+               SetEnv proxy-nokeepalive 1
+               RequestHeader edit X-GWT-Module-Base ^(.*)/(.*)$ $1/drifmaps/$2
+        </Location>
+
+        <Proxy *>
+            AllowOverride None
+            Order allow,deny
+            Allow from All
+         </Proxy>
+</VirtualHost>

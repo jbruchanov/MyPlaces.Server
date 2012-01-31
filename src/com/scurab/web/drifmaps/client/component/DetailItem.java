@@ -12,7 +12,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.scurab.web.drifmaps.client.DrifMaps;
 import com.scurab.web.drifmaps.shared.interfaces.IsDetailItem;
 
 public class DetailItem<T extends IsDetailItem> extends Composite

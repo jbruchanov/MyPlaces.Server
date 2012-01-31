@@ -14,7 +14,7 @@
   <!-- Other module inherits                                      -->
   <inherits name="com.google.gwt.maps.GoogleMaps"/>
   <inherits name='com.pietschy.gwt.pectin.Pectin'/>
-	<inherits name="com.capsula.gwt.reversegeocoder.ReverseGeocoder" />
+  <inherits name="com.capsula.gwt.reversegeocoder.ReverseGeocoder" />
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.scurab.web.drifmaps.client.DrifMaps'/>

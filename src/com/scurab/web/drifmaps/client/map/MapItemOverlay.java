@@ -22,7 +22,7 @@ public class MapItemOverlay<T extends HasCoordinates & HasId & HasIcon & HasTitl
 	public MapItemOverlay(T mi, MarkerOptions options)
 	{
 		super(getLatLng(mi), getOptions(options, mi.getIconUrl(),mi.getTitle()));
-		mMapItem = mi;		
+		mMapItem = mi;
 	}
 	
 	protected static LatLng getLatLng(HasCoordinates mi)

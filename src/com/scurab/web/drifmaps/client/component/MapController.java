@@ -6,13 +6,10 @@ import java.util.List;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.maps.client.InfoWindow;
-import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapUIOptions;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.event.MapClickHandler;
 import com.google.gwt.maps.client.event.MapClickHandler.MapClickEvent;
-import com.google.gwt.maps.client.event.InfoWindowCloseClickHandler;
 import com.google.gwt.maps.client.event.MapDragEndHandler;
 import com.google.gwt.maps.client.event.MapZoomEndHandler;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
@@ -21,7 +18,6 @@ import com.google.gwt.maps.client.geom.LatLngBounds;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.scurab.web.drifmaps.client.AppConstants;
 import com.scurab.web.drifmaps.client.DataServiceAsync;
 import com.scurab.web.drifmaps.client.Settings;
@@ -114,6 +110,7 @@ public class MapController
 			}
 			
 		});
+				
 		map.addOverlay(mio);
 	}
 	
@@ -299,7 +296,8 @@ public class MapController
 		for(int i = 0;i<cnt;i++)
 		{
 			Element e = elems.getItem(i);
-			DOM.setStyleAttribute((com.google.gwt.user.client.Element) e, "cursor", cursor);
+			if(e.getClientWidth() > 250) //map tile has 256px
+				DOM.setStyleAttribute((com.google.gwt.user.client.Element) e, "cursor", cursor);
 		}
 	}
 	

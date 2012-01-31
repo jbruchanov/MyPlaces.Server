@@ -1,7 +1,6 @@
 package com.scurab.web.drifmaps.shared.datamodel;
 
-import java.io.Serializable;
-
+import com.google.gwt.user.client.rpc.IsSerializable;
 import com.scurab.web.drifmaps.client.AppConstants;
 import com.scurab.web.drifmaps.shared.interfaces.HasCoordinates;
 import com.scurab.web.drifmaps.shared.interfaces.HasIcon;
@@ -9,7 +8,7 @@ import com.scurab.web.drifmaps.shared.interfaces.HasId;
 import com.scurab.web.drifmaps.shared.interfaces.HasTitle;
 import com.scurab.web.drifmaps.shared.utils.AppUtils;
 
-public class Star implements HasCoordinates, HasId, Serializable, HasIcon, HasTitle
+public class Star implements HasCoordinates, HasId, IsSerializable, HasIcon, HasTitle
 {
 	private long id;
 	private String note;

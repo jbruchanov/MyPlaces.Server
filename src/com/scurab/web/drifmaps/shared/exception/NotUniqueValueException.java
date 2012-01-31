@@ -1,6 +1,8 @@
 package com.scurab.web.drifmaps.shared.exception;
 
-public class NotUniqueValueException extends Exception
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class NotUniqueValueException extends DTOException implements IsSerializable
 {
 	public NotUniqueValueException(String value)
 	{

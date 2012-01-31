@@ -1,6 +1,8 @@
 package com.scurab.web.drifmaps.shared.exception;
 
-public class ValidationException extends Exception
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class ValidationException extends DTOException implements IsSerializable
 {
 	
 	/**

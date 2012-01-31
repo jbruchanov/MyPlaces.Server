@@ -11,12 +11,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.scurab.web.drifmaps.server.MainApplication;
 import com.scurab.web.drifmaps.shared.datamodel.Detail;
 import com.scurab.web.drifmaps.shared.datamodel.MapItem;
 import com.scurab.web.drifmaps.shared.datamodel.Star;
 
 public class Database
 {	
+	/**
+	 * {@link MainApplication#readPropertiesFile()}
+	 */
+	public static String DBFILE = null;
 	private Connection mConnection = null;	
 	private Statement mStatement = null;
 	static
@@ -32,9 +37,15 @@ public class Database
 		}
 	}
 	
-	public Database(String fileName) throws SQLException
+	protected Database(String fileName) throws SQLException
 	{
 		mConnection = DriverManager.getConnection(String.format("jdbc:sqlite:%s",fileName));		
+		mStatement = mConnection.createStatement();
+	}
+	
+	public Database() throws SQLException
+	{
+		mConnection = DriverManager.getConnection(String.format("jdbc:sqlite:%s",DBFILE));		
 		mStatement = mConnection.createStatement();
 	}
 	

@@ -1,8 +1,8 @@
 package com.scurab.web.drifmaps.shared.datamodel;
 
-import java.io.Serializable;
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 import com.scurab.web.drifmaps.client.AppConstants;
 import com.scurab.web.drifmaps.shared.interfaces.HasCoordinates;
 import com.scurab.web.drifmaps.shared.interfaces.HasIcon;
@@ -10,7 +10,7 @@ import com.scurab.web.drifmaps.shared.interfaces.HasId;
 import com.scurab.web.drifmaps.shared.interfaces.HasTitle;
 import com.scurab.web.drifmaps.shared.utils.AppUtils;
 
-public class MapItem implements Serializable, HasCoordinates, HasId, HasIcon, HasTitle
+public class MapItem implements IsSerializable, HasCoordinates, HasId, HasIcon, HasTitle
 {
 	
 	private long id;

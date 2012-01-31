@@ -2,13 +2,17 @@ package com.scurab.web.drifmaps.server;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.google.gwt.user.server.rpc.SerializationPolicy;
 import com.scurab.web.drifmaps.client.DataService;
 import com.scurab.web.drifmaps.database.Database;
 import com.scurab.web.drifmaps.shared.datamodel.Detail;
 import com.scurab.web.drifmaps.shared.datamodel.MapItem;
 import com.scurab.web.drifmaps.shared.datamodel.SearchResult;
 import com.scurab.web.drifmaps.shared.datamodel.Star;
+import com.scurab.web.drifmaps.shared.exception.DTOException;
 
 /**
  * DataService implementation
@@ -17,6 +21,17 @@ import com.scurab.web.drifmaps.shared.datamodel.Star;
  */
 public class DataServiceImpl extends RemoteServiceServlet implements DataService{
 
+	@Override
+	protected SerializationPolicy doGetSerializationPolicy(HttpServletRequest request, String moduleBaseURL, String strongName)
+	{
+		// get the base url from the header instead of the body this way
+		// apache reverse proxy with rewrite on the header can work
+		String moduleBaseURLHdr = request.getHeader("X-GWT-Module-Base");
+
+		if (moduleBaseURLHdr != null)
+			moduleBaseURL = moduleBaseURLHdr;
+		return super.doGetSerializationPolicy(request, moduleBaseURL, strongName);
+	}
 	/**
 	 * 
 	 */
@@ -43,7 +58,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements DataService
 		}
 		catch(ClassNotFoundException cne)
 		{
-			throw new Exception(getExceptionMessage(cne));
+			throw new DTOException(getExceptionMessage(cne));
 		}
 	}
 	
@@ -59,18 +74,18 @@ public class DataServiceImpl extends RemoteServiceServlet implements DataService
 		List<?> result = null;
 		try
 		{
-			db = new Database(FILE);
+			db = new Database();
 			
 			if(MapItem.class.equals(clazz))
 				result = db.get(true);
 			else if(Star.class.equals(clazz))
 				result = db.getStars();
 			else
-				throw new Exception("Not implemented!");	
+				throw new DTOException("Not implemented!");	
 		}
 		catch(Exception e)
 		{
-			throw new Exception(getExceptionMessage(e));
+			throw new DTOException(getExceptionMessage(e));
 		}
 		finally
 		{
@@ -100,7 +115,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements DataService
 		}
 		catch(ClassNotFoundException cne)
 		{
-			throw new Exception(getExceptionMessage(cne));
+			throw new DTOException(getExceptionMessage(cne));
 		}
 	}
 	
@@ -121,18 +136,18 @@ public class DataServiceImpl extends RemoteServiceServlet implements DataService
 		List<?> result = null;
 		try
 		{
-			db = new Database(FILE);
+			db = new Database();
 			
 			if(MapItem.class.equals(clazz))
 				result = db.get(x1, y1, x2, y2, deep);
 			else if(Star.class.equals(clazz))
 				result = db.getStars(x1, y1, x2, y2);
 			else
-				throw new Exception("Not implemented!");	
+				throw new DTOException("Not implemented!");	
 		}
 		catch(Exception e)
 		{
-			throw new Exception(getExceptionMessage(e));
+			throw new DTOException(getExceptionMessage(e));
 		}
 		finally
 		{
@@ -178,7 +193,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements DataService
 		Database db = null;
 		try
 		{
-			db = new Database(FILE);
+			db = new Database();
 			switch(operation)
 			{
 				case ADD:
@@ -191,13 +206,13 @@ public class DataServiceImpl extends RemoteServiceServlet implements DataService
 					db.deleteStar(item);
 					break;
 				default:
-					throw new Exception("Not implemented!");	
+					throw new DTOException("Not implemented!");	
 			}
 			return item;
 		}
 		catch(Exception e)
 		{
-			throw new Exception(getExceptionMessage(e));
+			throw new DTOException(getExceptionMessage(e));
 		}
 		finally
 		{
@@ -222,7 +237,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements DataService
 		Database db = null;
 		try
 		{
-			db = new Database(FILE);
+			db = new Database();
 			switch(operation)
 			{
 				case ADD:
@@ -235,13 +250,13 @@ public class DataServiceImpl extends RemoteServiceServlet implements DataService
 					db.deleteMapItem(item);
 					break;
 				default:
-					throw new Exception("Not implemented!");	
+					throw new DTOException("Not implemented!");	
 			}
 			return item;
 		}
 		catch(Exception e)
 		{
-			throw new Exception(getExceptionMessage(e));
+			throw new DTOException(getExceptionMessage(e));
 		}
 		finally
 		{
@@ -266,7 +281,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements DataService
 		Database db = null;
 		try
 		{
-			db = new Database(FILE);
+			db = new Database();
 			switch(operation)
 			{
 				case ADD:		
@@ -281,13 +296,13 @@ public class DataServiceImpl extends RemoteServiceServlet implements DataService
 					db.deleteDetail(item);
 					break;
 				default:
-					throw new Exception("Not implemented!");	
+					throw new DTOException("Not implemented!");	
 			}
 			return item;
 		}
 		catch(Exception e)
 		{
-			throw new Exception(getExceptionMessage(e));
+			throw new DTOException(getExceptionMessage(e));
 		}
 		finally
 		{
@@ -312,7 +327,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements DataService
 		Database db = null;
 		try
 		{
-			db = new Database(FILE);
+			db = new Database();
 			switch(operation)
 			{
 				case ADD:					
@@ -325,15 +340,15 @@ public class DataServiceImpl extends RemoteServiceServlet implements DataService
 					if(type == DataService.TYPE_MAPITEM_TYPE)
 						db.deleteMapItemType(item);
 					else
-						throw new Exception("Not implemented!");
+						throw new DTOException("Not implemented!");
 					break;
 				default:
-					throw new Exception("Not implemented!");	
+					throw new DTOException("Not implemented!");	
 			}
 		}
 		catch(Exception e)
 		{
-			throw new Exception(getExceptionMessage(e));
+			throw new DTOException(getExceptionMessage(e));
 		}
 		finally
 		{
@@ -356,7 +371,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements DataService
 		List<String> result = null;
 		try
 		{
-			db = new Database(FILE);
+			db = new Database();
 			result = db.getMapItemTypes();
 		}
 		catch(Exception e)
@@ -398,16 +413,16 @@ public class DataServiceImpl extends RemoteServiceServlet implements DataService
 		List<?> result = null;
 		try
 		{
-			db = new Database(FILE);
+			db = new Database();
 			
 			if(MapItem.class.equals(clazz))
 				result = db.getMapItems(filters, true);			
 			else
-				throw new Exception("Not implemented!");	
+				throw new DTOException("Not implemented!");	
 		}
 		catch(Exception e)
 		{
-			throw new Exception(getExceptionMessage(e));
+			throw new DTOException(getExceptionMessage(e));
 		}
 		finally
 		{

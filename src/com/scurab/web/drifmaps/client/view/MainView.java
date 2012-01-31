@@ -1,11 +1,9 @@
 package com.scurab.web.drifmaps.client.view;
 
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.maps.client.MapWidget;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -13,7 +11,6 @@ import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -238,6 +235,7 @@ public class MainView extends Composite implements MainViewPresenter.Display
 		mTabPanel.selectTab(i);		
 	}
 	
+	@Override
 	public Button getSearchButton()
 	{
 		return mSearchButton;
@@ -248,6 +246,7 @@ public class MainView extends Composite implements MainViewPresenter.Display
 		return mSearchBox;
 	}
 	
+	@Override
 	public Button getStarButton()
 	{
 		return mMenu.getStarButton();

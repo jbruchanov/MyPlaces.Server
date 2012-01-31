@@ -11,20 +11,24 @@ import com.google.gwt.user.client.Window;
 import com.scurab.web.drifmaps.client.dialog.NotificationDialog;
 import com.scurab.web.drifmaps.client.presenter.MainViewPresenter;
 import com.scurab.web.drifmaps.client.view.MainView;
-import com.scurab.web.drifmaps.language.Words;;
+import com.scurab.web.drifmaps.language.Words;
+
+;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class DrifMaps implements EntryPoint {
-	
+public class DrifMaps implements EntryPoint
+{
+
 	public static final Words Words = GWT.create(Words.class);
 	private static final DataServiceAsync sDataService = GWT.create(DataService.class);
 	private static final HandlerManager sEventBus = new HandlerManager(null);
 	public static NumberFormat Currency = NumberFormat.getCurrencyFormat();
-	public static NumberFormat Decimal = NumberFormat.getDecimalFormat();	
-	public static DateTimeFormat DateFormat =  DateTimeFormat.getFormat(PredefinedFormat.DATE_LONG);
-	public static DateTimeFormat DateTimeMediumFormat =  DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_MEDIUM);
+	public static NumberFormat Decimal = NumberFormat.getDecimalFormat();
+	public static DateTimeFormat DateFormat = DateTimeFormat.getFormat(PredefinedFormat.DATE_LONG);
+	public static DateTimeFormat DateTimeMediumFormat = DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_MEDIUM);
 	
+
 	public DrifMaps()
 	{
 		GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler()
@@ -36,17 +40,22 @@ public class DrifMaps implements EntryPoint {
 			}
 		});
 	}
+
 	@Override
-	public void onModuleLoad() {
+	public void onModuleLoad()
+	{
 		try
 		{
-			//MainViewOld mv = new MainViewOld(sDataService,sEventBus);
-			new MainViewPresenter(new MainView(sDataService),sDataService);
+			// MainViewOld mv = new MainViewOld(sDataService,sEventBus);
+			new MainViewPresenter(new MainView(sDataService), sDataService);
 		}
-		catch(Exception e)
+		catch (Exception e)
 		{
 			Window.alert(e.getMessage());
 		}
-		
+
 	}
+
+	
+
 }
