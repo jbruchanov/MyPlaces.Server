@@ -4,6 +4,8 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
@@ -73,6 +75,8 @@ public class MainView extends Composite implements MainViewPresenter.Display
 			}
 		});
 		handleResizeContextContainer();
+		
+		
 	}
 	
 	private void initSearchPanel()
@@ -251,5 +255,10 @@ public class MainView extends Composite implements MainViewPresenter.Display
 	public Button getStarButton()
 	{
 		return mMenu.getStarButton();
+	}
+	
+	public void addSelectionTabHandler(SelectionHandler<Integer> handler)
+	{
+		mTabPanel.addSelectionHandler(handler);
 	}
 }

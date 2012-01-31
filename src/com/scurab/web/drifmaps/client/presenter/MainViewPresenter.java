@@ -12,6 +12,8 @@ import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.event.MapClickHandler;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
@@ -90,6 +92,7 @@ public class MainViewPresenter
 		Button getSearchButton();
 		HasText getSearchBox();
 		Button getStarButton();
+		void addSelectionTabHandler(SelectionHandler<Integer> handler);
 	}
 	
 	private Display mDisplay = null;
@@ -306,6 +309,29 @@ public class MainViewPresenter
 					});
 				}
 			}
+		});
+		
+		mDisplay.addSelectionTabHandler(new SelectionHandler<Integer>()
+		{
+
+			@Override
+			public void onSelection(SelectionEvent<Integer> event)
+			{
+				
+				//when streetview is goint to be display:gone its reseting
+				if(event.getSelectedItem() != 0)
+					mDisplay.getStreetView().hide(false);
+				else
+				{
+					//show it with already set value, show is called in setValue if value is not null
+					String value = mDisplay.getDataModel().getStreetViewLink().getValue();
+					if(value != null)
+						mDisplay.getStreetView().setValue(value);
+					else
+						mDisplay.getStreetView().show();
+				}
+			}
+			
 		});
 	}
 	
