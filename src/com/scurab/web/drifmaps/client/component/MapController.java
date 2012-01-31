@@ -23,6 +23,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.scurab.web.drifmaps.client.AppConstants;
+import com.scurab.web.drifmaps.client.DataService;
 import com.scurab.web.drifmaps.client.DataServiceAsync;
 import com.scurab.web.drifmaps.client.Settings;
 import com.scurab.web.drifmaps.client.dialog.CloseableDialog;
@@ -108,6 +109,13 @@ public class MapController
 					{
 						cd.hide();
 					}
+
+					@Override
+					public void onDelete(Star s)
+					{
+						cd.hide();
+						onDeleteStar(s);
+					}
 				});				
 				cd.add(sew);
 				cd.show();
@@ -115,6 +123,13 @@ public class MapController
 			
 		});
 		map.addOverlay(mio);
+	}
+	
+	public void onDeleteStar(Star s)
+	{
+		MapItemOverlay<Star> mio = mCurrentVisibleStars.get(s.getId());
+		map.removeOverlay(mio);
+		mCurrentVisibleStars.remove(s.getId());
 	}
 	
 	public void startAdding()
