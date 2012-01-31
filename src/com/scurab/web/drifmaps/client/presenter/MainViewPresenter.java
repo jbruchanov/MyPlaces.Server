@@ -815,12 +815,24 @@ public class MainViewPresenter
 	{
 		try
 		{
-			mDataModel.getCity().setValue(placemark.getCity());
+//			StringBuilder sb = new StringBuilder();
+//			sb.append(placemark.getAddress() + "\n");
+//			sb.append(placemark.getCity() + "\n");
+//			sb.append(placemark.getCountry() + "\n");
+//			sb.append(placemark.getCounty() + "\n");
+//			sb.append(placemark.getLocality() + "\n");
+			
+			if(placemark.getCity() != null)
+				mDataModel.getCity().setValue(placemark.getCity());
+			else
+				mDataModel.getCity().setValue(placemark.getCounty()); //sometimes shows nonsense
 			mDataModel.getStreet().setValue(placemark.getStreet());
 			mDataModel.getCountry().setValue(placemark.getCountry());
 		}
 		catch(Exception e)
-		{/*just ignor error and let user write it */}
+		{
+			/*just ignor error and let user write it */
+		}
 	}
 	
 	public void onClearContextItems()
