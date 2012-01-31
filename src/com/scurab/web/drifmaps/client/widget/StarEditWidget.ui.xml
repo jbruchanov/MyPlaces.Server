@@ -2,9 +2,24 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:with type="com.scurab.web.drifmaps.language.Words" field="res" />
+	<ui:style>
+		.container
+		{
+			padding:5px;
+		}
+	</ui:style>
 	<g:HTMLPanel>
-		<g:Label text="{res.Note}"/>
-		<g:RichTextArea width="98%" height="80px" ui:field="txtNote"/>
-		<g:Button text="{res.Save}" ui:field="btnSave"/>
+		<g:VerticalPanel width="350px" styleName="{style.container}">
+			<g:Label text="{res.Note}"/>
+			<g:TextArea width="98%" height="80px" ui:field="txtNote" />
+			<g:HorizontalPanel width="100%" verticalAlignment="ALIGN_TOP" horizontalAlignment="ALIGN_CENTER">
+				<g:HTMLPanel>
+					<g:Button text="{res.Save}" ui:field="btnSave" width="80%" />
+				</g:HTMLPanel>
+				<g:HTMLPanel>
+					<g:Button text="{res.Delete}" ui:field="btnDelete" width="80%"/>
+				</g:HTMLPanel>
+			</g:HorizontalPanel>
+		</g:VerticalPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 
