@@ -13,8 +13,8 @@ public class Menu extends Composite
 {
 
 	private static MenuUiBinder uiBinder = GWT.create(MenuUiBinder.class);
-	@UiField Button btnAdd;
-	@UiField Button btnSave;
+	@UiField Button btnLeft;
+	@UiField Button btnRight;
 	@UiField Button btnStar;
 	@UiField DisclosurePanel menuContentHolder;
 
@@ -28,16 +28,19 @@ public class Menu extends Composite
 		//to hide triangle button to open/close disclosure panel
 		menuContentHolder.setHeader(new Label());
 		menuContentHolder.remove(menuContentHolder.getHeader());
+		
+		btnRight.setEnabled(false);
+		btnRight.setVisible(false);
 	}
 	
 	public Button getAddButton()
 	{
-		return btnAdd;
+		return btnLeft;
 	}
 	
 	public Button getSaveButton()
 	{
-		return btnSave;
+		return btnRight;
 	}
 	
 	public Button getStarButton()

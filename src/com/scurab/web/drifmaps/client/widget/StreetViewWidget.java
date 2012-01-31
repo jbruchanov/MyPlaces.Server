@@ -74,6 +74,7 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 				if(lastPitch == pitch || panorama.isHidden()) //check for some change
 					return;
 				currentPov.setPitch(pitch);
+				currentLatLng = event.getSender().getLatLng();
 				lastPitch = pitch;
 //				panorama.getPov().setPitch(pitch);
 				updatePolyline();
@@ -91,6 +92,7 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 					return;
 				lastYaw = yaw;
 				currentPov.setYaw(yaw);
+				currentLatLng = event.getSender().getLatLng();
 //				panorama.getPov().setYaw(yaw);
 				updatePolyline();
 				ValueChangeEvent.fire(StreetViewWidget.this, getValue());
@@ -107,6 +109,8 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 				//so let it be handled by this way
 				if(panorama.isHidden()) 
 					return;
+				
+				currentLatLng = event.getSender().getLatLng();
 				currentPov.setZoom(zoom);
 				lastZoom = zoom;
 //				panorama.getPov().setZoom(zoom);
@@ -118,8 +122,6 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 		initWidget(panorama);		
 	}
 	
-	
-	
 	public void show()
 	{
 		panorama.show();
@@ -127,12 +129,19 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 	
 	public void hide()
 	{
+		hide(true);
+	}
+	public void hide(boolean reset)
+	{
 		panorama.hide();		
-		resetLastValues();
-		if (viewPolygon != null)
+		if(reset)
 		{
-			mapViewport.removeOverlay(viewPolygon);
-			viewPolygon = null;
+			resetLastValues();
+			if (viewPolygon != null)
+			{
+				mapViewport.removeOverlay(viewPolygon);
+				viewPolygon = null;
+			}
 		}
 	}
 	
@@ -282,7 +291,7 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 	@Override
 	public void setValue(String value)
 	{
-		 setPanorama(value);
+		setValue(value,false);
 	}
 
 	@Override
@@ -304,11 +313,11 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 	private String transformLocationToString()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append(X + VALUE_SEPARATOR + AppUtils.round(panorama.getLatLng().getLongitude(),6) + ITEM_SEPARATOR);
-		sb.append(Y + VALUE_SEPARATOR + AppUtils.round(panorama.getLatLng().getLatitude(),6) + ITEM_SEPARATOR);
-		sb.append(YAW + VALUE_SEPARATOR + AppUtils.round(panorama.getPov().getYaw(),6) + ITEM_SEPARATOR);
-		sb.append(PITCH + VALUE_SEPARATOR + AppUtils.round(panorama.getPov().getPitch(),6) + ITEM_SEPARATOR);
-		sb.append(ZOOM + VALUE_SEPARATOR + AppUtils.round(panorama.getPov().getZoom(),6));
+		sb.append(X + VALUE_SEPARATOR + AppUtils.round(currentLatLng.getLongitude(),6) + ITEM_SEPARATOR);
+		sb.append(Y + VALUE_SEPARATOR + AppUtils.round(currentLatLng.getLatitude(),6) + ITEM_SEPARATOR);
+		sb.append(YAW + VALUE_SEPARATOR + AppUtils.round(currentPov.getYaw(),6) + ITEM_SEPARATOR);
+		sb.append(PITCH + VALUE_SEPARATOR + AppUtils.round(currentPov.getPitch(),6) + ITEM_SEPARATOR);
+		sb.append(ZOOM + VALUE_SEPARATOR + AppUtils.round(currentPov.getZoom(),6));
 		return sb.toString();
 	}
 	

@@ -12,6 +12,8 @@ import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.event.MapClickHandler;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
@@ -21,6 +23,7 @@ import com.google.gwt.maps.client.geocode.LocationCallback;
 import com.google.gwt.maps.client.geocode.Placemark;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
+import com.google.gwt.maps.client.overlay.Overlay;
 import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -49,6 +52,7 @@ import com.scurab.web.drifmaps.shared.datamodel.Detail;
 import com.scurab.web.drifmaps.shared.datamodel.MapItem;
 import com.scurab.web.drifmaps.shared.datamodel.Star;
 import com.scurab.web.drifmaps.shared.exception.ValidationException;
+import com.scurab.web.drifmaps.shared.interfaces.HasCoordinates;
 
 public class MainViewPresenter
 {
@@ -82,13 +86,14 @@ public class MainViewPresenter
 		MapItemDetailFormModel getDataModel();
 		void setMapItem(MapItem mi);
 		boolean validate();
-		Button getAddButton();
-		Button getSaveButton();
+		Button getLeftButton();
+		Button getRightButton();
 		DisclosurePanel getMenuContent();
 		void setCurrentMenuTab(int i);
 		Button getSearchButton();
 		HasText getSearchBox();
 		Button getStarButton();
+		void addSelectionTabHandler(SelectionHandler<Integer> handler);
 	}
 	
 	private Display mDisplay = null;
@@ -140,7 +145,7 @@ public class MainViewPresenter
 			@Override
 			public void onMapItemClick(MapItemOverlay<MapItem> item)
 			{
-				handleStartEditing(item.getMapItem());
+				showMapItemEdit(item.getMapItem());
 			}
 		});
 	}
@@ -231,35 +236,50 @@ public class MainViewPresenter
 	private void bindMenu(DataServiceAsync ds)
 	{
 		
-		mDisplay.getAddButton().addClickHandler(new ClickHandler()
+		mDisplay.getLeftButton().addClickHandler(new ClickHandler()
 		{
 			@Override
 			public void onClick(ClickEvent event)
 			{
 				if(mState == State.Default)
-					onAddingItem();
-				else
-					onFinishAdding(true);
+				{
+					MapItem mi = mDisplay.getDataModel().getValue();
+					if(mi == null)
+						onAddingItem();
+					else
+						handleStartEditing(mi);
+				}
+				else if(mState == State.Adding || mState == State.Editing)
+				{
+					try
+					{
+						if (mDisplay.validate())
+							onSavingItem();
+					}
+					catch(ValidationException ve)
+					{
+						//it's not neccassary to catch, its exception for testing, validate will show it
+					}
+				}
+					
 			}
 		});
-		mDisplay.getSaveButton().addClickHandler(new ClickHandler()
+		mDisplay.getRightButton().addClickHandler(new ClickHandler()
 		{
 			@Override
 			public void onClick(ClickEvent event)
 			{
-				try
-				{
-					if (mDisplay.validate())
-						onSavingItem();
-				}
-				catch(ValidationException ve)
-				{
-					//it's not neccassary to catch, its exception for testing, validate will show it
-				}
+					onFinishAdding(true);
+//						mDisplay.getAddButton().setEnabled(true);
+//						mDisplay.getAddButton().setText(DrifMaps.Words.Add());
+//						mDisplay.getSaveButton().setEnabled(false);
+//						mDisplay.getSaveButton().setText(DrifMaps.Words.Save());
+//						mDisplay.getDataModel().setValue(null);
+//						mDisplay.getMenuContent().setOpen(false);
+//						mDisplay.getStreetView().hide();
+				
 			}
 		});
-		mDisplay.getSaveButton().setEnabled(false);
-		
 		mDisplay.getPlusButton().addClickHandler(new ClickHandler()
 		{
 			@Override
@@ -300,11 +320,34 @@ public class MainViewPresenter
 						@Override
 						public void onStarClick(String value)
 						{
-								onAddingStar(value);
+							onAddingStar(value);
 						}
 					});
 				}
 			}
+		});
+		
+		mDisplay.addSelectionTabHandler(new SelectionHandler<Integer>()
+		{
+
+			@Override
+			public void onSelection(SelectionEvent<Integer> event)
+			{
+				
+				//when streetview is goint to be display:gone its reseting
+				if(event.getSelectedItem() != 0)
+					mDisplay.getStreetView().hide(false);
+				else
+				{
+					//show it with already set value, show is called in setValue if value is not null
+					String value = mDisplay.getDataModel().getStreetViewLink().getValue();
+					if(value != null)
+						mDisplay.getStreetView().setValue(value);
+					else
+						mDisplay.getStreetView().show();
+				}
+			}
+			
 		});
 	}
 	
@@ -491,12 +534,52 @@ public class MainViewPresenter
 		mState = State.Adding;
 		
 		mDisplay.getMenuContent().setOpen(true);
-		mDisplay.getAddButton().setStyleName("button cancel");
-		mDisplay.getAddButton().setText(DrifMaps.Words.Cancel());	
 		mDisplay.setMapItem(new MapItem());
-		mDisplay.getSaveButton().setEnabled(true);
+		
+		setLeftButton(true, "save", DrifMaps.Words.Save());
+		setRightButton(true, "cancel", DrifMaps.Words.Cancel());
+
 		mDisplay.getStarButton().setEnabled(false);
 		mMapController.startAdding();
+	}
+	
+	private void resetButtons()
+	{
+		setLeftButton(true,"add",DrifMaps.Words.Add());
+		setRightButton(false,"cancel",DrifMaps.Words.Cancel());
+		setStarButton(true,"star",DrifMaps.Words.Star());
+	}
+	
+	private void setLeftButton(boolean enabled)
+	{
+		mDisplay.getLeftButton().setEnabled(enabled);
+	}
+	
+	private void setRightButton(boolean enabled)
+	{
+		mDisplay.getRightButton().setEnabled(enabled);
+	}
+	
+	private void setLeftButton(boolean enabled, String style, String text)
+	{
+		mDisplay.getLeftButton().setEnabled(enabled);
+		mDisplay.getLeftButton().setStyleName("button " + style);
+		mDisplay.getLeftButton().setText(text);	
+	}
+	
+	private void setRightButton(boolean enabled, String style, String text)
+	{
+		mDisplay.getRightButton().setEnabled(enabled);
+		mDisplay.getRightButton().setStyleName("button " + style);
+		mDisplay.getRightButton().setText(text);	
+		mDisplay.getRightButton().setVisible(enabled);
+	}
+	
+	private void setStarButton(boolean enabled, String style, String text)
+	{
+		mDisplay.getStarButton().setEnabled(enabled);
+		mDisplay.getStarButton().setStyleName("button " + style);
+		mDisplay.getStarButton().setText(text);	
 	}
 	
 	public void onAddingStar(String type)
@@ -505,10 +588,9 @@ public class MainViewPresenter
 		mState = State.AddingStar;
 		mMapController.onChangeCursor(Cursor.CROSSHAIR.toString());
 		mDisplay.getMenuContent().setOpen(false);
-		mDisplay.getStarButton().setStyleName("button cancel");
-		mDisplay.getStarButton().setText(DrifMaps.Words.Cancel());			
-		mDisplay.getAddButton().setEnabled(false);
-		mDisplay.getSaveButton().setEnabled(false);
+		setStarButton(true, "cancel", DrifMaps.Words.Cancel());
+		setLeftButton(false);
+		setRightButton(false);
 	}
 	
 	private void handleStartEditing(final MapItem mi)
@@ -521,7 +603,7 @@ public class MainViewPresenter
 			{
 				if(result.size() == 1)
 				{
-					onStarEditing((MapItem) result.get(0));
+					onStartEditing((MapItem) result.get(0));
 				}
 				else
 				{
@@ -543,15 +625,21 @@ public class MainViewPresenter
 	 * Event called on start editing
 	 * @param mi
 	 */
-	public void onStarEditing(MapItem mi)
+	public void onStartEditing(MapItem mi)
 	{		
 		//map handler call this method => witch handler to edit state made before this call
 		mState = State.Editing;		
-		mDisplay.getMenuContent().setOpen(true);
-		mDisplay.getAddButton().setStyleName("button cancel");
-		mDisplay.getAddButton().setText(DrifMaps.Words.Cancel());	
+		showMapItemEdit(mi);
+		setRightButton(true, "cancel", DrifMaps.Words.Cancel());
+		setLeftButton(true, "save", DrifMaps.Words.Save());
+		mMapController.startEditing(mi);
+		
+	}
+	
+	protected void showMapItemEdit(MapItem mi)
+	{
 		mDisplay.setMapItem(mi);
-		mDisplay.getSaveButton().setEnabled(true);
+		mDisplay.getMenuContent().setOpen(true);
 		if(mi.getPros() != null)
 		{
 			for(String s : mi.getPros())
@@ -570,6 +658,8 @@ public class MainViewPresenter
 				onAddDetail(d, false);
 		}
 		
+		setLeftButton(true,"edit",DrifMaps.Words.Edit());
+		setRightButton(true,"cancel",DrifMaps.Words.Hide());
 	}
 	
 	/**
@@ -582,14 +672,8 @@ public class MainViewPresenter
 		mDisplay.getMenuContent().setOpen(false);
 		onClearContextItems();
 		mDisplay.setMapItem(null);
-		mDisplay.getAddButton().setEnabled(true);
-		mDisplay.getAddButton().setStyleName("button add");
-		mDisplay.getAddButton().setText(DrifMaps.Words.Add());
 		mDisplay.getStreetView().hide();
-		mDisplay.getSaveButton().setEnabled(false);
-		mDisplay.getStarButton().setEnabled(true);
-		mDisplay.getStarButton().setStyleName("button star");
-		mDisplay.getStarButton().setText(DrifMaps.Words.Star());
+		resetButtons();
 		mDisplay.setCurrentMenuTab(0);
 		mDisplay.getForm().getMapItemType().setSelectedIndex(0);
 	}
@@ -616,11 +700,9 @@ public class MainViewPresenter
 	public void onAddedStar(Star s)
 	{
 		mState = State.Default;
-		mDisplay.getStarButton().setStyleName("button star");
-		mDisplay.getStarButton().setText(DrifMaps.Words.Star());
-		mDisplay.getStarButton().setEnabled(true);
-		mDisplay.getAddButton().setEnabled(true);
-		mDisplay.getSaveButton().setEnabled(false);
+		setLeftButton(true,"add",DrifMaps.Words.Add());
+		setRightButton(false,"save",DrifMaps.Words.Save());
+		setStarButton(true, "star", DrifMaps.Words.Star());
 		mMapController.addStar(s);
 		mMapController.onChangeCursor(null);
 	}
@@ -631,8 +713,7 @@ public class MainViewPresenter
 			throw new ValidationException("Map Item validation");
 		
 		MapItem item = mDisplay.getDataModel().getValue();
-		mDisplay.getSaveButton().setEnabled(false);
-		mDisplay.getSaveButton().setText(DrifMaps.Words.Saving());
+		setLeftButton(false,"save",DrifMaps.Words.Saving());
 		int operation = (item.getId() == 0) ? DataService.ADD : DataService.UPDATE;
 		
 		mDataService.processMapItem(item, operation, new AsyncCallback<MapItem>()
@@ -660,8 +741,6 @@ public class MainViewPresenter
 		if(mState == State.Adding)
 			mMapController.addMapItem(item);
 		onFinishAdding(false);
-		mDisplay.getSaveButton().setText(DrifMaps.Words.Save());
-		
 	}
 	
 	/**
@@ -685,7 +764,16 @@ public class MainViewPresenter
 	{
 		LatLng e = event.getLatLng();
 		if(e == null)
+		{
 			e = event.getOverlayLatLng();
+//			if(mState == State.Default)
+//			{
+//				MapItemOverlay mio = (MapItemOverlay) event.getOverlay();
+//				HasCoordinates item = mio.getMapItem();
+//				if(item instanceof MapItem)
+//					showMapItemEdit((MapItem)item);
+//			}
+		}
 		if(mState == State.Adding || mState==State.Editing)
 		{
 			mDataModel.getX().setValue(e.getLongitude());
@@ -726,12 +814,24 @@ public class MainViewPresenter
 	{
 		try
 		{
-			mDataModel.getCity().setValue(placemark.getCity());
+//			StringBuilder sb = new StringBuilder();
+//			sb.append(placemark.getAddress() + "\n");
+//			sb.append(placemark.getCity() + "\n");
+//			sb.append(placemark.getCountry() + "\n");
+//			sb.append(placemark.getCounty() + "\n");
+//			sb.append(placemark.getLocality() + "\n");
+			
+			if(placemark.getCity() != null)
+				mDataModel.getCity().setValue(placemark.getCity());
+			else
+				mDataModel.getCity().setValue(placemark.getCounty()); //sometimes shows nonsense
 			mDataModel.getStreet().setValue(placemark.getStreet());
 			mDataModel.getCountry().setValue(placemark.getCountry());
 		}
 		catch(Exception e)
-		{/*just ignor error and let user write it */}
+		{
+			/*just ignor error and let user write it */
+		}
 	}
 	
 	public void onClearContextItems()

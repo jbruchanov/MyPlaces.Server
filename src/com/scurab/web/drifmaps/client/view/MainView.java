@@ -3,6 +3,8 @@ package com.scurab.web.drifmaps.client.view;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
@@ -70,6 +72,8 @@ public class MainView extends Composite implements MainViewPresenter.Display
 			}
 		});
 		handleResizeContextContainer();
+		
+		
 	}
 	
 	private void initSearchPanel()
@@ -213,13 +217,13 @@ public class MainView extends Composite implements MainViewPresenter.Display
 	}
 	
 	@Override
-	public Button getAddButton()
+	public Button getLeftButton()
 	{
 		return mMenu.getAddButton();
 	}
 	
 	@Override
-	public Button getSaveButton()
+	public Button getRightButton()
 	{
 		return  mMenu.getSaveButton();
 	}
@@ -250,5 +254,10 @@ public class MainView extends Composite implements MainViewPresenter.Display
 	public Button getStarButton()
 	{
 		return mMenu.getStarButton();
+	}
+	
+	public void addSelectionTabHandler(SelectionHandler<Integer> handler)
+	{
+		mTabPanel.addSelectionHandler(handler);
 	}
 }

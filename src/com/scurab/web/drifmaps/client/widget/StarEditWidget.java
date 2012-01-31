@@ -9,6 +9,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.RichTextArea;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.scurab.web.drifmaps.client.DataService;
 import com.scurab.web.drifmaps.client.DataServiceAsync;
@@ -28,10 +29,12 @@ public class StarEditWidget extends Composite
 	public interface OnSavedListener
 	{
 		void onSave();
+		void onDelete(Star s);
 	}
 	
-	@UiField RichTextArea txtNote;
+	@UiField TextArea txtNote;
 	@UiField Button btnSave;
+	@UiField Button btnDelete;
 	private Star mStar = null;
 	private OnSavedListener listener = null;
 	
@@ -45,6 +48,7 @@ public class StarEditWidget extends Composite
 		mDataService = dse;
 		txtNote.setText(s.getNote());
 		btnSave.addClickHandler(mUpdateClickHandler);
+		btnDelete.addClickHandler(mDeleteClickHandler);
 	}
 	
 	private ClickHandler mUpdateClickHandler = new ClickHandler()
@@ -52,19 +56,18 @@ public class StarEditWidget extends Composite
 		@Override
 		public void onClick(ClickEvent event)
 		{		
-			btnSave.setEnabled(false);
-			btnSave.setText(DrifMaps.Words.Saving());
 			String t = txtNote.getText();
 			if(t == null || t.length() == 0)
 				return;
-			
+			setButtonsEnabled(false);
+			btnSave.setText(DrifMaps.Words.Saving());
 			mStar.setNote(t);
 			mDataService.processStar(mStar, DataService.UPDATE, new AsyncCallback<Star>()
 			{
 				@Override
 				public void onSuccess(Star result)
 				{
-					btnSave.setEnabled(true);
+					setButtonsEnabled(true);
 					btnSave.setText(DrifMaps.Words.Save());
 					listener.onSave();
 				}
@@ -72,6 +75,40 @@ public class StarEditWidget extends Composite
 				@Override
 				public void onFailure(Throwable caught)
 				{
+					setButtonsEnabled(true);
+					NotificationDialog.show(caught);
+				}
+			});
+		}
+	};
+	
+	private void setButtonsEnabled(boolean enabled)
+	{
+		btnSave.setEnabled(enabled);
+		btnDelete.setEnabled(enabled);
+	}
+	
+	private ClickHandler mDeleteClickHandler = new ClickHandler()
+	{
+		@Override
+		public void onClick(ClickEvent event)
+		{
+			setButtonsEnabled(false);
+			btnDelete.setText(DrifMaps.Words.Deleting());
+			mDataService.processStar(mStar, DataService.DELETE, new AsyncCallback<Star>()
+			{
+				@Override
+				public void onSuccess(Star result)
+				{
+					setButtonsEnabled(true);
+					btnDelete.setText(DrifMaps.Words.Delete());
+					listener.onDelete(mStar);
+				}
+				
+				@Override
+				public void onFailure(Throwable caught)
+				{
+					setButtonsEnabled(true);
 					NotificationDialog.show(caught);
 				}
 			});

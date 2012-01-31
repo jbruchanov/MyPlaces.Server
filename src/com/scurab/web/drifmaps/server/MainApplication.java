@@ -1,13 +1,20 @@
 package com.scurab.web.drifmaps.server;
 
+<<<<<<< HEAD
 import java.io.InputStream;
 import java.sql.ResultSet;
 import java.util.Properties;
+=======
+import java.io.File;
+>>>>>>> 5347438827bd7f9051fd4b6e6c320843594edc87
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+<<<<<<< HEAD
 import com.scurab.web.drifmaps.client.DrifMaps;
+=======
+>>>>>>> 5347438827bd7f9051fd4b6e6c320843594edc87
 import com.scurab.web.drifmaps.database.Database;
 
 
@@ -23,9 +30,10 @@ public class MainApplication implements ServletContextListener
 
 	@Override
 	public void contextInitialized(ServletContextEvent arg0)
-	{	
+	{
 		try
 		{
+<<<<<<< HEAD
 			System.out.print("Starting Drifmaps...\n");
 			readPropertiesFile();
 			checkForDataStructure();
@@ -91,6 +99,18 @@ public class MainApplication implements ServletContextListener
 		{
 			System.err.println("Failed to read from " + PROP_FILE + " file.");
 		}
+=======
+			File f = new File(DataServiceImpl.FILE);
+			if (!f.exists())
+			{
+				Database d = new Database(DataServiceImpl.FILE);
+				d.createTables();
+			}
+		}
+		catch (Exception e)
+		{}
+
+>>>>>>> 5347438827bd7f9051fd4b6e6c320843594edc87
 	}
 
 }

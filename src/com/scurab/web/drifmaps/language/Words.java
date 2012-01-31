@@ -2,7 +2,7 @@ package com.scurab.web.drifmaps.language;
 
 /**
  * Interface to represent the constants contained in resource bundle:
- * 	'C:/Projects/eclipse-workspace-j2ee/DrifMaps/src/com/scurab/web/drifmaps/language/Words.properties'.
+ * 	'C:/Developing/Projects/eclipse-workspace-j2ee/DrifMaps/src/com/scurab/web/drifmaps/language/Words.properties'.
  */
 public interface Words extends com.google.gwt.i18n.client.Constants {
   
@@ -133,6 +133,24 @@ public interface Words extends com.google.gwt.i18n.client.Constants {
   String Country();
 
   /**
+   * Translated "Delete".
+   * 
+   * @return translated "Delete"
+   */
+  @DefaultStringValue("Delete")
+  @Key("Delete")
+  String Delete();
+
+  /**
+   * Translated "Deleting".
+   * 
+   * @return translated "Deleting"
+   */
+  @DefaultStringValue("Deleting")
+  @Key("Deleting")
+  String Deleting();
+
+  /**
    * Translated "Detail".
    * 
    * @return translated "Detail"
@@ -140,6 +158,24 @@ public interface Words extends com.google.gwt.i18n.client.Constants {
   @DefaultStringValue("Detail")
   @Key("Detail")
   String Detail();
+
+  /**
+   * Translated "Edit".
+   * 
+   * @return translated "Edit"
+   */
+  @DefaultStringValue("Edit")
+  @Key("Edit")
+  String Edit();
+
+  /**
+   * Translated "Hide".
+   * 
+   * @return translated "Hide"
+   */
+  @DefaultStringValue("Hide")
+  @Key("Hide")
+  String Hide();
 
   /**
    * Translated "ID".

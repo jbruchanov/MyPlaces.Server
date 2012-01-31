@@ -19,6 +19,7 @@ import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.scurab.web.drifmaps.client.AppConstants;
+import com.scurab.web.drifmaps.client.DataService;
 import com.scurab.web.drifmaps.client.DataServiceAsync;
 import com.scurab.web.drifmaps.client.Settings;
 import com.scurab.web.drifmaps.client.dialog.CloseableDialog;
@@ -104,6 +105,13 @@ public class MapController
 					{
 						cd.hide();
 					}
+
+					@Override
+					public void onDelete(Star s)
+					{
+						cd.hide();
+						onDeleteStar(s);
+					}
 				});				
 				cd.add(sew);
 				cd.show();
@@ -114,12 +122,23 @@ public class MapController
 		map.addOverlay(mio);
 	}
 	
+	public void onDeleteStar(Star s)
+	{
+		MapItemOverlay<Star> mio = mCurrentVisibleStars.get(s.getId());
+		map.removeOverlay(mio);
+		mCurrentVisibleStars.remove(s.getId());
+	}
+	
 	public void startAdding()
 	{
 		mState = State.Adding;
 		onChangeCursor(Cursor.CROSSHAIR.toString());
 	}
 	
+	public void startEditing(MapItem mio)
+	{
+		startEditing(mCurrentVisibleMapItems.get(mio.getId()));
+	}
 	public void startEditing(MapItemOverlay<MapItem> mio)
 	{
 		mState = State.Editing;
@@ -270,7 +289,9 @@ public class MapController
 //		InfoWindow iw = map.getInfoWindow();
 //		InfoWindowContent iwc = new InfoWindowContent(mapItemOverlay.getMapItem().getName());
 //		iw.open(mapItemOverlay.getLatLng(), iwc);
-		startEditing(mapItemOverlay);
+		//called after user click on edit button
+//		startEditing(mapItemOverlay);
+		
 	}
 	
 	private void hideMapMarker()
