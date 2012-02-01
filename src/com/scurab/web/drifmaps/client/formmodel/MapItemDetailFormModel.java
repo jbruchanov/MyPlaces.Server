@@ -74,6 +74,8 @@ public class MapItemDetailFormModel extends FormModel
 	
 	public void setValue(MapItem item)
 	{
+		if(item == null)
+			getValidationManager(this).getFormValidator().clear();
 		itemProvider.setValue(item);
 	}
 	
