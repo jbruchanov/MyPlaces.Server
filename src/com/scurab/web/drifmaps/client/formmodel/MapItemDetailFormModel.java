@@ -61,7 +61,7 @@ public class MapItemDetailFormModel extends FormModel
 		validateField(name).using(new NotEmptyValidator("!"));
 		validateField(x).using(new NotZeroValidation("!"));
 		validateField(y).using(new NotZeroValidation("!"));
-		validateField(type).using(new NotNullValidator("!"));
+		validateField(type).using(new NotEmptyValidator("!"));
 		validateField(street).using(new NotNullValidator("!"));
 	}
 	
