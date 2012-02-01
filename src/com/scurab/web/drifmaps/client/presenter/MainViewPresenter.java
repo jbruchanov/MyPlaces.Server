@@ -834,12 +834,12 @@ public class MainViewPresenter
 	{
 		try
 		{
-//			StringBuilder sb = new StringBuilder();
-//			sb.append(placemark.getAddress() + "\n");
-//			sb.append(placemark.getCity() + "\n");
-//			sb.append(placemark.getCountry() + "\n");
-//			sb.append(placemark.getCounty() + "\n");
-//			sb.append(placemark.getLocality() + "\n");
+			StringBuilder sb = new StringBuilder();
+			sb.append(placemark.getAddress() + "\n");
+			sb.append(placemark.getCity() + "\n");
+			sb.append(placemark.getCountry() + "\n");
+			sb.append(placemark.getCounty() + "\n");
+			sb.append(placemark.getLocality() + "\n");
 			
 			if(placemark.getCity() != null)
 				mDataModel.getCity().setValue(placemark.getCity());
