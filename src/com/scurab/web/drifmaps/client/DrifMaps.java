@@ -36,7 +36,8 @@ public class DrifMaps implements EntryPoint
 			@Override
 			public void onUncaughtException(Throwable e)
 			{
-				NotificationDialog.show(e);
+				GWT.log("onUncaughtException", e);
+//				NotificationDialog.show(e);
 			}
 		});
 	}
