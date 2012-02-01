@@ -675,7 +675,7 @@ public class MainViewPresenter
 		mDisplay.getStreetView().hide();
 		resetButtons();
 		mDisplay.setCurrentMenuTab(0);
-		mDisplay.getForm().getMapItemType().setSelectedIndex(0);
+		mDisplay.getForm().getMapItemType().setValue("");//its first null item
 	}
 	
 	public void onFinishAddingStar(final Star s)
@@ -707,6 +707,10 @@ public class MainViewPresenter
 		mMapController.onChangeCursor(null);
 	}
 	
+	/**
+	 * Called only if data model is valid
+	 * @throws ValidationException
+	 */
 	public void onSavingItem() throws ValidationException
 	{
 		if (!mDisplay.validate())
@@ -740,6 +744,8 @@ public class MainViewPresenter
 	{
 		if(mState == State.Adding)
 			mMapController.addMapItem(item);
+		else if(mState == State.Editing)
+			mMapController.onEditMapItem(item);
 		onFinishAdding(false);
 	}
 	
@@ -814,12 +820,12 @@ public class MainViewPresenter
 	{
 		try
 		{
-//			StringBuilder sb = new StringBuilder();
-//			sb.append(placemark.getAddress() + "\n");
-//			sb.append(placemark.getCity() + "\n");
-//			sb.append(placemark.getCountry() + "\n");
-//			sb.append(placemark.getCounty() + "\n");
-//			sb.append(placemark.getLocality() + "\n");
+			StringBuilder sb = new StringBuilder();
+			sb.append(placemark.getAddress() + "\n");
+			sb.append(placemark.getCity() + "\n");
+			sb.append(placemark.getCountry() + "\n");
+			sb.append(placemark.getCounty() + "\n");
+			sb.append(placemark.getLocality() + "\n");
 			
 			if(placemark.getCity() != null)
 				mDataModel.getCity().setValue(placemark.getCity());
