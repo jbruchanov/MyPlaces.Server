@@ -66,6 +66,7 @@ public class MapController
 		bind();
 		
 		loadStars();
+		loadIcons(map.getZoomLevel(), map.getBounds());//load icons on startup, (only if there is good start)
 	}
 	
 	public void addMapItem(MapItem item)
