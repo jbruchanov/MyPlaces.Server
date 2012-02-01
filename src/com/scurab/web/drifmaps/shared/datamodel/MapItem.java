@@ -150,7 +150,26 @@ public class MapItem implements IsSerializable, HasCoordinates, HasId, HasIcon, 
 	@Override
 	public String getIconUrl()
 	{
-		return AppConstants.MediumIcons.ICO_BEER;
+		String t = getType();
+		if(t == null)
+			return AppConstants.MediumIcons.ICO_BEER;
+		else
+			t = t.toLowerCase();
+		
+		if(t.equals("hospoda"))
+			return AppConstants.MediumIcons.ICO_BEER;
+		else if(t.equals("bar"))
+			return AppConstants.MediumIcons.ICO_DRINK;
+		else if(t.equals("kavárna"))
+			return AppConstants.MediumIcons.ICO_CAFE;
+		else if(t.equals("café"))
+			return AppConstants.MediumIcons.ICO_CAFE;
+		else if(t.equals("restaurace"))
+			return AppConstants.MediumIcons.ICO_RESTAURANT;
+		else if(t.equals("pizzerie"))
+			return AppConstants.MediumIcons.ICO_PIZZA;
+		else
+			return AppConstants.MediumIcons.ICO_SEARCH;
 	}
 	@Override
 	public String getTitle()

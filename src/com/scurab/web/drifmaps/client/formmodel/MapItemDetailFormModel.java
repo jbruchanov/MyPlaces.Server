@@ -10,6 +10,8 @@ import com.pietschy.gwt.pectin.client.form.FormModel;
 import com.pietschy.gwt.pectin.client.form.ListFieldModel;
 import com.pietschy.gwt.pectin.client.form.validation.validator.NotEmptyValidator;
 import com.pietschy.gwt.pectin.client.form.validation.validator.NotNullValidator;
+import com.pietschy.gwt.pectin.client.function.Function;
+import com.pietschy.gwt.pectin.client.value.ValueModel;
 import com.scurab.web.drifmaps.client.validation.NotZeroValidation;
 import com.scurab.web.drifmaps.shared.datamodel.Detail;
 import com.scurab.web.drifmaps.shared.datamodel.MapItem;
@@ -35,6 +37,7 @@ public class MapItemDetailFormModel extends FormModel
 	protected final ListFieldModel<Detail> details;
 	private final FieldModel<Double> x;
 	private final FieldModel<Double> y;
+	private final ValueModel<Boolean> hasWeb;
 
 	public MapItemDetailFormModel()
 	{
@@ -52,6 +55,14 @@ public class MapItemDetailFormModel extends FormModel
 		x = fieldOfType(Double.class).boundTo(itemProvider, "x");
 		y = fieldOfType(Double.class).boundTo(itemProvider, "y");
 		contact = fieldOfType(String.class).boundTo(itemProvider, "contact");
+		hasWeb = fieldOfType(Boolean.class).computedFrom(web).using(new Function<Boolean, String>()
+		{
+			@Override
+			public Boolean compute(String source)
+			{
+				return !(source == null || source.length() == 0);
+			}
+		});
 		initValidation();
 	}
 	
@@ -142,5 +153,10 @@ public class MapItemDetailFormModel extends FormModel
 	public FieldModel<String> getContact()
 	{
 		return contact;
+	}
+	
+	public ValueModel<Boolean> getHasWeb()
+	{
+		return hasWeb;
 	}
 }
