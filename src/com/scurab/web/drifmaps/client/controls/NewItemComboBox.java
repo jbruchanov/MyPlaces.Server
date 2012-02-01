@@ -68,7 +68,7 @@ public class NewItemComboBox extends ListBox implements HasValue<String>
 					setSelectedIndex(0);
 				ValueChangeEvent.fire(NewItemComboBox.this, getValue());
 				if (getSelectedIndex() == getItemCount() - 1)//addnewitemvalue
-					onAddNewItemSelection();
+					onAddNewItemSelected();
 			}
 		});
 	}
@@ -100,7 +100,7 @@ public class NewItemComboBox extends ListBox implements HasValue<String>
 
 	private final static int OFFSET = 3;
 
-	public void onAddNewItemSelection()
+	public void onAddNewItemSelected()
 	{
 		InputDialog.show(DrifMaps.Words.AddNewItem(), new InputDialog.OnInputDialogButtonClick()
 		{
@@ -152,6 +152,7 @@ public class NewItemComboBox extends ListBox implements HasValue<String>
 		//add new item and select it
 		addItem(item);
 		setSelectedIndex(getItemCount()-OFFSET);//was added after null and before 2 last items, +1 first null value and -1 for index from 0 => 1-1 :)
+		ValueChangeEvent.fire(this, item);
 	}
 	
 	@Override
@@ -230,6 +231,12 @@ public class NewItemComboBox extends ListBox implements HasValue<String>
 	@Override
 	public void setValue(String value)
 	{
+		setValue(value,false);
+	}
+
+	@Override
+	public void setValue(String value, boolean fireEvents)
+	{
 		for (int i = 0; i < getItemCount(); i++)
 		{
 			if (getItemText(i).equals(value))
@@ -238,12 +245,6 @@ public class NewItemComboBox extends ListBox implements HasValue<String>
 				break;
 			}
 		}
-	}
-
-	@Override
-	public void setValue(String value, boolean fireEvents)
-	{
-		setValue(value);
 		if(fireEvents)
 			ValueChangeEvent.fire(this, value);
 	}
