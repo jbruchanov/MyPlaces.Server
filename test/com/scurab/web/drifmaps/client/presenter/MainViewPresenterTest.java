@@ -38,10 +38,26 @@ public class MainViewPresenterTest extends GWTTestCase
 		super.gwtSetUp();
 		MainView.initForTest();
 	}
+	
+	MockDataServiceAsync mds = new MockDataServiceAsync();
+	
 
 	@Test
 	public void testAll()
 	{
+		mds.setOnGetListener(new MockDataServiceAsync.OnGetListener()
+		{
+			
+			@Override
+			public void get(String className, double x1, double x2, double y1, double y2, boolean deep, AsyncCallback<List<?>> callback){}
+			
+			@Override
+			public void get(String className, String filters, boolean deep, AsyncCallback<List<?>> callback){}
+			
+			@Override
+			public void get(String className, AsyncCallback<List<?>> callback){}
+		});
+		
 		Maps.loadMapsApi("ABQIAAAAZ3LzS5n2kDiopvOBUxlJwxSBtpmqjM9_4xe7GwB5qdGzFHEeZhQjbZf1kWCfUIvrO9rMtDj_dx87mg", "2", false,
 				new Runnable()
 				{
@@ -72,27 +88,26 @@ public class MainViewPresenterTest extends GWTTestCase
 	/**
 	 * Testing internal object states on adding state
 	 */
-	@SuppressWarnings("unused")
 	private void tstOnAddingItem()
 	{
-		MainViewPresenter.Display display = new MainView(null);
-		MainViewPresenter mvp = new MainViewPresenter(display, null);
+		
+		MainViewPresenter.Display display = new MainView(mds);
+		MainViewPresenter mvp = new MainViewPresenter(display, mds);
 
 		defaultValuesTest(display);
 		mvp.onAddingItem();
 		editingValuesTest(display);
-		finishTest();
 	}
 
 	private void defaultValuesTest(MainViewPresenter.Display display)
 	{
 		// init value
 		assertTrue(display.getLeftButton().isVisible());
-		assertEquals(display.getRightButton().getText(), "Add");
-		assertTrue(display.getRightButton().isVisible());
+		assertEquals(display.getRightButton().getText(), "Cancel");
+		assertFalse(display.getRightButton().isVisible());
 		assertNull(display.getDataModel().getValue());
 		assertFalse(display.getMenuContent().isOpen());
-		assertFalse(display.getLeftButton().isEnabled());
+		assertTrue(display.getLeftButton().isEnabled());
 	}
 
 	private void editingValuesTest(MainViewPresenter.Display display)
@@ -121,8 +136,8 @@ public class MainViewPresenterTest extends GWTTestCase
 	 */
 	private void tstBinding()	
 	{
-		MainViewPresenter.Display display = new MainView(null);
-		MainViewPresenter mvp = new MainViewPresenter(display, null);
+		MainViewPresenter.Display display = new MainView(mds);
+		MainViewPresenter mvp = new MainViewPresenter(display, mds);
 
 		mvp.onAddingItem();
 		MapItemDetailForm form = display.getForm();
@@ -160,8 +175,8 @@ public class MainViewPresenterTest extends GWTTestCase
 	 */
 	private void tstOnEditingItem()
 	{
-		MainViewPresenter.Display display = new MainView(null);
-		MainViewPresenter mvp = new MainViewPresenter(display, null);
+		MainViewPresenter.Display display = new MainView(mds);
+		MainViewPresenter mvp = new MainViewPresenter(display, mds);
 
 		mvp.onAddingItem();
 		editingValuesTest(display);
@@ -174,8 +189,8 @@ public class MainViewPresenterTest extends GWTTestCase
 	 */
 	private void tstAddingContextIntoPanel()
 	{
-		MainViewPresenter.Display display = new MainView(null);
-		MainViewPresenter mvp = new MainViewPresenter(display, null);
+		MainViewPresenter.Display display = new MainView(mds);
+		MainViewPresenter mvp = new MainViewPresenter(display, mds);
 
 		mvp.onAddingItem();
 		MapItemDetailForm form = display.getForm();
@@ -216,8 +231,8 @@ public class MainViewPresenterTest extends GWTTestCase
 	 */
 	private void tstDeletingContextPanelItems()
 	{
-		MainViewPresenter.Display display = new MainView(null);
-		MainViewPresenter mvp = new MainViewPresenter(display, null);
+		MainViewPresenter.Display display = new MainView(mds);
+		MainViewPresenter mvp = new MainViewPresenter(display, mds);
 
 		mvp.onAddingItem();
 		MapItemDetailForm form = display.getForm();
@@ -288,8 +303,8 @@ public class MainViewPresenterTest extends GWTTestCase
 	 */
 	private void tstAddingContextIntoDataModel()
 	{
-		MainViewPresenter.Display display = new MainView(null);
-		MainViewPresenter mvp = new MainViewPresenter(display, null);
+		MainViewPresenter.Display display = new MainView(mds);
+		MainViewPresenter mvp = new MainViewPresenter(display, mds);
 
 		mvp.onAddingItem();
 		MapItemDetailForm form = display.getForm();
@@ -347,9 +362,8 @@ public class MainViewPresenterTest extends GWTTestCase
 
 	private void tstAddItem() throws ValidationException
 	{
-		MockDataServiceAsync ds = new MockDataServiceAsync();
-		final MainViewPresenter.Display display = new MainView(ds);
-		MockMainViewPresenter mvp = new MockMainViewPresenter(display, ds);
+		final MainViewPresenter.Display display = new MainView(mds);
+		MockMainViewPresenter mvp = new MockMainViewPresenter(display, mds);
 
 		mvp.onAddingItem();
 		MapItemDetailForm form = display.getForm();
@@ -474,34 +488,38 @@ public class MainViewPresenterTest extends GWTTestCase
 
 	private void tstEditItem() throws ValidationException
 	{
-		MockDataServiceAsync ds = new MockDataServiceAsync();
-		final MainViewPresenter.Display display = new MainView(ds);
-		MockMainViewPresenter mvp = new MockMainViewPresenter(display, ds);
-
-		mvp.onAddingItem();
-		MapItemDetailForm form = display.getForm();
 		final MapItem mi = RandomGenerator.genMapItem(true);
-
-		mvp.onStartEditing(mi);
-		editingValuesTest(display, mi);
+		MockDataServiceAsync ds = new MockDataServiceAsync();
 		ds.setOnGetListener(new MockDataServiceAsync.OnGetListener()
 		{
 			@Override
 			public void get(String className, String filters, boolean deep, AsyncCallback<List<?>> callback)
-			{
+			{				
 				callback.onSuccess(Arrays.asList(new MapItem[]
 				{ mi }));
 			}
 
 			@Override
 			public void get(String className, double x1, double x2, double y1, double y2, boolean deep, AsyncCallback<List<?>> callback)
-			{}
+			{
+				callback.onSuccess(Arrays.asList(new MapItem[]
+						{ mi }));
+			}
 
 			@Override
 			public void get(String className, AsyncCallback<List<?>> callback)
 			{
 			}
 		});
+		final MainViewPresenter.Display display = new MainView(ds);
+		MockMainViewPresenter mvp = new MockMainViewPresenter(display, ds);
+
+		mvp.onAddingItem();
+		MapItemDetailForm form = display.getForm();
+		
+
+		mvp.onStartEditing(mi);
+		editingValuesTest(display, mi);
 
 		mvp.setOnSavedItemListener(new OnSavedItemListener()
 		{
@@ -540,5 +558,5 @@ public class MainViewPresenterTest extends GWTTestCase
 		});
 
 		mvp.onSavingItem(); // continue in MockMainViewPresenter.onSavedItem
-	}
+	}	
 }

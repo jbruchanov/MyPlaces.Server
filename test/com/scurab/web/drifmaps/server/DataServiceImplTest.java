@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +18,7 @@ import com.scurab.web.drifmaps.shared.datamodel.Star;
 import com.scurab.web.drifmaps.shared.utils.AppUtils;
 import com.scurab.web.drifmaps.shared.utils.RandomGenerator;
 
-public class DataServiceImplTest
+public class DataServiceImplTest extends TestCase
 {
 	DataServiceImpl dsi = new DataServiceImpl();
 	Database d = null;

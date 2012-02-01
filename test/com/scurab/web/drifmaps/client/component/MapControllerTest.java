@@ -218,9 +218,11 @@ public class MapControllerTest extends GWTTestCase
 		//simulate editing click
 		mc.onMarkerClick(mi);
 		
-		assertEquals(mc.mState,State.Editing);
+		assertEquals(mc.mState,State.Default);
+		mc.startEditing(mi);
 		DataComparator.assertEquals(mapItemLatLng,mc.mCurrentMarker.getLatLng());
 		DataComparator.assertEquals(mapItemLatLng,mc.mStartEditLatLng);
+		
 		assertEquals(Cursor.CROSSHAIR.toString(),mc.currentCursor);
 		
 		for(int i = 0;i<10;i++)//just chaotic click, icon should moves
