@@ -56,8 +56,6 @@ public class StarEditWidget extends Composite
 		public void onClick(ClickEvent event)
 		{		
 			String t = txtNote.getText();
-			if(t == null || t.length() == 0)
-				return;
 			setButtonsEnabled(false);
 			btnSave.setText(DrifMaps.Words.Saving());
 			mStar.setNote(t);
