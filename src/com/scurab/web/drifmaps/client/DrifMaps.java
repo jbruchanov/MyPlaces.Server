@@ -9,10 +9,8 @@ import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.i18n.shared.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.maps.client.Maps;
 import com.google.gwt.user.client.Window;
-import com.scurab.web.drifmaps.client.dialog.NotificationDialog;
 import com.scurab.web.drifmaps.client.presenter.MainViewPresenter;
 import com.scurab.web.drifmaps.client.view.MainView;
-import com.scurab.web.drifmaps.database.Database;
 import com.scurab.web.drifmaps.language.Words;
 
 ;

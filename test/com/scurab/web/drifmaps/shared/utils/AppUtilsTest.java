@@ -1,6 +1,5 @@
 package com.scurab.web.drifmaps.shared.utils;
 
-import static org.junit.Assert.*;
 import junit.framework.TestCase;
 
 import org.junit.Before;
@@ -9,6 +8,7 @@ import org.junit.Test;
 public class AppUtilsTest extends TestCase
 {
 
+	@Override
 	@Before
 	public void setUp() throws Exception
 	{

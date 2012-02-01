@@ -1,7 +1,5 @@
 package com.scurab.web.drifmaps.server;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -22,6 +20,7 @@ public class DataServiceImplTest extends TestCase
 {
 	DataServiceImpl dsi = new DataServiceImpl();
 	Database d = null;
+	@Override
 	@Before
 	public void setUp() throws Exception
 	{

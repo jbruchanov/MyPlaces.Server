@@ -7,8 +7,14 @@ import java.util.Properties;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.restlet.Component;
+import org.restlet.data.Protocol;
+
 import com.scurab.web.drifmaps.client.DrifMaps;
 import com.scurab.web.drifmaps.database.Database;
+import com.scurab.web.drifmaps.server.restlet.MapItemRestlet;
+import com.scurab.web.drifmaps.server.restlet.StarRestlet;
+import com.scurab.web.drifmaps.server.restlet.WebServiceServer;
 
 
 
@@ -20,6 +26,9 @@ public class MainApplication implements ServletContextListener
 	{
 		
 	}
+	
+	private static Component sComponent = null;
+	private static int port = 8182; 	
 
 	@Override
 	public void contextInitialized(ServletContextEvent arg0)
@@ -27,6 +36,7 @@ public class MainApplication implements ServletContextListener
 		try
 		{
 			System.out.print("Starting Drifmaps...\n");
+			WebServiceServer.start();
 			readPropertiesFile();
 			checkForDataStructure();
 //			Database d = new Database(DataServiceImpl.FILE);
@@ -41,7 +51,6 @@ public class MainApplication implements ServletContextListener
 	
 	private void checkForDataStructure()
 	{
-		System.out.print("[Drifmaps DataStructureCheck]\n");
 		try
 		{
 			Database db = new Database();

@@ -417,7 +417,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements DataService
 			
 			if(MapItem.class.equals(clazz))
 				result = db.getMapItems(filters, true);			
-			else
+			else 
 				throw new DTOException("Not implemented!");	
 		}
 		catch(Exception e)

@@ -19,7 +19,6 @@ import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.scurab.web.drifmaps.client.AppConstants;
-import com.scurab.web.drifmaps.client.DataService;
 import com.scurab.web.drifmaps.client.DataServiceAsync;
 import com.scurab.web.drifmaps.client.Settings;
 import com.scurab.web.drifmaps.client.dialog.CloseableDialog;
