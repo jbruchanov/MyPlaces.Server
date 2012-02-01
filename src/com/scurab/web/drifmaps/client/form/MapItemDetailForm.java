@@ -1,7 +1,15 @@
 package com.scurab.web.drifmaps.client.form;
 
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
+import com.pietschy.gwt.pectin.client.channel.Destination;
 import com.pietschy.gwt.pectin.client.form.binding.FormBinder;
 import com.pietschy.gwt.pectin.client.form.validation.binding.ValidationBinder;
 import com.scurab.web.drifmaps.client.DrifMaps;
@@ -23,11 +31,12 @@ public class MapItemDetailForm extends VerySimpleForm
 	private StreetViewWidget streetView = new StreetViewWidget(false);
 	private Label x = new Label();
 	private Label y = new Label();
+	private Label webLink = new Label(DrifMaps.Words.WebLink());
 	private NewItemComboBox type = new NewItemComboBox();
 
 	private MapItemDetailFormModel mModel = null;
 	private FormBinder binder = new FormBinder();
-
+	private boolean hasLink = false;
 	
 	public MapItemDetailForm(MapItemDetailFormModel model, MapItemTypeService dataService)
 	{
@@ -51,19 +60,43 @@ public class MapItemDetailForm extends VerySimpleForm
 		binder.bind(model.getY()).toTextOf(y);
 		binder.bind(model.getStreetViewLink()).to(streetView);
 		binder.bind(model.getContact()).to(contact);
-		doLayout();
-		
+		binder.bind(model.getHasWeb()).to(new Destination<Boolean>()
+		{
+			@Override
+			public void receive(Boolean value)
+			{
+				if(value == null || value == false)
+					webLink.setStyleName("");
+				else
+					webLink.setStyleName("webLink");
+			}
+		});
+		doLayout();											
 	}
 	
 	private void doLayout()
 	{
+		webLink.addClickHandler(new ClickHandler()
+		{
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				String link = mModel.getWeb().getValue(); 
+				if(link != null)
+				{
+					if(!link.startsWith("http://"))
+						link = "http://" + link;
+					Window.open(link, mModel.getName().getValue(), null);
+				}
+			}
+		});
 		addRow(DrifMaps.Words.Name(), name,createValidationLabel(validation,mModel.getName()));
 		addRow(DrifMaps.Words.Street(), street,createValidationLabel(validation,mModel.getStreet()));
 		addRow(DrifMaps.Words.City(), city);
 		addRow(DrifMaps.Words.Country(), country);
 		addRow(DrifMaps.Words.Type(), type, createValidationLabel(validation,mModel.getType()));		
-		addRow(DrifMaps.Words.Contact(), contact);
-		addRow(DrifMaps.Words.WebLink(), web);
+		addRow(DrifMaps.Words.Contact(), contact);		
+		addRow(webLink, web);
 		addRow(DrifMaps.Words.Author(), author);
 		addRow(DrifMaps.Words.LatLngX(), x, createValidationLabel(validation,mModel.getX()));
 		addRow(DrifMaps.Words.LatLngY(), y, createValidationLabel(validation,mModel.getY()));

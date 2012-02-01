@@ -316,3 +316,16 @@ Search text box */
 {
 	min-width:200px;
 }
+
+.webLink
+{
+	font-size:100%;
+}
+
+.webLink:hover
+{
+	color: blue;
+	text-decoration: underline;
+	font-size:100%;
+	cursor: pointer;
+}

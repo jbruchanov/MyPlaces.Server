@@ -33,6 +33,7 @@ public final class AppConstants {
 		public final static String ICO_CAFE = PREFIX + "ico_cafe.png";
 		public final static String ICO_WINE = PREFIX + "ico_wine.png";
 		public final static String ICO_DRINK = PREFIX + "ico_drink.png";
+		public final static String ICO_RESTAURANT = PREFIX + "ico_restaurant.png";
 
 	}
 
@@ -59,6 +60,8 @@ public final class AppConstants {
 		public final static String ICO_WINE = PREFIX + "ico_wine.png";
 		public final static String ICO_DRINK = PREFIX + "ico_drink.png";
 		public final static String ICO_SEARCH = PREFIX + "ico_search.png";
+		public final static String ICO_PIZZA = PREFIX + "ico_pizza.png";
+		public final static String ICO_RESTAURANT = PREFIX + "ico_restaurant.png";
 		
 	}
 	

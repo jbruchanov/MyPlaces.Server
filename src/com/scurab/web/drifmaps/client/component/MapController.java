@@ -17,6 +17,7 @@ import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.geom.LatLngBounds;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.scurab.web.drifmaps.client.AppConstants;
 import com.scurab.web.drifmaps.client.DataServiceAsync;
@@ -46,6 +47,7 @@ public class MapController
 	protected HashMap<Long, MapItemOverlay<Star>> mCurrentVisibleStars = new HashMap<Long,MapItemOverlay<Star>>();
 	protected State mState = State.Default;
 	private OnMapMarkerClick listener = null;
+	private static int AUTO_RELOAD = 30000;
 	
 	public interface OnMapMarkerClick
 	{
@@ -58,7 +60,7 @@ public class MapController
 		this.listener = listener;
 	}
 	
-	public MapController(MapWidget map, DataServiceAsync ds)
+	public MapController(final MapWidget map, DataServiceAsync ds)
 	{
 		this.map = map;
 		mDataService = ds;
@@ -66,6 +68,16 @@ public class MapController
 		
 		loadStars();
 		loadIcons(map.getZoomLevel(), map.getBounds());//load icons on startup, (only if there is good start)
+		Timer t = new Timer()
+		{
+			@Override
+			public void run()
+			{
+				loadIcons(map.getZoomLevel(), map.getBounds());//load icons on startup, (only if there is good start)				
+			}
+		};
+		if(AUTO_RELOAD > 0)
+			t.scheduleRepeating(AUTO_RELOAD);
 	}
 	
 	public void addMapItem(MapItem item)
