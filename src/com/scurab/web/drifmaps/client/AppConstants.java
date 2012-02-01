@@ -82,5 +82,8 @@ public final class AppConstants {
 		public static float DEFAULT_MAP_LOCATION_X = 14.4469678401f;
 		public static float DEFAULT_MAP_LOCATION_Y = 50.071615414f;
 		public static int DEFAULT_MAP_ZOOM = 12;
+		
+		public static String MAPKEY_LOCALHOST = "ABQIAAAARrCK38aboqQKDotehUjrPhTb-vLQlFZmc2N8bgWI8YDPp5FEVBQ-MFjXfKfAvdbsbp3pa0q7fQNDDA";
+		public static String MAPKEY_PRODUCTION = "ABQIAAAAZ3LzS5n2kDiopvOBUxlJwxSj3bItJgjyzlR-2yzG1mefJ9BEEhSf3Q4l-nRgPoKUxtmaPhypPwClEg";
 	}
 }

@@ -25,6 +25,7 @@ import com.scurab.web.drifmaps.shared.utils.RandomGenerator;
 
 public class MainViewPresenterTest extends GWTTestCase
 {
+	String mapKey = "ABQIAAAAZ3LzS5n2kDiopvOBUxlJwxSBtpmqjM9_4xe7GwB5qdGzFHEeZhQjbZf1kWCfUIvrO9rMtDj_dx87mg"; 
 	@Override
 	public String getModuleName()
 	{
@@ -58,7 +59,7 @@ public class MainViewPresenterTest extends GWTTestCase
 			public void get(String className, AsyncCallback<List<?>> callback){}
 		});
 		
-		Maps.loadMapsApi("ABQIAAAAZ3LzS5n2kDiopvOBUxlJwxSBtpmqjM9_4xe7GwB5qdGzFHEeZhQjbZf1kWCfUIvrO9rMtDj_dx87mg", "2", false,
+		Maps.loadMapsApi(mapKey, "2", false,
 				new Runnable()
 				{
 					@Override

@@ -7,10 +7,12 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.i18n.shared.DateTimeFormat.PredefinedFormat;
+import com.google.gwt.maps.client.Maps;
 import com.google.gwt.user.client.Window;
 import com.scurab.web.drifmaps.client.dialog.NotificationDialog;
 import com.scurab.web.drifmaps.client.presenter.MainViewPresenter;
 import com.scurab.web.drifmaps.client.view.MainView;
+import com.scurab.web.drifmaps.database.Database;
 import com.scurab.web.drifmaps.language.Words;
 
 ;
@@ -45,15 +47,30 @@ public class DrifMaps implements EntryPoint
 	@Override
 	public void onModuleLoad()
 	{
-		try
+		String key = "";
+		GWT.log(Window.Location.getHostName());
+		if(Window.Location.getHostName().equals("127.0.0.1"))
+			key = AppConstants.Settings.MAPKEY_LOCALHOST;
+		else
+			key = AppConstants.Settings.MAPKEY_PRODUCTION;
+		
+		Maps.loadMapsApi(key, "2", false, new Runnable()
 		{
-			// MainViewOld mv = new MainViewOld(sDataService,sEventBus);
-			new MainViewPresenter(new MainView(sDataService), sDataService);
-		}
-		catch (Exception e)
-		{
-			Window.alert(e.getMessage());
-		}
+			@Override
+			public void run()
+			{
+				try
+				{
+					// MainViewOld mv = new MainViewOld(sDataService,sEventBus);
+					new MainViewPresenter(new MainView(sDataService), sDataService);
+				}
+				catch (Exception e)
+				{
+					Window.alert(e.getMessage());
+				}
+			}
+		});
+		
 
 	}
 

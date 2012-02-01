@@ -30,6 +30,7 @@ import com.scurab.web.drifmaps.shared.utils.RandomGenerator;
 public class MainViewPresenterAndControllerTest extends GWTTestCase
 {
 
+	String mapKey = "ABQIAAAAZ3LzS5n2kDiopvOBUxlJwxSBtpmqjM9_4xe7GwB5qdGzFHEeZhQjbZf1kWCfUIvrO9rMtDj_dx87mg";
 	MapWidget map;
 	MockDataServiceAsync service;
 	List<MapAddOverlayEvent> mapAddOverlayEvents = new ArrayList<MapAddOverlayEvent>();
@@ -52,7 +53,7 @@ public class MainViewPresenterAndControllerTest extends GWTTestCase
 	@Test
 	public void testAll()
 	{
-		Maps.loadMapsApi("ABQIAAAAZ3LzS5n2kDiopvOBUxlJwxSBtpmqjM9_4xe7GwB5qdGzFHEeZhQjbZf1kWCfUIvrO9rMtDj_dx87mg", "2", false,
+		Maps.loadMapsApi(mapKey, "2", false,
 				new Runnable()
 				{
 					@Override
