@@ -74,13 +74,13 @@ public final class AppConstants {
 	{
 		//LatLng.newInstance(50, 14.5)
 		
-		public static float DEFAULT_MAP_LOCATION_X = 14.5f;
+		/*public static float DEFAULT_MAP_LOCATION_X = 14.5f;
 		public static float DEFAULT_MAP_LOCATION_Y = 50f;
 		public static int DEFAULT_MAP_ZOOM = 7;
-		public static String DBFILE = null;
+		public static String DBFILE = null;*/
 		
-		/*public static float DEFAULT_MAP_LOCATION_X = 14.4469678401f;
-		public static float DEFAULT_MAP_LOCATION_Y = 50.091615414f;
-		public static int DEFAULT_MAP_ZOOM = 15;*/
+		public static float DEFAULT_MAP_LOCATION_X = 14.4469678401f;
+		public static float DEFAULT_MAP_LOCATION_Y = 50.071615414f;
+		public static int DEFAULT_MAP_ZOOM = 12;
 	}
 }
