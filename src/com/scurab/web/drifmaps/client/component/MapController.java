@@ -47,7 +47,7 @@ public class MapController
 	protected HashMap<Long, MapItemOverlay<Star>> mCurrentVisibleStars = new HashMap<Long,MapItemOverlay<Star>>();
 	protected State mState = State.Default;
 	private OnMapMarkerClick listener = null;
-	private static int AUTO_RELOAD = 30000;
+	private static int AUTO_RELOAD = 0;
 	
 	public interface OnMapMarkerClick
 	{
