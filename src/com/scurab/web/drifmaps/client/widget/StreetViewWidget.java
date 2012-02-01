@@ -324,7 +324,10 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 	private void setPanorama(String link)
 	{
 		if(link == null || link.length() == 0)
+		{
+			hide(true);
 			return;
+		}
 		String[] data = link.split("\\" + ITEM_SEPARATOR);
 		double x = 0;
 		double y = 0;
