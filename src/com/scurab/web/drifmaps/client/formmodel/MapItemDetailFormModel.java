@@ -67,6 +67,8 @@ public class MapItemDetailFormModel extends FormModel
 	
 	public boolean validate()
 	{
+		if(getValue() == null)
+			return true;
 		return getValidationManager(this).validate();
 	}
 	
