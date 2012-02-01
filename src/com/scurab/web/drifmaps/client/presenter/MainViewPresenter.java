@@ -675,7 +675,7 @@ public class MainViewPresenter
 		mDisplay.getStreetView().hide();
 		resetButtons();
 		mDisplay.setCurrentMenuTab(0);
-		mDisplay.getForm().getMapItemType().setSelectedIndex(0);
+		mDisplay.getForm().getMapItemType().setValue("");//its first null item
 	}
 	
 	public void onFinishAddingStar(final Star s)
@@ -707,6 +707,10 @@ public class MainViewPresenter
 		mMapController.onChangeCursor(null);
 	}
 	
+	/**
+	 * Called only if data model is valid
+	 * @throws ValidationException
+	 */
 	public void onSavingItem() throws ValidationException
 	{
 		if (!mDisplay.validate())
@@ -740,6 +744,8 @@ public class MainViewPresenter
 	{
 		if(mState == State.Adding)
 			mMapController.addMapItem(item);
+		else if(mState == State.Editing)
+			mMapController.onEditMapItem(item);
 		onFinishAdding(false);
 	}
 	

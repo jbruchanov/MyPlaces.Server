@@ -355,4 +355,11 @@ public class MapController
 		
 		
 	};
+
+	public void onEditMapItem(MapItem item)
+	{
+		MapItemOverlay<MapItem> mio = mCurrentVisibleMapItems.get(item.getId());
+		if(mio != null)
+			mio.setMapItem(item);
+	}
 }
