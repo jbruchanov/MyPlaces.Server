@@ -24,6 +24,7 @@ public class ContextButtonPanel extends Composite
 	public ContextButtonPanel()
 	{
 		initWidget(uiBinder.createAndBindUi(this));
+		setVisibleButtons(false);
 	}
 	
 	public HasClickHandlers getPlusButton()
@@ -39,6 +40,13 @@ public class ContextButtonPanel extends Composite
 	public HasClickHandlers getCustomButton()
 	{
 		return btnCustom;
+	}
+	
+	public void setVisibleButtons(boolean visible)
+	{
+		btnPlus.setVisible(visible);
+		btnMinus.setVisible(visible);
+		btnCustom.setVisible(visible);
 	}
 
 }

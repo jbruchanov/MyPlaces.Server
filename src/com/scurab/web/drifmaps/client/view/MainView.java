@@ -167,7 +167,10 @@ public class MainView extends Composite implements MainViewPresenter.Display
 	{
 		return mStreetView;
 	}
-
+	public void setContextButtonsVisible(boolean visible)
+	{
+		mContextButtonPanel.setVisibleButtons(visible);
+	}
 	@Override
 	public HasClickHandlers getPlusButton()
 	{

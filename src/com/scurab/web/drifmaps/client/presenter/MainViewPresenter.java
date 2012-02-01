@@ -94,6 +94,7 @@ public class MainViewPresenter
 		HasText getSearchBox();
 		Button getStarButton();
 		void addSelectionTabHandler(SelectionHandler<Integer> handler);
+		void setContextButtonsVisible(boolean visible);
 	}
 	
 	private Display mDisplay = null;
@@ -145,7 +146,7 @@ public class MainViewPresenter
 			@Override
 			public void onMapItemClick(MapItemOverlay<MapItem> item)
 			{
-				showMapItemEdit(item.getMapItem());
+				handleLoadDetail(item.getMapItem());
 			}
 		});
 	}
@@ -245,9 +246,9 @@ public class MainViewPresenter
 				{
 					MapItem mi = mDisplay.getDataModel().getValue();
 					if(mi == null)
-						onAddingItem();
+						onStartAddingItem();
 					else
-						handleStartEditing(mi);
+						onStartEditing(mi);
 				}
 				else if(mState == State.Adding || mState == State.Editing)
 				{
@@ -352,7 +353,7 @@ public class MainViewPresenter
 	}
 	
 	private void handleClickAddProCons(final boolean pro)
-	{
+	{		
 		SafeUri uri = (pro) 
 						? UriUtils.fromSafeConstant(AppConstants.BiggerIcons.ICO_PLUS)
 						: UriUtils.fromSafeConstant(AppConstants.BiggerIcons.ICO_MINUS);
@@ -447,6 +448,8 @@ public class MainViewPresenter
 	
 	private void handleRemovePro(final ContextItem<String> ci)
 	{
+		if(mState == State.Default)
+			return;
 		QuestionDialog.show(DrifMaps.Words.ReallyQstn(), new QuestionDialog.OnQuestionDialogButtonClick()
 		{
 			@Override
@@ -467,6 +470,8 @@ public class MainViewPresenter
 	
 	private void handleRemoveCon(final ContextItem<String> ci)
 	{
+		if(mState == State.Default)
+			return;
 		QuestionDialog.show(DrifMaps.Words.ReallyQstn(), new QuestionDialog.OnQuestionDialogButtonClick()
 		{
 			@Override
@@ -508,6 +513,8 @@ public class MainViewPresenter
 	
 	private void handleRemoveDetail(final DetailItem<Detail> di)
 	{
+		if(mState == State.Default)
+			return;
 		QuestionDialog.show(DrifMaps.Words.ReallyQstn(), new QuestionDialog.OnQuestionDialogButtonClick()
 		{
 			@Override
@@ -529,17 +536,16 @@ public class MainViewPresenter
 	/**
 	 * Changes states of objects during @value {@link State#Adding}
 	 */
-	public void onAddingItem()
+	public void onStartAddingItem()
 	{
 		mState = State.Adding;
 		
 		mDisplay.getMenuContent().setOpen(true);
+		mDisplay.setContextButtonsVisible(true);
 		mDisplay.setMapItem(new MapItem());
-		
 		setLeftButton(true, "save", DrifMaps.Words.Save());
 		setRightButton(true, "cancel", DrifMaps.Words.Cancel());
-
-		mDisplay.getStarButton().setEnabled(false);
+		setStarButton(false);
 		mMapController.startAdding();
 	}
 	
@@ -575,6 +581,10 @@ public class MainViewPresenter
 		mDisplay.getRightButton().setVisible(enabled);
 	}
 	
+	private void setStarButton(boolean enabled)
+	{
+		mDisplay.getStarButton().setEnabled(enabled);
+	}
 	private void setStarButton(boolean enabled, String style, String text)
 	{
 		mDisplay.getStarButton().setEnabled(enabled);
@@ -593,7 +603,7 @@ public class MainViewPresenter
 		setRightButton(false);
 	}
 	
-	private void handleStartEditing(final MapItem mi)
+	private void handleLoadDetail(final MapItem mi)
 	{
 		String filter = "id = " + mi.getId();
 		mDataService.get(MapItem.class.getName(), filter, true, new AsyncCallback<List<?>>()
@@ -603,7 +613,8 @@ public class MainViewPresenter
 			{
 				if(result.size() == 1)
 				{
-					onStartEditing((MapItem) result.get(0));
+//					onStartEditing((MapItem) result.get(0));
+					showMapItemEdit((MapItem) result.get(0));
 				}
 				else
 				{
@@ -630,6 +641,7 @@ public class MainViewPresenter
 		//map handler call this method => witch handler to edit state made before this call
 		mState = State.Editing;		
 		showMapItemEdit(mi);
+		mDisplay.setContextButtonsVisible(true);
 		setRightButton(true, "cancel", DrifMaps.Words.Cancel());
 		setLeftButton(true, "save", DrifMaps.Words.Save());
 		mMapController.startEditing(mi);
@@ -640,6 +652,7 @@ public class MainViewPresenter
 	{
 		mDisplay.setMapItem(mi);
 		mDisplay.getMenuContent().setOpen(true);
+		mDisplay.getContextItemsContainer().clear();
 		if(mi.getPros() != null)
 		{
 			for(String s : mi.getPros())
@@ -668,6 +681,7 @@ public class MainViewPresenter
 	public void onFinishAdding(boolean canceled)
 	{
 		mState = State.Default;
+		mDisplay.setContextButtonsVisible(false);
 		mMapController.finishWorking(canceled);
 		mDisplay.getMenuContent().setOpen(false);
 		onClearContextItems();
@@ -680,7 +694,7 @@ public class MainViewPresenter
 	
 	public void onFinishAddingStar(final Star s)
 	{
-		mDisplay.getStarButton().setEnabled(false);
+		setStarButton(false);
 		mDataService.processStar(s, DataService.ADD, new AsyncCallback<Star>()
 		{
 			@Override

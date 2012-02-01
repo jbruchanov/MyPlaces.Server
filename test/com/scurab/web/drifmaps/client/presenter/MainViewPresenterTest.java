@@ -96,7 +96,7 @@ public class MainViewPresenterTest extends GWTTestCase
 		MainViewPresenter mvp = new MainViewPresenter(display, mds);
 
 		defaultValuesTest(display);
-		mvp.onAddingItem();
+		mvp.onStartAddingItem();
 		editingValuesTest(display);
 	}
 
@@ -140,7 +140,7 @@ public class MainViewPresenterTest extends GWTTestCase
 		MainViewPresenter.Display display = new MainView(mds);
 		MainViewPresenter mvp = new MainViewPresenter(display, mds);
 
-		mvp.onAddingItem();
+		mvp.onStartAddingItem();
 		MapItemDetailForm form = display.getForm();
 		MapItem mi = RandomGenerator.genMapItem(false);
 
@@ -179,7 +179,7 @@ public class MainViewPresenterTest extends GWTTestCase
 		MainViewPresenter.Display display = new MainView(mds);
 		MainViewPresenter mvp = new MainViewPresenter(display, mds);
 
-		mvp.onAddingItem();
+		mvp.onStartAddingItem();
 		editingValuesTest(display);
 		mvp.onFinishAdding(true);
 		defaultValuesTest(display);
@@ -193,7 +193,7 @@ public class MainViewPresenterTest extends GWTTestCase
 		MainViewPresenter.Display display = new MainView(mds);
 		MainViewPresenter mvp = new MainViewPresenter(display, mds);
 
-		mvp.onAddingItem();
+		mvp.onStartAddingItem();
 		MapItemDetailForm form = display.getForm();
 		MapItem mi = RandomGenerator.genMapItem(true);
 
@@ -235,7 +235,7 @@ public class MainViewPresenterTest extends GWTTestCase
 		MainViewPresenter.Display display = new MainView(mds);
 		MainViewPresenter mvp = new MainViewPresenter(display, mds);
 
-		mvp.onAddingItem();
+		mvp.onStartAddingItem();
 		MapItemDetailForm form = display.getForm();
 		MapItem mi = RandomGenerator.genMapItem(true);
 
@@ -307,7 +307,7 @@ public class MainViewPresenterTest extends GWTTestCase
 		MainViewPresenter.Display display = new MainView(mds);
 		MainViewPresenter mvp = new MainViewPresenter(display, mds);
 
-		mvp.onAddingItem();
+		mvp.onStartAddingItem();
 		MapItemDetailForm form = display.getForm();
 		MapItem mi = RandomGenerator.genMapItem(true);
 
@@ -366,11 +366,11 @@ public class MainViewPresenterTest extends GWTTestCase
 		final MainViewPresenter.Display display = new MainView(mds);
 		MockMainViewPresenter mvp = new MockMainViewPresenter(display, mds);
 
-		mvp.onAddingItem();
+		mvp.onStartAddingItem();
 		MapItemDetailForm form = display.getForm();
 		final MapItem mi = RandomGenerator.genMapItem(true);
 
-		mvp.onAddingItem();
+		mvp.onStartAddingItem();
 		display.getDataModel().setValue(mi);
 		mvp.setSaveButtonToCheck(display.getLeftButton());
 		mvp.setOnSavedItemListener(new OnSavedItemListener()
@@ -515,7 +515,7 @@ public class MainViewPresenterTest extends GWTTestCase
 		final MainViewPresenter.Display display = new MainView(ds);
 		MockMainViewPresenter mvp = new MockMainViewPresenter(display, ds);
 
-		mvp.onAddingItem();
+		mvp.onStartAddingItem();
 		MapItemDetailForm form = display.getForm();
 		
 

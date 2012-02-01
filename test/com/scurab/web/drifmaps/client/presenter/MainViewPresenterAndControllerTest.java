@@ -110,7 +110,7 @@ public class MainViewPresenterAndControllerTest extends GWTTestCase
 		
 		assertNull(d.getDataModel().getValue());
 		assertEquals(0,mapAddOverlayEvents.size());
-		mvp.onAddingItem();//add click
+		mvp.onStartAddingItem();//add click
 		assertEquals(mapControllerT.getState(),State.Adding);
 		assertEquals(0,mapAddOverlayEvents.size());
 		assertNotNull(d.getDataModel().getValue());
@@ -154,7 +154,7 @@ public class MainViewPresenterAndControllerTest extends GWTTestCase
 		
 		Display d = new MainView(service);
 		MainViewPresenterT mvp = new MainViewPresenterT(d, service);
-		mvp.onAddingItem();//add click
+		mvp.onStartAddingItem();//add click
 		
 		assertEquals(0,mapAddOverlayEvents.size());
 		LatLng ll1 = getRandomLatLng();
