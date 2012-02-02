@@ -14,6 +14,7 @@ import com.pietschy.gwt.pectin.client.form.binding.FormBinder;
 import com.pietschy.gwt.pectin.client.form.validation.binding.ValidationBinder;
 import com.scurab.web.drifmaps.client.DrifMaps;
 import com.scurab.web.drifmaps.client.controls.NewItemComboBox;
+import com.scurab.web.drifmaps.client.controls.Rating;
 import com.scurab.web.drifmaps.client.formmodel.MapItemDetailFormModel;
 import com.scurab.web.drifmaps.client.widget.StreetViewWidget;
 import com.scurab.web.drifmaps.shared.interfaces.MapItemTypeService;
@@ -37,6 +38,7 @@ public class MapItemDetailForm extends VerySimpleForm
 	private MapItemDetailFormModel mModel = null;
 	private FormBinder binder = new FormBinder();
 	private boolean hasLink = false;
+	private Rating rating = new Rating(0, 10);
 	
 	public MapItemDetailForm(MapItemDetailFormModel model, MapItemTypeService dataService)
 	{
@@ -71,6 +73,7 @@ public class MapItemDetailForm extends VerySimpleForm
 					webLink.setStyleName("webLink");
 			}
 		});
+		binder.bind(model.getRating()).to(rating);
 		doLayout();											
 	}
 	
@@ -98,6 +101,7 @@ public class MapItemDetailForm extends VerySimpleForm
 		addRow(DrifMaps.Words.Contact(), contact);		
 		addRow(webLink, web);
 		addRow(DrifMaps.Words.Author(), author);
+		addRow(DrifMaps.Words.Rating(), rating);
 		addRow(DrifMaps.Words.LatLngX(), x, createValidationLabel(validation,mModel.getX()));
 		addRow(DrifMaps.Words.LatLngY(), y, createValidationLabel(validation,mModel.getY()));
 		addRow(streetView);
@@ -157,5 +161,35 @@ public class MapItemDetailForm extends VerySimpleForm
 	public TextBox getContact()
 	{
 		return contact;
+	}
+
+	public ValidationBinder getValidation()
+	{
+		return validation;
+	}
+
+	public StreetViewWidget getStreetView()
+	{
+		return streetView;
+	}
+
+	public Label getWebLink()
+	{
+		return webLink;
+	}
+
+	public NewItemComboBox getType()
+	{
+		return type;
+	}
+
+	public boolean isHasLink()
+	{
+		return hasLink;
+	}
+
+	public Rating getRating()
+	{
+		return rating;
 	}
 }	

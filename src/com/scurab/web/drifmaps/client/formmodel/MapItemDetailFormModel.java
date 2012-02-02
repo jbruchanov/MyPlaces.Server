@@ -38,6 +38,7 @@ public class MapItemDetailFormModel extends FormModel
 	private final FieldModel<Double> x;
 	private final FieldModel<Double> y;
 	private final ValueModel<Boolean> hasWeb;
+	private final FieldModel<Integer> rating;
 
 	public MapItemDetailFormModel()
 	{
@@ -55,6 +56,7 @@ public class MapItemDetailFormModel extends FormModel
 		x = fieldOfType(Double.class).boundTo(itemProvider, "x");
 		y = fieldOfType(Double.class).boundTo(itemProvider, "y");
 		contact = fieldOfType(String.class).boundTo(itemProvider, "contact");
+		rating = fieldOfType(Integer.class).boundTo(itemProvider,"rating");
 		hasWeb = fieldOfType(Boolean.class).computedFrom(web).using(new Function<Boolean, String>()
 		{
 			@Override
@@ -158,5 +160,10 @@ public class MapItemDetailFormModel extends FormModel
 	public ValueModel<Boolean> getHasWeb()
 	{
 		return hasWeb;
+	}
+
+	public FieldModel<Integer> getRating()
+	{
+		return rating;
 	}
 }

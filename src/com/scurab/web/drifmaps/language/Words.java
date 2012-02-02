@@ -2,7 +2,7 @@ package com.scurab.web.drifmaps.language;
 
 /**
  * Interface to represent the constants contained in resource bundle:
- * 	'C:/Developing/Projects/eclipse-workspace-j2ee/DrifMaps/src/com/scurab/web/drifmaps/language/Words.properties'.
+ * 	'F:/0Work/eclipse-workspace-j2ee/DrifMaps/src/com/scurab/web/drifmaps/language/Words.properties'.
  */
 public interface Words extends com.google.gwt.i18n.client.Constants {
   
@@ -257,6 +257,15 @@ public interface Words extends com.google.gwt.i18n.client.Constants {
   @DefaultStringValue("Pros")
   @Key("Pros")
   String Pros();
+
+  /**
+   * Translated "Rating".
+   * 
+   * @return translated "Rating"
+   */
+  @DefaultStringValue("Rating")
+  @Key("Rating")
+  String Rating();
 
   /**
    * Translated "Really ?".

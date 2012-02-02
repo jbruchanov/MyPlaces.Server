@@ -75,7 +75,7 @@ public class MainApplication implements ServletContextListener
 		}
 	}
 	
-	private static final String PROP_FILE = "app.properties";
+	private static final String PROP_FILE = "/app.properties";
 
 	public void readPropertiesFile()
 	{

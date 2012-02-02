@@ -51,6 +51,7 @@ public final class DataComparator extends GWTTestCase
 		Assert.assertEquals(o1.getWeb(),o2.getWeb());
 		Assert.assertEquals(o1.getX(),o2.getX());
 		Assert.assertEquals(o1.getY(),o2.getY());
+		Assert.assertEquals(o1.getRating(),o2.getRating());
 		
 		if(!deep)
 		{

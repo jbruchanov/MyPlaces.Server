@@ -39,7 +39,7 @@ public class DatabaseTest extends TestCase
 	@Before
 	public void setUp() throws Exception
 	{
-		file = String.format("C:\\temp\\DrifMapsTest%s.sqlite",System.currentTimeMillis());
+		file = String.format("c:\\Temporary Files\\DrifMapsTest%s.sqlite",System.currentTimeMillis());
 		db = new DatabaseT(file);
 	}
 	

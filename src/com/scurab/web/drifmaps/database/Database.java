@@ -271,6 +271,7 @@ public class Database
 			mi.setX(rs.getDouble(Structure.MapItems.X));
 			mi.setY(rs.getDouble(Structure.MapItems.Y));
 			mi.setType(rs.getString(Structure.MapItems.TYPE));
+			mi.setRating(rs.getInt(Structure.MapItems.RATING));
 			ids.add(mi.getId());
 			help.put(mi.getId(), mi);
 			result.add(mi);
@@ -653,6 +654,7 @@ public class Database
 			sb.append(String.format("%s,",Structure.MapItems.TYPE));
 			values.append(String.format("%s,",convertEmptyStringToNull(mi.getType(),true)));
 		}
+		
 		if(mi.getWeb() != null && mi.getWeb().length() > 0)
 		{
 			sb.append(String.format("%s,",Structure.MapItems.WEBLINK));
@@ -663,6 +665,10 @@ public class Database
 			sb.append(String.format("%s,%s,",Structure.MapItems.X,Structure.MapItems.Y));
 			values.append(String.format("%s,%s,",mi.getX(), mi.getY()));
 		}
+		
+		sb.append(String.format("%s, ",Structure.MapItems.RATING));
+		values.append(String.format("%s, ",mi.getRating()));
+		
 		if(values.length() == 0)
 			throw new IllegalArgumentException("No values generated, because everythink to save is null or empty?!");
 		
@@ -710,7 +716,9 @@ public class Database
 		sb.append(String.format("%s = ",Structure.MapItems.X));	
 		sb.append(String.format("%s, ",mi.getX()));
 		sb.append(String.format("%s = ",Structure.MapItems.Y));
-		sb.append(String.format("%s",mi.getY()));
+		sb.append(String.format("%s, ",mi.getY()));
+		sb.append(String.format("%s = ",Structure.MapItems.RATING));
+		sb.append(String.format("%s",mi.getRating()));
 		
 		sb.append(String.format(" WHERE %s = %s",Structure.MapItems.ID,mi.getId()));
 		String result = sb.toString(); 
@@ -804,7 +812,7 @@ public class Database
 		
 		public static class Queries
 		{
-			public static final String CREATE_TABLE_MAP_ITEM = "CREATE VIRTUAL TABLE MapItems USING fts3(ID NUMERIC PRIMARY KEY NOT NULL, Author TEXT NOT NULL, City TEXT NOT NULL, Country TEXT NOT NULL, Name TEXT NOT NULL, Street TEXT NOT NULL, Contact TEXT, WebLink TEXT, StreetViewLink TEXT, X FLOAT NOT NULL, Y FLOAT NOT NULL, Type TEXT)";
+			public static final String CREATE_TABLE_MAP_ITEM = "CREATE VIRTUAL TABLE MapItems USING fts3(ID NUMERIC PRIMARY KEY NOT NULL, Author TEXT NOT NULL, City TEXT NOT NULL, Country TEXT NOT NULL, Name TEXT NOT NULL, Street TEXT NOT NULL, Contact TEXT, WebLink TEXT, StreetViewLink TEXT, X FLOAT NOT NULL, Y FLOAT NOT NULL, Type TEXT, Rating NUMERIC NOT NULL)";
 			public static final String CREATE_TABLE_PROS = "CREATE VIRTUAL TABLE Pros USING fts3(MapItem_FK NUMERIC NOT NULL, Value TEXT NOT NULL)";
 			public static final String CREATE_TABLE_CONS = "CREATE VIRTUAL TABLE Cons USING fts3(MapItem_FK NUMERIC NOT NULL, Value TEXT NOT NULL)";			
 			public static final String CREATE_TABLE_DETAILS = "CREATE VIRTUAL TABLE Details USING fts3(ID NUMERIC PRIMARY KEY NOT NULL, MapItem_FK NUMERIC NOT NULL, What TEXT, Value TEXT NOT NULL, [When] DATETIME NOT NULL)";
@@ -846,6 +854,7 @@ public class Database
 			public static final String X = "X";
 			public static final String Y = "Y";
 			public static final String TYPE = "TYPE";
+			public static final String RATING = "Rating";
 		}
 		
 		public static class Pros

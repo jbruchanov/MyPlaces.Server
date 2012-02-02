@@ -11,6 +11,7 @@ public class Detail implements IsSerializable, IsDetailItem
 	private String what;
 	private String detail;
 	private Date time;
+	
 	@Override
 	public String getWhat()
 	{

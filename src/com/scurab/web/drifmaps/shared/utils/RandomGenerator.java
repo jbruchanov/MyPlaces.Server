@@ -70,6 +70,7 @@ public class RandomGenerator
 		mi.setWeb(AppUtils.generateRandomString());
 		mi.setX(genRandomX());
 		mi.setY(genRandomY());
+		mi.setRating(r.nextInt(11));
 		return mi;
 	}
 	

@@ -28,6 +28,8 @@ public class MapItem implements IsSerializable, HasCoordinates, HasId, HasIcon, 
 	private double x;
 	private double y;
 	
+	private int rating;
+	
 	private List<String> pros;
 	private List<String> cons;
 	private List<Detail> details;
@@ -183,5 +185,13 @@ public class MapItem implements IsSerializable, HasCoordinates, HasId, HasIcon, 
 	public void setContact(String contact)
 	{
 		this.contact = contact;
+	}
+	public int getRating()
+	{
+		return rating;
+	}
+	public void setRating(int rating)
+	{
+		this.rating = rating;
 	}
 }

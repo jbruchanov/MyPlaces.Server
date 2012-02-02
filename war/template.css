@@ -27,7 +27,7 @@ body {
 .menu {
 	position: absolute;
 	left: 0px;
-	/*background-color: #DCDCDC;*/	
+	background-color: #EAEAEA;	
 	top: 80px;
 	bottom: 0px; 
 	min-width: 370px;
@@ -37,11 +37,11 @@ body {
 	-moz-box-shadow: 3px 3px 5px 6px #ccc;
 	-webkit-box-shadow: 3px 3px 5px 6px #ccc;
 	box-shadow: 2px 2px 2px 2px #aaa;
-	background: -webkit-gradient(linear, left top, right top, from(#DCDCDC), to(#eaeaea)); 
+	/*background: -webkit-gradient(linear, left top, right top, from(#DCDCDC), to(#eaeaea)); 
 	background: -webkit-linear-gradient(left, #DCDCDC, #eaeaea); 
 	background: -moz-linear-gradient(left, #DCDCDC, #eaeaea); 
 	background: -ms-linear-gradient(left, #DCDCDC, #eaeaea); 
-	background: -o-linear-gradient(left, #DCDCDC, #eaeaea);
+	background: -o-linear-gradient(left, #DCDCDC, #eaeaea);*/
 }
 
 .center {
@@ -328,4 +328,9 @@ Search text box */
 	text-decoration: underline;
 	font-size:100%;
 	cursor: pointer;
+}
+
+.cbg-Rating
+{	
+	outline: none;
 }
