@@ -17,9 +17,9 @@ package com.scurab.web.drifmaps.client.controls;
 
 import java.util.Iterator;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseOverHandlers;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -28,7 +28,6 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
@@ -221,12 +220,12 @@ public class Rating extends FocusPanel implements HasValue<Integer>, HasMouseOut
 				case Event.ONMOUSEOVER:
 					hoverValue = getIndex();
 					setItemsState(hoverValue);
-					MouseOverEvent.fireNativeEvent(event, Rating.this);
+					DomEvent.fireNativeEvent(event, Rating.this);
 					break;
 				case Event.ONMOUSEOUT:
 					hoverValue = -1;
 					setItemsState(hoverValue);
-					MouseOutEvent.fireNativeEvent(event, Rating.this);
+					DomEvent.fireNativeEvent(event, Rating.this);
 					break;
 				case Event.ONCLICK:
 					setValue(getIndex());
@@ -270,17 +269,20 @@ public class Rating extends FocusPanel implements HasValue<Integer>, HasMouseOut
 			super(listener);
 		}
 
+		@Override
 		public void onValueChange(ValueChangeEvent<Integer> event)
 		{
 			final Rating rating = (Rating) getSource(event);
 			getListener().onSelect(rating, rating.currentRating.intValue());
 		}
 
+		@Override
 		public void onMouseOut(MouseOutEvent event)
 		{
 			getListener().onHover((Rating) getSource(event), -1);
 		}
 
+		@Override
 		public void onMouseOver(MouseOverEvent event)
 		{
 			final RatingItem ratingItem = (RatingItem) getSource(event);
@@ -404,6 +406,7 @@ public class Rating extends FocusPanel implements HasValue<Integer>, HasMouseOut
 		addValueChangeHandler(new WrappedRatingListener(listener));
 	}
 
+	@Override
 	public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Integer> handler)
 	{
 		return addHandler(handler, ValueChangeEvent.getType());
@@ -436,6 +439,7 @@ public class Rating extends FocusPanel implements HasValue<Integer>, HasMouseOut
 	 * 
 	 * @return Current rating
 	 */
+	@Override
 	public Integer getValue()
 	{
 		return currentRating;
@@ -551,11 +555,13 @@ public class Rating extends FocusPanel implements HasValue<Integer>, HasMouseOut
 	 * @param value
 	 *            New rating value to set
 	 */
+	@Override
 	public void setValue(Integer value)
 	{
 		setValue(value, true);
 	}
 
+	@Override
 	public void setValue(Integer value, boolean fireEvents)
 	{
 		if(value == null)

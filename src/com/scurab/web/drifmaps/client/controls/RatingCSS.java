@@ -1684,7 +1684,8 @@ public class RatingCSS {
        * browsers are not supported by GWT. Use {@link #POINTER} which is the
        * equivalent of <code>hand</code> and works in all browsers.
        */
-      public static final String HAND = "hand";
+      @Deprecated
+	public static final String HAND = "hand";
       public static final String HELP = "help";
       public static final String MOVE = "move";
 

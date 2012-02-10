@@ -8,3 +8,5 @@ ico_smile_unhappy - http://www.iconarchive.com/show/oxygen-icons-by-oxygen-icons
 ico_smile_neutral - http://www.iconarchive.com/show/oxygen-icons-by-oxygen-icons.org/Emotes-face-plain-icon.html
 ico_smile_lick - http://www.iconarchive.com/show/oxygen-icons-by-oxygen-icons.org/Emotes-face-raspberry-icon.html
 ico_search - http://www.iconarchive.com/show/id-icons-by-delacro/Search-2-icon.html
+ico_fastfood - http://www.iconfinder.com/icondetails/49742/128/burger_fast_food_food_hamburger_junk_food_icon
+ico_patio - http://www.iconfinder.com/icondetails/63479/128/beach_picnic_umbrella_icon

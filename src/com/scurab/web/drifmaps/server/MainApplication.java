@@ -8,12 +8,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.restlet.Component;
-import org.restlet.data.Protocol;
-
 import com.scurab.web.drifmaps.client.DrifMaps;
 import com.scurab.web.drifmaps.database.Database;
-import com.scurab.web.drifmaps.server.restlet.MapItemRestlet;
-import com.scurab.web.drifmaps.server.restlet.StarRestlet;
 import com.scurab.web.drifmaps.server.restlet.WebServiceServer;
 
 

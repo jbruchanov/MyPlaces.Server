@@ -1,12 +1,8 @@
 package com.scurab.web.drifmaps.client.form;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.pietschy.gwt.pectin.client.channel.Destination;
