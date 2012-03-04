@@ -399,8 +399,9 @@ public class Database
 		{
 			if(s != null && s.trim().length() > 0)
 			{
+				String v = s.trim().replace("'", "''");
 				execute = true;
-				String qry = String.format("INSERT INTO [%s] ([%s],[%s]) VALUES (%s,'%s');",Structure.Tables.PROS,Structure.Pros.MAPITEM_ID,Structure.Pros.VALUE,parentId,s);
+				String qry = String.format("INSERT INTO [%s] ([%s],[%s]) VALUES (%s,'%s');",Structure.Tables.PROS,Structure.Pros.MAPITEM_ID,Structure.Pros.VALUE,parentId,v);
 				mStatement.addBatch(qry);
 			}
 		}
@@ -468,9 +469,10 @@ public class Database
 		for(String s :cons)
 		{
 			if(s != null && s.trim().length() > 0)
-			{
+			{	
+				String v = s.trim().replace("'", "''");
 				execute = true;
-				String qry = String.format("INSERT INTO [%s] ([%s],[%s]) VALUES (%s,'%s');",Structure.Tables.CONS,Structure.Cons.MAPITEM_ID, Structure.Cons.VALUE,parentId,s);
+				String qry = String.format("INSERT INTO [%s] ([%s],[%s]) VALUES (%s,'%s');",Structure.Tables.CONS,Structure.Cons.MAPITEM_ID, Structure.Cons.VALUE,parentId,v);
 				mStatement.addBatch(qry);
 			}
 		}
@@ -597,10 +599,16 @@ public class Database
 		if(value == null || value.trim().length() == 0)
 			return null;
 		else
+		{
+			String result = null;
 			if(addQuotMarks)
-				return "'" + value.trim() + "'";
+				result = "'" + value.trim() + "'";
 			else 
-				return value.trim();
+				result = value.trim().replace("'","''");
+			
+			result = result.replace("'", "''").replace("\"", "\"\"");
+			return result;
+		}
 	}
 	
 	/**
