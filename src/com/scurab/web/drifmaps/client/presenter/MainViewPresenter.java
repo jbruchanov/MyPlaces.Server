@@ -743,6 +743,7 @@ public class MainViewPresenter
 			@Override
 			public void onFailure(Throwable caught)
 			{
+				setLeftButton(true,"save",DrifMaps.Words.Save());
 				NotificationDialog.show(caught);
 			}
 		});
