@@ -178,6 +178,15 @@ public interface Words extends com.google.gwt.i18n.client.Constants {
   String Hide();
 
   /**
+   * Translated "Hide streetview".
+   * 
+   * @return translated "Hide streetview"
+   */
+  @DefaultStringValue("Hide streetview")
+  @Key("HideStreetView")
+  String HideStreetView();
+
+  /**
    * Translated "ID".
    * 
    * @return translated "ID"

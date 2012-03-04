@@ -1,5 +1,9 @@
 package com.scurab.web.drifmaps.client.widget;
 
+import org.restlet.Application;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -16,8 +20,12 @@ import com.google.gwt.maps.client.streetview.StreetviewClient;
 import com.google.gwt.maps.client.streetview.StreetviewPanoramaOptions;
 import com.google.gwt.maps.client.streetview.StreetviewPanoramaWidget;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.scurab.web.drifmaps.client.DrifMaps;
 import com.scurab.web.drifmaps.shared.utils.AppUtils;
 
 public class StreetViewWidget extends Composite implements HasValue<String>
@@ -34,6 +42,8 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 	private boolean moved = false;
 	private Pov currentPov = null;
 	private LatLng currentLatLng = null;
+	private final static int MAX_STREETVIEW_DISTANCE = 100;
+	Button mButtonHideStreetView = new Button(DrifMaps.Words.HideStreetView());
 	
 
 	public StreetViewWidget(LatLng position)
@@ -119,12 +129,32 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 			}
 		});
 		
-		initWidget(panorama);		
+		mButtonHideStreetView.addClickHandler(new ClickHandler()
+		{
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				onHideStreetViewClick();
+			}
+		});
+		
+		VerticalPanel lp = new VerticalPanel();
+		mButtonHideStreetView.setVisible(false);
+		lp.add(mButtonHideStreetView);
+		lp.add(panorama);
+		initWidget(lp);		
+	}
+	
+	protected void onHideStreetViewClick()
+	{
+		setValue("",true);
+		hide(true);
 	}
 	
 	public void show()
 	{
-		panorama.show();
+		mButtonHideStreetView.setVisible(true);
+		panorama.show();		
 	}
 	
 	public void hide()
@@ -133,7 +163,8 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 	}
 	public void hide(boolean reset)
 	{
-		panorama.hide();		
+		panorama.hide();
+		mButtonHideStreetView.setVisible(false);
 		if(reset)
 		{
 			resetLastValues();
@@ -182,8 +213,9 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 				public void onSuccess(LatLng result)
 				{
 					double distance = distance(point, result)*1000;
-					if(distance < 10)//max length from point
+					if(distance < MAX_STREETVIEW_DISTANCE)//max length from point
 					{
+						mButtonHideStreetView.setVisible(true);
 						currentLatLng = LatLng.newInstance(result.getLatitude(), result.getLongitude());
 						currentPov = Pov.newInstance();
 						panorama.setLocationAndPov(currentLatLng, currentPov);
@@ -367,14 +399,14 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 		currentPov.setZoom(zoom);
 		show();
 		panorama.setLocationAndPov(currentLatLng, currentPov);
-		Timer t = new Timer()
-		{
-			@Override
-			public void run()
-			{
-//				panorama.setLocationAndPov(latLng, currentPov);
-			}
-		};
-		t.schedule(2500);
+//		Timer t = new Timer()
+//		{
+//			@Override
+//			public void run()
+//			{
+////				panorama.setLocationAndPov(latLng, currentPov);
+//			}
+//		};
+//		t.schedule(2500);
 	}
 }
