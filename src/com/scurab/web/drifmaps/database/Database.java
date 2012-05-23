@@ -601,12 +601,10 @@ public class Database
 		else
 		{
 			String result = null;
+			value = value.trim();
+			result = value.replace("'", "''").replace("\"", "\"\"");
 			if(addQuotMarks)
-				result = "'" + value.trim() + "'";
-			else 
-				result = value.trim().replace("'","''");
-			
-			result = result.replace("'", "''").replace("\"", "\"\"");
+				result = "'" + result + "'";
 			return result;
 		}
 	}

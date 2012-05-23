@@ -537,5 +537,15 @@ public class DatabaseTest extends TestCase
 		value = db.convertEmptyStringToNull(s, true);
 		assertEquals(expected,value);
 		
+		s = "Baby's";
+		expected = "'Baby''s'";
+		value = db.convertEmptyStringToNull(s, true);
+		assertEquals(expected,value);
+		
+		s = "Baby's";
+		expected = "Baby''s";
+		value = db.convertEmptyStringToNull(s, false);
+		assertEquals(expected,value);
+		
 	}
 }
