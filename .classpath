@@ -8,7 +8,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Pectin"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SQLite"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Restlet"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Log4J"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GSon"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Restlet"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

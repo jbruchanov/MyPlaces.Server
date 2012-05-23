@@ -1,6 +1,7 @@
 package com.scurab.web.drifmaps.server.restlet;
 
 import org.restlet.Component;
+import org.restlet.Server;
 import org.restlet.data.Protocol;
 import org.restlet.resource.ServerResource;
 
@@ -19,8 +20,9 @@ public class WebServiceServer extends ServerResource
 		try
 		{
 			System.out.println("Starting WebServiceServer");
-			sComponent = new Component();  
-			sComponent.getServers().add(Protocol.HTTP, port);
+			sComponent = new Component();
+			Server server = new Server(Protocol.HTTP, port);
+			sComponent.getServers().add(server);
 			sComponent.getDefaultHost().attach("/stars", StarRestlet.class);
 			sComponent.getDefaultHost().attach("/mapitems", MapItemRestlet.class);
 			sComponent.getDefaultHost().attach("/mapitems/{id}", MapItemRestlet.class);

@@ -22,37 +22,31 @@ public class StarRestlet extends ServerResource
 	Gson mGson = new Gson();
 	DataServiceImpl dsi = new DataServiceImpl();
 	
-	@Override
-	public void init(Context context, Request request, Response response)
-	{
-		super.init(context, request, response);
-	}
-
-	@Get("json")
-	public void getStars() throws Exception 
+	@Get
+	public void doGet() throws Exception 
 	{	
 		String result = mGson.toJson(dsi.get(Star.class));		
 		getResponse().setEntity(new StringRepresentation(result, MediaType.APPLICATION_JSON));
 	}	
 	
-	@Put(value="json")
-    public void update(String value) throws Exception 
+	@Put
+    public void doUpdate(String value) throws Exception 
     {  				
 		Gson gs = new Gson();
 		Star s = gs.fromJson(value, Star.class);
 		dsi.processStar(s, DataService.UPDATE);
 	}
 		
-	@Post(value="json")
-    public void add(String value) throws Exception 
+	@Post
+    public void doPost(String value) throws Exception 
     {
 		Gson gs = new Gson();
 		Star s = gs.fromJson(value, Star.class);
 		dsi.processStar(s, DataService.ADD);
     }
 	
-	@Delete()
-	public void delete(String value) throws Exception
+	@Delete
+	public void doDelete(String value) throws Exception
 	{
 		Gson gs = new Gson();
 		Star s = gs.fromJson(value, Star.class);

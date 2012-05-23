@@ -21,17 +21,17 @@ import com.scurab.web.drifmaps.shared.datamodel.MapItem;
 public class MapItemRestlet extends ServerResource
 {
 	DataServiceImpl dsi = new DataServiceImpl();
-	double x1 = 0;
-	double y1 = 0;
-	double x2 = 0;
-	double y2 = 0;
-	String itemId = null;
-	Gson mGson = new Gson();
 	
-	@Override
-	public void init(Context context, Request request, Response response)
-	{
-		super.init(context, request, response);
+	Gson mGson = new Gson();
+	@SuppressWarnings({ "unchecked" })
+	@Get("json")
+	public void getItems() throws Exception 
+	{	
+		double x1 = 0;
+		double y1 = 0;
+		double x2 = 0;
+		double y2 = 0;
+		String itemId = null;
 		itemId = (String) getRequest().getAttributes().get("id");
 		if(itemId == null)
 		{
@@ -50,12 +50,7 @@ public class MapItemRestlet extends ServerResource
 				y2 = 0; 
 			}
 		}
-	}
-
-	@SuppressWarnings({ "unchecked" })
-	@Get("json")
-	public void getItems() throws Exception 
-	{	
+		
 		List<MapItem> data = null;
 		if(itemId == null)
 			data = (List<MapItem>) dsi.get(MapItem.class, x1, y1, x2, y2, false);
