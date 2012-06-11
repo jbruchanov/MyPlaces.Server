@@ -23,10 +23,14 @@ public class WebServiceServer extends ServerResource
 			sComponent = new Component();
 			Server server = new Server(Protocol.HTTP, port);
 			sComponent.getServers().add(server);
+			
 			sComponent.getDefaultHost().attach("/stars", StarRestlet.class);
+			sComponent.getDefaultHost().attach("/stars/{id}", StarRestlet.class);
 			sComponent.getDefaultHost().attach("/mapitems", MapItemRestlet.class);
 			sComponent.getDefaultHost().attach("/mapitems/{id}", MapItemRestlet.class);
 			sComponent.getDefaultHost().attach("/mapitems/{x1}/{y1}/{x2}/{y2}", MapItemRestlet.class);
+			sComponent.getDefaultHost().attach("/mapitemtypes", MapItemTypeRestlet.class);
+			sComponent.getDefaultHost().attach("/mapitemtypes/{name}", MapItemTypeRestlet.class);
 			sComponent.start();		 
 			System.out.println("Started WebServiceServer on port " + port);
 		}

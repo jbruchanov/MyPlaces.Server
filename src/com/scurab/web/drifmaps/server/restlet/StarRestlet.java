@@ -42,14 +42,15 @@ public class StarRestlet extends ServerResource
     {
 		Gson gs = new Gson();
 		Star s = gs.fromJson(value, Star.class);
-		dsi.processStar(s, DataService.ADD);
+		Star saved = dsi.processStar(s, DataService.ADD);
+		getResponse().setEntity(new StringRepresentation(gs.toJson(saved), MediaType.APPLICATION_JSON));
     }
 	
 	@Delete
-	public void doDelete(String value) throws Exception
+	public void doDelete() throws Exception
 	{
-		Gson gs = new Gson();
-		Star s = gs.fromJson(value, Star.class);
+		Star s = new Star();
+		s.setId(Long.parseLong(getRequestAttributes().get("id").toString()));
 		dsi.processStar(s, DataService.DELETE);
 	}
 }
