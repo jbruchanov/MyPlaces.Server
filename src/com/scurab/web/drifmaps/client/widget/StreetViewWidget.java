@@ -1,17 +1,17 @@
 package com.scurab.web.drifmaps.client.widget;
 
-import org.restlet.Application;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.maps.client.MapWidget;
+import com.google.gwt.maps.client.event.StreetviewErrorHandler;
 import com.google.gwt.maps.client.event.StreetviewInitializedHandler;
 import com.google.gwt.maps.client.event.StreetviewPitchChangedHandler;
 import com.google.gwt.maps.client.event.StreetviewYawChangedHandler;
 import com.google.gwt.maps.client.event.StreetviewZoomChangedHandler;
+import com.google.gwt.maps.client.event.StreetviewErrorHandler.StreetviewErrorEvent;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Polygon;
 import com.google.gwt.maps.client.streetview.LatLngStreetviewCallback;
@@ -20,6 +20,7 @@ import com.google.gwt.maps.client.streetview.StreetviewClient;
 import com.google.gwt.maps.client.streetview.StreetviewPanoramaOptions;
 import com.google.gwt.maps.client.streetview.StreetviewPanoramaWidget;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasValue;
@@ -30,7 +31,7 @@ import com.scurab.web.drifmaps.shared.utils.AppUtils;
 
 public class StreetViewWidget extends Composite implements HasValue<String>
 {
-	private final StreetviewPanoramaWidget panorama;
+	private StreetviewPanoramaWidget panorama;
 	private final StreetviewClient svClient;
 
 //	private Pov currentPov = Pov.newInstance();
@@ -44,7 +45,7 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 	private LatLng currentLatLng = null;
 	private final static int MAX_STREETVIEW_DISTANCE = 100;
 	Button mButtonHideStreetView = new Button(DrifMaps.Words.HideStreetView());
-	
+	VerticalPanel mPanel;
 
 	public StreetViewWidget(LatLng position)
 	{
@@ -58,12 +59,39 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 	}
 	public StreetViewWidget(LatLng position, final boolean visible)
 	{
+		svClient = new StreetviewClient();
+		initPanorama(position);
+		mButtonHideStreetView.addClickHandler(new ClickHandler()
+		{
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				onHideStreetViewClick();
+			}
+		});
+		
+		mPanel = new VerticalPanel();
+		mButtonHideStreetView.setVisible(false);
+		mPanel.add(mButtonHideStreetView);
+		mPanel.add(panorama);
+		initWidget(mPanel);		
+	}
+	
+	private void initPanorama(LatLng position)
+	{
+		if(panorama != null && mPanel != null)
+		{
+			mPanel.remove(panorama);
+			panorama = null;
+		}
+		
 		StreetviewPanoramaOptions options = StreetviewPanoramaOptions.newInstance();
 		if(position != null)
 			options.setLatLng(position);
-		svClient = new StreetviewClient();
 		panorama = new StreetviewPanoramaWidget(options);
 		panorama.setSize("320px", "300px");
+		if(mPanel != null)
+			mPanel.add(panorama);
 
 		panorama.addInitializedHandler(new StreetviewInitializedHandler()
 		{
@@ -129,20 +157,15 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 			}
 		});
 		
-		mButtonHideStreetView.addClickHandler(new ClickHandler()
+		panorama.addErrorHandler(new StreetviewErrorHandler()
 		{
 			@Override
-			public void onClick(ClickEvent event)
+			public void onError(StreetviewErrorEvent event)
 			{
-				onHideStreetViewClick();
+				int errcode = event.getErrorCode();
+				Window.alert("" + errcode);
 			}
 		});
-		
-		VerticalPanel lp = new VerticalPanel();
-		mButtonHideStreetView.setVisible(false);
-		lp.add(mButtonHideStreetView);
-		lp.add(panorama);
-		initWidget(lp);		
 	}
 	
 	protected void onHideStreetViewClick()
@@ -154,7 +177,8 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 	public void show()
 	{
 		mButtonHideStreetView.setVisible(true);
-		panorama.show();		
+//		panorama.show();	
+		panorama.setVisible(true);
 	}
 	
 	public void hide()
@@ -163,8 +187,6 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 	}
 	public void hide(boolean reset)
 	{
-		panorama.hide();
-		mButtonHideStreetView.setVisible(false);
 		if(reset)
 		{
 			resetLastValues();
@@ -174,6 +196,8 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 				viewPolygon = null;
 			}
 		}
+		mButtonHideStreetView.setVisible(false);
+		panorama.setVisible(false);
 	}
 	
 	private void resetLastValues()
@@ -201,7 +225,7 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 				@Override
 				public void onFailure()
 				{
-					panorama.hide();
+					hide();
 					if (viewPolygon != null)
 					{
 						mapViewport.removeOverlay(viewPolygon);
@@ -215,10 +239,12 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 					double distance = distance(point, result)*1000;
 					if(distance < MAX_STREETVIEW_DISTANCE)//max length from point
 					{
-						mButtonHideStreetView.setVisible(true);
+						show();
 						currentLatLng = LatLng.newInstance(result.getLatitude(), result.getLongitude());
 						currentPov = Pov.newInstance();
-						panorama.setLocationAndPov(currentLatLng, currentPov);
+						initPanorama(currentLatLng);
+						panorama.setPov(currentPov);
+//						panorama.setLocationAndPov(currentLatLng, currentPov);
 						updatePolyline();
 //						panorama.setLocationAndPov(result, currentPov);
 //						if(panorama.isHidden())
@@ -398,7 +424,10 @@ public class StreetViewWidget extends Composite implements HasValue<String>
 		currentPov.setYaw(yaw);
 		currentPov.setZoom(zoom);
 		show();
-		panorama.setLocationAndPov(currentLatLng, currentPov);
+		
+//		panorama.setLocationAndPov(currentLatLng, currentPov);
+		
+		initPanorama(currentLatLng);
 //		Timer t = new Timer()
 //		{
 //			@Override
