@@ -4,6 +4,7 @@ import org.restlet.Component;
 import org.restlet.Server;
 import org.restlet.data.Protocol;
 import org.restlet.resource.ServerResource;
+import org.restlet.routing.Router;
 
 public class WebServiceServer extends ServerResource
 {
@@ -19,6 +20,7 @@ public class WebServiceServer extends ServerResource
 	{
 		try
 		{
+			
 			System.out.println("Starting WebServiceServer");
 			sComponent = new Component();
 			Server server = new Server(Protocol.HTTP, port);

@@ -24,7 +24,7 @@ public class MapItemRestlet extends ServerResource
 	
 	Gson mGson = new Gson();
 	@SuppressWarnings({ "unchecked" })
-	@Get("json")
+	@Get
 	public void doGet() throws Exception 
 	{	
 		double x1 = 0;
@@ -62,7 +62,7 @@ public class MapItemRestlet extends ServerResource
 		getResponse().setEntity(new StringRepresentation(result, MediaType.APPLICATION_JSON));
 	}	
 	
-	@Put(value="json")
+	@Put
     public void doUpdate(String value) throws Exception 
     {  				
 		Gson gs = new Gson();
@@ -70,7 +70,7 @@ public class MapItemRestlet extends ServerResource
 		dsi.processMapItem(s, DataService.UPDATE);
 	}
 		
-	@Post(value="json")
+	@Post
     public void doPost(String value) throws Exception 
     {
 		Gson gs = new Gson();
