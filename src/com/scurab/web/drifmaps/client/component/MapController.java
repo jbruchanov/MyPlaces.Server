@@ -3,9 +3,14 @@ package com.scurab.web.drifmaps.client.component;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.gwt.core.client.Callback;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.geolocation.client.Geolocation;
+import com.google.gwt.geolocation.client.Position;
+import com.google.gwt.geolocation.client.Position.Coordinates;
+import com.google.gwt.geolocation.client.PositionError;
 import com.google.gwt.maps.client.MapUIOptions;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.event.MapClickHandler;
@@ -184,10 +189,32 @@ public class MapController
 		map.setHeight("100%");
 //		mapWidget.addControl(new LargeMapControl3D());
 //		mapWidget.addControl(new MapTypeControl());
-		map.setCenter(
-				LatLng.newInstance(AppConstants.Settings.DEFAULT_MAP_LOCATION_Y,AppConstants.Settings.DEFAULT_MAP_LOCATION_X),
-				AppConstants.Settings.DEFAULT_MAP_ZOOM);
-		
+		if (Geolocation.isSupported())
+		{
+			Geolocation gl = Geolocation.getIfSupported();
+			gl.getCurrentPosition(new Callback<Position, PositionError>()
+			{
+				
+				@Override
+				public void onSuccess(Position result)
+				{
+					Coordinates c = result.getCoordinates();
+					float lat = (float)c.getLatitude();
+					float lon = (float)c.getLongitude();
+					setMapLocation(lon, lat);
+				}
+				
+				@Override
+				public void onFailure(PositionError reason)
+				{
+					setMapLocation(AppConstants.Settings.DEFAULT_MAP_LOCATION_Y, AppConstants.Settings.DEFAULT_MAP_LOCATION_X);
+				}
+			});
+		}
+		else
+		{
+			setMapLocation(AppConstants.Settings.DEFAULT_MAP_LOCATION_Y, AppConstants.Settings.DEFAULT_MAP_LOCATION_X);
+		}
 		map.setContinuousZoom(true);
 		MapUIOptions maui = map.getDefaultUI();
 		maui.setScrollwheel(true);
@@ -198,7 +225,11 @@ public class MapController
 		map.addMapDragEndHandler(mDragEndHandler);
 		map.addMapZoomEndHandler(mZoomEventHandler);
 		map.addMapClickHandler(mClickHandler);	
-		
+	}
+	
+	private void setMapLocation(float x, float y)
+	{
+		map.setCenter(LatLng.newInstance(y, x), AppConstants.Settings.DEFAULT_MAP_ZOOM);
 	}
 	
 	public void loadStars()
