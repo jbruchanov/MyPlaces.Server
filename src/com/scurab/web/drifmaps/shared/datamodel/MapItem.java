@@ -176,6 +176,8 @@ public class MapItem implements IsSerializable, HasCoordinates, HasId, HasIcon, 
 			return AppConstants.MediumIcons.ICO_MUSIC;
 		else if(t.equals("zahrádka"))
 			return AppConstants.MediumIcons.ICO_PATIO;
+		else if(t.equals("sushi"))
+			return AppConstants.MediumIcons.ICO_SUSHI;
 		else
 			return AppConstants.MediumIcons.ICO_SEARCH;
 	}
