@@ -6,14 +6,20 @@ import org.restlet.data.Protocol;
 import org.restlet.resource.ServerResource;
 import org.restlet.routing.Router;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 public class WebServiceServer extends ServerResource
 {
 	private static Component sComponent = null;
 	private static int port = 8182; 
 	
+	public static final Gson sGson;
+	
 	static
 	{
 		sComponent = new Component(); 
+		sGson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 	}
 	
 	public static void start() throws Exception

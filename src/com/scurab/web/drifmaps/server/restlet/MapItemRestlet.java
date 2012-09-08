@@ -22,7 +22,8 @@ public class MapItemRestlet extends ServerResource
 {
 	DataServiceImpl dsi = new DataServiceImpl();
 	
-	Gson mGson = new Gson();
+	Gson mGson = WebServiceServer.sGson;
+	
 	@SuppressWarnings({ "unchecked" })
 	@Get
 	public void doGet() throws Exception 
@@ -65,18 +66,16 @@ public class MapItemRestlet extends ServerResource
 	@Put
     public void doUpdate(String value) throws Exception 
     {  				
-		Gson gs = new Gson();
-		MapItem s = gs.fromJson(value, MapItem.class);
+		MapItem s = mGson.fromJson(value, MapItem.class);
 		dsi.processMapItem(s, DataService.UPDATE);
 	}
 		
 	@Post
     public void doPost(String value) throws Exception 
     {
-		Gson gs = new Gson();
-		MapItem s = gs.fromJson(value, MapItem.class);
+		MapItem s = mGson.fromJson(value, MapItem.class);
 		MapItem saved = dsi.processMapItem(s, DataService.ADD);
-		getResponse().setEntity(new StringRepresentation(gs.toJson(saved), MediaType.APPLICATION_JSON));
+		getResponse().setEntity(new StringRepresentation(mGson.toJson(saved), MediaType.APPLICATION_JSON));
     }
 	
 	@Delete()

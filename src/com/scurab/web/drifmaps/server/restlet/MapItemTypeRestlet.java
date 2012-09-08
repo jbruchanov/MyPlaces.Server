@@ -16,8 +16,9 @@ import com.scurab.web.drifmaps.server.DataServiceImpl;
 public class MapItemTypeRestlet  extends ServerResource
 {
 	DataServiceImpl mDataService = new DataServiceImpl();
+	Gson mGson = WebServiceServer.sGson;
 	
-	Gson mGson = new Gson();
+	
 	@Get("json")
 	public void doGet() throws Exception 
 	{	

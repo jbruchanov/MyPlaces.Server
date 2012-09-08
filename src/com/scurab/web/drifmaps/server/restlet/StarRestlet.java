@@ -12,6 +12,7 @@ import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.scurab.web.drifmaps.client.DataService;
 import com.scurab.web.drifmaps.server.DataServiceImpl;
 import com.scurab.web.drifmaps.shared.datamodel.Star;
@@ -19,7 +20,7 @@ import com.scurab.web.drifmaps.shared.datamodel.Star;
 public class StarRestlet extends ServerResource
 {
 
-	Gson mGson = new Gson();
+	Gson mGson = WebServiceServer.sGson;
 	DataServiceImpl dsi = new DataServiceImpl();
 	
 	@Get
@@ -32,18 +33,16 @@ public class StarRestlet extends ServerResource
 	@Put
     public void doUpdate(String value) throws Exception 
     {  				
-		Gson gs = new Gson();
-		Star s = gs.fromJson(value, Star.class);
+		Star s = mGson.fromJson(value, Star.class);
 		dsi.processStar(s, DataService.UPDATE);
 	}
 		
 	@Post
     public void doPost(String value) throws Exception 
     {
-		Gson gs = new Gson();
-		Star s = gs.fromJson(value, Star.class);
+		Star s = mGson.fromJson(value, Star.class);
 		Star saved = dsi.processStar(s, DataService.ADD);
-		getResponse().setEntity(new StringRepresentation(gs.toJson(saved), MediaType.APPLICATION_JSON));
+		getResponse().setEntity(new StringRepresentation(mGson.toJson(saved), MediaType.APPLICATION_JSON));
     }
 	
 	@Delete

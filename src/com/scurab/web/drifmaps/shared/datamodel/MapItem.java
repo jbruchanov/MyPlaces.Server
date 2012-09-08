@@ -153,33 +153,39 @@ public class MapItem implements IsSerializable, HasCoordinates, HasId, HasIcon, 
 	public String getIconUrl()
 	{
 		String t = getType();
+		String result = null;
+		
 		if(t == null)
 			return AppConstants.MediumIcons.ICO_BEER;
 		else
-			t = t.toLowerCase();
+			t = t.toLowerCase().trim();
 		
 		if(t.equals("hospoda"))
-			return AppConstants.MediumIcons.ICO_BEER;
+			result = AppConstants.MediumIcons.ICO_BEER;
 		else if(t.equals("bar"))
-			return AppConstants.MediumIcons.ICO_DRINK;
+			result = AppConstants.MediumIcons.ICO_DRINK;
 		else if(t.equals("kavárna"))
-			return AppConstants.MediumIcons.ICO_CAFE;
+			result = AppConstants.MediumIcons.ICO_CAFE;
 		else if(t.equals("café"))
-			return AppConstants.MediumIcons.ICO_CAFE;
+			result = AppConstants.MediumIcons.ICO_CAFE;
 		else if(t.equals("restaurace"))
-			return AppConstants.MediumIcons.ICO_RESTAURANT;
+			result = AppConstants.MediumIcons.ICO_RESTAURANT;
 		else if(t.equals("pizzerie"))
-			return AppConstants.MediumIcons.ICO_PIZZA;
+			result = AppConstants.MediumIcons.ICO_PIZZA;
 		else if(t.equals("fastfood"))
-			return AppConstants.MediumIcons.ICO_FASTFOOD;
+			result = AppConstants.MediumIcons.ICO_FASTFOOD;
 		else if(t.equals("club"))
-			return AppConstants.MediumIcons.ICO_MUSIC;
+			result = AppConstants.MediumIcons.ICO_MUSIC;
 		else if(t.equals("zahrádka"))
-			return AppConstants.MediumIcons.ICO_PATIO;
+			result = AppConstants.MediumIcons.ICO_PATIO;
 		else if(t.equals("sushi"))
-			return AppConstants.MediumIcons.ICO_SUSHI;
+			result = AppConstants.MediumIcons.ICO_SUSHI;
 		else
-			return AppConstants.MediumIcons.ICO_SEARCH;
+			result = AppConstants.MediumIcons.ICO_SEARCH;
+		
+		
+		
+		return result;
 	}
 	@Override
 	public String getTitle()
