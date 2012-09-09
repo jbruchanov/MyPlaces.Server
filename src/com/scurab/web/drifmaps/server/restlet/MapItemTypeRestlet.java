@@ -32,7 +32,7 @@ public class MapItemTypeRestlet  extends ServerResource
 		}
 		catch(Exception e)
 		{
-			r.setStatus(Status.CLIENT_ERROR_BAD_REQUEST,e.getMessage());
+			r.setStatus(Status.CLIENT_ERROR_BAD_REQUEST,e);
 			e.printStackTrace();
 		}
 	}
@@ -48,7 +48,7 @@ public class MapItemTypeRestlet  extends ServerResource
 		}
 		catch(Exception e)
 		{
-			r.setStatus(Status.CLIENT_ERROR_BAD_REQUEST,e.getMessage());
+			r.setStatus(Status.SERVER_ERROR_INTERNAL,e);
 			e.printStackTrace();
 		}
 	}
@@ -65,7 +65,7 @@ public class MapItemTypeRestlet  extends ServerResource
 		}
 		catch(Exception e)
 		{
-			r.setStatus(Status.CLIENT_ERROR_BAD_REQUEST,e.getMessage());
+			r.setStatus(Status.SERVER_ERROR_INTERNAL,e);
 			e.printStackTrace();
 		}
 	}

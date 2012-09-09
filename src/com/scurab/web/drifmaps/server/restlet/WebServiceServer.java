@@ -29,7 +29,7 @@ public class WebServiceServer extends ServerResource
 			
 			System.out.println("Starting WebServiceServer");
 			sComponent = new Component();
-			Server server = new Server(Protocol.HTTP, port);
+			Server server = new Server(Protocol.HTTP, port);				
 			sComponent.getServers().add(server);
 			
 			sComponent.getDefaultHost().attach("/stars", StarRestlet.class);
